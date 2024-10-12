@@ -33,14 +33,6 @@ namespace electrifier.Controls.Vanara;
 public sealed partial class ExplorerBrowser : INotifyPropertyChanged
 {
     // TODO: Use shell32 stock icons
-    internal static readonly BitmapImage DefaultFileImage =
-        new(new Uri("ms-appx:///Assets/Views/Workbench/Shell32 Default unknown File.ico"));
-
-    internal static readonly BitmapImage DefaultFolderImage =
-        new(new Uri("ms-appx:///Assets/Views/Workbench/Shell32 Default Folder.ico"));
-
-    internal static readonly BitmapImage DefaultLibraryImage =
-        new(new Uri("ms-appx:///Assets/Views/Workbench/Shell32 Library.ico"));
 
     /// <summary>
     /// 
@@ -213,7 +205,7 @@ public sealed partial class ExplorerBrowser : INotifyPropertyChanged
         var galleryEbItem = new ExplorerBrowserItem(galleryFolder);
         rootItems.Add(galleryEbItem);
 
-        InitializeStockIcons();
+        await InitializeStockIcons();
 
         ShellTreeView.ItemsSource = rootItems;
         CurrentFolderBrowserItem.IsExpanded = true;
@@ -229,14 +221,15 @@ public sealed partial class ExplorerBrowser : INotifyPropertyChanged
     /// <see cref="GetWinUi3BitmapSourceFromIcon"/>
     /// <see cref="GetWinUi3BitmapSourceFromGdiBitmap"/>
     /// </summary>
-    public void InitializeStockIcons()
+    public async Task InitializeStockIcons()
     {
         try
         {
             using var siFolder = new StockIcon(Shell32.SHSTOCKICONID.SIID_FOLDER);
 
-            var loc = siFolder.Location;  // TODO: Why do we have to call this first, to init the StockIcon?
+            var idx = siFolder.SystemImageIndex;
 
+            //var loc = siFolder.Location;  // TODO: Why do we have to call this first, to init the StockIcon?
             //using var siFolderOpen = new StockIcon(Shell32.SHSTOCKICONID.SIID_FOLDEROPEN);
             // TODO: Opened Folder Icon, use for selected TreeViewItems
             //using var siVar = new StockIcon(Shell32.SHSTOCKICONID.SIID_DOCASSOC);
@@ -250,7 +243,7 @@ public sealed partial class ExplorerBrowser : INotifyPropertyChanged
                 var bmpSource = GetWinUi3BitmapSourceFromIcon(icnHandle);
 
                 
-                //_defaultFolderImageBitmapSource = bmpSource;
+                _defaultFolderImageBitmapSource = await bmpSource;
             }
 
             //System.Drawing.Icon icn = Icon.FromHandle((IntPtr)siFolder.IconHandle);
@@ -311,6 +304,7 @@ public sealed partial class ExplorerBrowser : INotifyPropertyChanged
                 foreach (var child in shellItems)
                 {
                     var ebItem = new ExplorerBrowserItem(child);
+                    ebItem.BitmapSource = this._defaultFolderImageBitmapSource;
                     targetFolder.Children?.Add(ebItem);
                 }
             }
