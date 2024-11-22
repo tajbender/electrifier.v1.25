@@ -137,6 +137,7 @@ public sealed partial class ExplorerBrowser : INotifyPropertyChanged
 
                 Navigate(selectedFolder);
                 //Navigate(selectedFolder.ShellItem, currentTreeNode as TreeViewNode);
+                // TODO: Raise NavigationFailed()
             }
         }
     }

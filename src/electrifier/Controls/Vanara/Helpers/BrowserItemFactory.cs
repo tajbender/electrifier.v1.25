@@ -1,43 +1,54 @@
 ﻿using electrifier.Controls.Vanara.Services;
 using Microsoft.UI.Xaml.Media.Imaging;
+using System.Diagnostics;
+using System.Drawing;
 using Vanara.PInvoke;
 
 namespace electrifier.Controls.Vanara.Helpers;
 internal class BrowserItemFactory
 {
-    public static async Task<SoftwareBitmapSource> GetStockIconBitmapSource(Shell32.SHSTOCKICONID shStockIconId)
-    {
-        Dictionary<Shell32.SHSTOCKICONID, SoftwareBitmapSource> stockIconDictionary = [];
+    public static readonly Dictionary<Shell32.SHSTOCKICONID, SoftwareBitmapSource> StockIconDictionary = [];
 
+    public static Task<SoftwareBitmapSource> GetStockIconBitmapSource(Shell32.SHSTOCKICONID shStockIconId,
+        Shell32.SHGSI gsiFlags = (Shell32.SHGSI.SHGSI_LARGEICON | Shell32.SHGSI.SHGSI_ICON)) =>
+        GetStockIconBitmapSource(shStockIconId, new Shell32.SHSTOCKICONINFO(), gsiFlags);
+
+    public static async Task<SoftwareBitmapSource> GetStockIconBitmapSource(Shell32.SHSTOCKICONID shStockIconId,
+        Shell32.SHSTOCKICONINFO stockIconInfo, Shell32.SHGSI gsiFlags = (Shell32.SHGSI.SHGSI_LARGEICON | Shell32.SHGSI.SHGSI_ICON))
+    {
         try
         {
-            if (stockIconDictionary.TryGetValue(shStockIconId, out var source))
+            if (StockIconDictionary.TryGetValue(shStockIconId, out var source))
             {
+                Debug.Print($".GetStockIconBitmapSource({shStockIconId}) cache hit");
                 return source;
             }
 
-            var siFlags = Shell32.SHGSI.SHGSI_LARGEICON | Shell32.SHGSI.SHGSI_ICON;
-            var icninfo = Shell32.SHSTOCKICONINFO.Default;
-            Shell32.SHGetStockIconInfo(shStockIconId, siFlags, ref icninfo).ThrowIfFailed($"SHGetStockIconInfo({shStockIconId})");
+            var hr = Shell32.SHGetStockIconInfo(shStockIconId, gsiFlags, ref stockIconInfo);
+                
+                
+                //.ThrowIfFailed($"SHGetStockIconInfo({shStockIconId})");
+            var hIcon = stockIconInfo.hIcon;
+            Icon? icnHandle;
 
-            var hIcon = icninfo.hIcon;
-            var icnHandle = hIcon.ToIcon();
-            var bmpSource = ShellNamespaceService.GetWinUi3BitmapSourceFromIcon(icnHandle);
-            await bmpSource;
-            var softBitmap = bmpSource.Result;
-
-            if (softBitmap != null)
+            if ((icnHandle = hIcon.ToIcon()) is not null)
             {
-                _ = stockIconDictionary.TryAdd(shStockIconId, softBitmap);
-                return softBitmap;
+                var bmpSource = ShellNamespaceService.GetWinUi3BitmapSourceFromIcon(icnHandle);
+                await bmpSource;
+                var softBitmap = bmpSource.Result;      //.SetBitmapAsync(bmpSource.Result); TODO: Check this!
+
+                if (softBitmap != null)
+                {
+                    _ = StockIconDictionary.TryAdd(shStockIconId, softBitmap);
+                    return softBitmap;
+                }
             }
 
-            throw new ArgumentOutOfRangeException($".GetStockIconBitmapSource(): Can't get StockIcon for SHSTOCKICONID: {shStockIconId.ToString()}");
+            throw new ArgumentOutOfRangeException($".GetStockIconBitmapSource(): Can't get StockIcon for SHSTOCKICONID: {shStockIconId}");
         }
         catch (Exception)
         {
             throw; // TODO handle exception
         }
     }
-
 }
