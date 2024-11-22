@@ -18,6 +18,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
 using electrifier.Controls.Vanara.Contracts;
+using electrifier.Controls.Vanara.Helpers;
 using Vanara.PInvoke;
 using Vanara.Windows.Shell;
 
@@ -80,8 +81,8 @@ public sealed partial class ExplorerBrowser : INotifyPropertyChanged
                 var ebItem = new BrowserItem(child.PIDL, child.IsFolder)
                 {
                     SoftwareBitmap = child.IsFolder
-                    ? await GetStockIconBitmapSource(Shell32.SHSTOCKICONID.SIID_FOLDER)
-                    : await GetStockIconBitmapSource(Shell32.SHSTOCKICONID.SIID_DOCNOASSOC)
+                    ? await BrowserItemFactory.GetStockIconBitmapSource(Shell32.SHSTOCKICONID.SIID_FOLDER)
+                    : await BrowserItemFactory.GetStockIconBitmapSource(Shell32.SHSTOCKICONID.SIID_DOCNOASSOC)
                 };
 
                 target.ChildItems.Add(ebItem);
@@ -103,40 +104,6 @@ public sealed partial class ExplorerBrowser : INotifyPropertyChanged
             IsLoading = false;
         }
     }
-
-    public async Task<SoftwareBitmapSource> GetStockIconBitmapSource(Shell32.SHSTOCKICONID shStockIconId)
-    {
-        try
-        {
-            if (_stockIconDictionary.TryGetValue(shStockIconId, out var source))
-            {
-                return source;
-            }
-
-            var siFlags = Shell32.SHGSI.SHGSI_LARGEICON | Shell32.SHGSI.SHGSI_ICON;
-            var icninfo = Shell32.SHSTOCKICONINFO.Default;
-            SHGetStockIconInfo(shStockIconId, siFlags, ref icninfo).ThrowIfFailed($"SHGetStockIconInfo({shStockIconId})");
-
-            var hIcon = icninfo.hIcon;
-            var icnHandle = hIcon.ToIcon();
-            var bmpSource = ShellNamespaceService.GetWinUi3BitmapSourceFromIcon(icnHandle);
-            await bmpSource;
-            var softBitmap = bmpSource.Result;
-
-            if (softBitmap != null)
-            {
-                _ = _stockIconDictionary.TryAdd(shStockIconId, softBitmap);
-                return softBitmap;
-            }
-
-            throw new ArgumentOutOfRangeException($"Can't get StockIcon for SHSTOCKICONID: {shStockIconId.ToString()}");
-        }
-        catch (Exception)
-        {
-            throw; // TODO handle exception
-        }
-    }
-
 
     public async void Navigate(ShellItem target, TreeViewNode? treeViewNode = null)
     {
