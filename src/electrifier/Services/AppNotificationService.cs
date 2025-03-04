@@ -1,12 +1,9 @@
 ﻿using System.Collections.Specialized;
 using System.Web;
-
 using electrifier.Contracts.Services;
-using electrifier.ViewModels;
-
 using Microsoft.Windows.AppNotifications;
 
-namespace electrifier.Notifications;
+namespace electrifier.Services;
 
 public class AppNotificationService : IAppNotificationService
 {
@@ -44,7 +41,8 @@ public class AppNotificationService : IAppNotificationService
 
         App.MainWindow.DispatcherQueue.TryEnqueue(() =>
         {
-            App.MainWindow.ShowMessageDialogAsync("TODO: Handle notification invocations when your app is already running.", "Notification Invoked");
+            App.MainWindow.ShowMessageDialogAsync(
+                "TODO: Handle notification invocations when your app is already running.", "Notification Invoked");
 
             App.MainWindow.BringToFront();
         });
