@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-
 using electrifier.Contracts.Services;
 using electrifier.ViewModels;
 using electrifier.Views;
-
 using Microsoft.UI.Xaml.Controls;
 
 namespace electrifier.Services;
@@ -16,7 +14,7 @@ public class PageService : IPageService
     {
         Configure<MainViewModel, MainPage>();
         Configure<WebViewViewModel, WebViewPage>();
-        Configure<BlankViewModel, BlankPage>();
+        Configure<FileManagementViewModel, FileManagementPage>();
         Configure<SettingsViewModel, SettingsPage>();
     }
 
