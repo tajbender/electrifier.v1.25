@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace electrifier.Helpers;
+namespace electrifier.Controls.Helpers;
 
 /// <summary>
 /// <seealso href="https://github.com/microsoft/WinUI-Gallery/blob/main/WinUIGallery/Helpers/WindowsSystemDispatcherQueueHelper.cs"/>
