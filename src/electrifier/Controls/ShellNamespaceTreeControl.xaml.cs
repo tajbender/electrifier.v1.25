@@ -38,6 +38,17 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         //        AdvancedCollectionView = new AdvancedCollectionView(TreeItems, true);
         //        NativeTreeView.ItemsSource = AdvancedCollectionView;
 
+        // TODO: Raise event, and let the parent decide which folders to use as root
+        var rootItem = new ShellBrowserItem(ShellFolder.Desktop.PIDL, isFolder: true);
+        Items.Add(rootItem);
+        rootItem.EnumChildItems();
+        rootItem.TreeViewItemIsSelected = true;
+        //SelectedItem = rootItem;
+        //rootItem.TreeViewItemIsSelected = true; TODO: Concatenate with reference to rootItem of treeview.
+
+        Loading += ShellNamespaceTreeControl_Loading;
+
+
         //SelectionChanged = (sender, e) =>
         //{
         //    if (e.AddedItems.Count > 0)
@@ -49,9 +60,6 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         //        }
         //    }
         //};
-
-        Loading += ShellNamespaceTreeControl_Loading;
-
         //TreeView.SelectionChanged += (sender, e) =>
         //{
         //    if (e.AddedItems.Count > 0)
@@ -77,10 +85,6 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
 
     private void ShellNamespaceTreeControl_Loading(FrameworkElement sender, object args)
     {
-        // TODO: Raise event, and let the parent decide which folders to use as root
-        var rootItem = new ShellBrowserItem(ShellFolder.Desktop.PIDL, true);
-        rootItem.TreeViewItemIsSelected = true;
-        Items.Add(rootItem);
 
         //        var homeItem = BrowserItemFactory.FromShellFolder(IExplorerBrowser.HomeShellFolder);
         //        homeItem.TreeViewItemIsSelected = true;
@@ -95,7 +99,7 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
     }
 
     // TODO: Bind to Property
-    public void Navigate(ShellBrowserItem item)
+    internal void Navigate(ShellBrowserItem item)
     {
         if (item == null)
         {
