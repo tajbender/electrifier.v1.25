@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -35,6 +36,8 @@ public abstract class AbstractBrowserItem<T> // TODO: IDisposable
     {
         ChildItems = childItems ?? [];
         IsFolder = isFolder;
+        //todo: var propertBag = new ArrayList<object owner, string key, object value>();
+        //todo: var pb = new PropertyBag();
     }
 
     public virtual Task EnumChildItems() => Task.CompletedTask;
