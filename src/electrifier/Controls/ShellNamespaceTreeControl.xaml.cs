@@ -48,7 +48,7 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
 
         Loading += ShellNamespaceTreeControl_Loading;
 
-
+        /*
         //SelectionChanged = (sender, e) =>
         //{
         //    if (e.AddedItems.Count > 0)
@@ -70,6 +70,7 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         //        }
         //    }
         //};
+        */
     }
 
     public Action<object, TreeViewSelectionChangedEventArgs> SelectionChanged

@@ -13,7 +13,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" AnimatedIcon.State="None">New Shell...</Button>
+        <!--<Button Grid.Row="0" AnimatedIcon.State="None">New Shell...</Button>-->
         <controls:ShellNamespaceTreeControl Grid.Column="1" Grid.Row="0" Background="AntiqueWhite"/>
         <controls:ShellListView Grid.Row="1" Grid.ColumnSpan="2"/>
         <!-- @todo: add filmstrip to the bottom for recent tabs and editors -->
