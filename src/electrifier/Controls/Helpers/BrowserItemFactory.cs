@@ -17,7 +17,7 @@ class BrowserItemFactory
 {
 }
 
-/// <summary>Abstract base class BrowserItem of Type <typeparam name="T"/>.</summary>
+/// <summary>Abstract base class ShellBrowserItem of Type <typeparam name="T"/>.</summary>
 /// <typeparam name="T">The derived Type of this abstract class.</typeparam>
 [DebuggerDisplay($"{{{nameof(ToString)}(),nq}}")]
 public abstract class AbstractBrowserItem<T> // TODO: IDisposable
@@ -26,7 +26,7 @@ public abstract class AbstractBrowserItem<T> // TODO: IDisposable
     public readonly bool? IsFolder;
     public readonly bool IsRootItem;
 
-    /// <summary>Abstract base class BrowserItem of Type <typeparam name="T"/>.</summary>
+    /// <summary>Abstract base class ShellBrowserItem of Type <typeparam name="T"/>.</summary>
     /// <typeparam name="T">The derived Type of this abstract class.</typeparam>
     /// <param name="isFolder" >
     /// <value>true</value>
@@ -60,7 +60,7 @@ public abstract class AbstractBrowserItem<T> // TODO: IDisposable
 // TODO: IDisposable
 // TODO: IComparable
 [DebuggerDisplay($"{{{nameof(ToString)}(),nq}}")]
-public partial class BrowserItem : AbstractBrowserItem<ShellItem>, INotifyPropertyChanged
+public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyPropertyChanged
 {
     public string DisplayName => ShellItem.GetDisplayName(ShellItemDisplayString.NormalDisplay) ?? ShellItem.ToString();
     public readonly Shell32.PIDL PIDL;
@@ -93,11 +93,12 @@ public partial class BrowserItem : AbstractBrowserItem<ShellItem>, INotifyProper
     public bool HasUnrealizedChildren => ShellItem.Attributes.HasFlag(ShellItemAttribute.HasSubfolder);
 
     // TODO: Listen for ShellItem Property changes
-    public BrowserItem(Shell32.PIDL pidl, bool? isFolder,
+    public ShellBrowserItem(Shell32.PIDL pidl, bool? isFolder,
         List<AbstractBrowserItem<ShellItem>>? childItems = default) : base(isFolder, childItems ?? [])
     {
         PIDL = new Shell32.PIDL(pidl);
         ShellItem = new ShellItem(pidl);
+        //ChildItems = childItems ?? []; note: base ctor
         //SoftwareBitmap = ConfiguredTaskAwaitable GetStockIconBitmapSource()
     }
 

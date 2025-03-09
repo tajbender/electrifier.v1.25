@@ -13,7 +13,7 @@
     <Grid>
         <Grid.Resources>
             <DataTemplate x:Key="ItemsViewBrowserItemTemplate"
-                          x:DataType="helpers:BrowserItem">
+                          x:DataType="helpers:ShellBrowserItem">
                 <ItemContainer AutomationProperties.Name="{x:Bind DisplayName}">
                     <Grid Margin="3">
                         <StackPanel Orientation="Horizontal"

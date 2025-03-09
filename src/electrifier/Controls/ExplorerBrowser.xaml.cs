@@ -63,14 +63,14 @@ public sealed partial class ExplorerBrowser : UserControl
         PrimaryShellTreeView.SelectionChanged += NativeTreeView_SelectionChanged;
         SecondaryShellTreeView.SelectionChanged += NativeTreeView_SelectionChanged;
 
-        // Navigate(PrimaryShellTreeView.Items[0] as BrowserItem);
-        // . PrimaryShellTreeView.Items.Add(new BrowserItem(ShellFolder.Desktop.PIDL, true));
-        // . SecondaryShellTreeView.Items.Add(new BrowserItem(ShellFolder.Desktop.PIDL, true));
+        // Navigate(PrimaryShellTreeView.Items[0] as ShellBrowserItem);
+        // . PrimaryShellTreeView.Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
+        // . SecondaryShellTreeView.Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
     }
 
     private void ExplorerBrowser_Loading(FrameworkElement sender, object args)
     {
-        //_ = Navigate(new BrowserItem(ShellFolder.Desktop.PIDL, true));
+        //_ = Navigate(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
     }
 
     /*
@@ -78,7 +78,7 @@ public sealed partial class ExplorerBrowser : UserControl
             //{
             //    if (e.AddedItems.Count > 0)
             //    {
-            //        if (e.AddedItems[0] is BrowserItem item)
+            //        if (e.AddedItems[0] is ShellBrowserItem item)
             //        {
             //            var args = new SelectionChangedEventArgs(Array.Empty<object>(), Array.Empty<object>());
             //            SelectionChanged(this, args);
@@ -108,7 +108,7 @@ public sealed partial class ExplorerBrowser : UserControl
         }
 
         // Misc Debris:
-        var selectedFolder = addedItems[0] as BrowserItem;
+        var selectedFolder = addedItems[0] as ShellBrowserItem;
         var currentTreeNode = owner?.SelectedItem as TreeViewNode;
         if (currentTreeNode != null)
         {
@@ -133,7 +133,7 @@ public sealed partial class ExplorerBrowser : UserControl
         _ = Navigate(selectedFolder, owner);
     }
 
-    internal async Task<HRESULT> Navigate(BrowserItem target, ShellNamespaceTreeControl shTreeControl)
+    internal async Task<HRESULT> Navigate(ShellBrowserItem target, ShellNamespaceTreeControl shTreeControl)
     {
         var shTargetItem = target.ShellItem;
         Debug.Assert(shTargetItem is not null);
@@ -166,7 +166,7 @@ public sealed partial class ExplorerBrowser : UserControl
 
                     //                    var softBitmap = await StockIconFactory.GetStockIconBitmapSource(shStockIconId);
 
-                    var ebItem = new BrowserItem(child.PIDL, child.IsFolder)
+                    var ebItem = new ShellBrowserItem(child.PIDL, child.IsFolder)
                     {
                         //                        SoftwareBitmap = softBitmap
                     };
@@ -192,7 +192,7 @@ public sealed partial class ExplorerBrowser : UserControl
 
             //    foreach (var child in target.ChildItems)
             //    {
-            //        var ebItem = child as BrowserItem;
+            //        var ebItem = child as ShellBrowserItem;
             //        if (ebItem is not null)
             //        {
             //            shListView.Items.Add(ebItem);
@@ -206,7 +206,7 @@ public sealed partial class ExplorerBrowser : UserControl
 
             //    foreach (var child in target.ChildItems)
             //    {
-            //        var ebItem = child as BrowserItem;
+            //        var ebItem = child as ShellBrowserItem;
             //        if (ebItem is not null)
             //        {
             //            shListView.Items.Add(ebItem);

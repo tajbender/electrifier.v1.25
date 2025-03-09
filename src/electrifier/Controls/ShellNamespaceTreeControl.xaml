@@ -12,7 +12,7 @@
     <Grid Width="192">
         <Grid.Resources>
             <DataTemplate x:Name="BrowserItemTemplate"
-                          x:DataType="helpers:BrowserItem">
+                          x:DataType="helpers:ShellBrowserItem">
                 <TreeViewItem HasUnrealizedChildren="{x:Bind HasUnrealizedChildren}"
                               IsSelected="{x:Bind TreeViewItemIsSelected}"
                               ItemsSource="{x:Bind ChildItems}">

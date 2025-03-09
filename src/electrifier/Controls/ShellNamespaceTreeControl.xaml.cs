@@ -26,7 +26,7 @@ namespace electrifier.Controls;
 public sealed partial class ShellNamespaceTreeControl : UserControl
 {
     public TreeView NativeTreeView => TreeView;
-    public ObservableCollection<BrowserItem> Items;
+    public ObservableCollection<ShellBrowserItem> Items;
     //    internal readonly AdvancedCollectionView AdvancedCollectionView;
     //    public static ShellNamespaceService NamespaceService => App.GetService<ShellNamespaceService>();
 
@@ -42,7 +42,7 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         //{
         //    if (e.AddedItems.Count > 0)
         //    {
-        //        if (e.AddedItems[0] is BrowserItem item)
+        //        if (e.AddedItems[0] is ShellBrowserItem item)
         //        {
         //            var args = new SelectionChangedEventArgs(Array.Empty<object>(), Array.Empty<object>());
         //            SelectionChanged(this, args);
@@ -56,7 +56,7 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         //{
         //    if (e.AddedItems.Count > 0)
         //    {
-        //        if (e.AddedItems[0] is BrowserItem item)
+        //        if (e.AddedItems[0] is ShellBrowserItem item)
         //        {
         //            SelectionChanged(this, e);
         //        }
@@ -78,7 +78,7 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
     private void ShellNamespaceTreeControl_Loading(FrameworkElement sender, object args)
     {
         // TODO: Raise event, and let the parent decide which folders to use as root
-        var rootItem = new BrowserItem(ShellFolder.Desktop.PIDL, true);
+        var rootItem = new ShellBrowserItem(ShellFolder.Desktop.PIDL, true);
         rootItem.TreeViewItemIsSelected = true;
         Items.Add(rootItem);
 
@@ -95,7 +95,7 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
     }
 
     // TODO: Bind to Property
-    public void Navigate(BrowserItem item)
+    public void Navigate(ShellBrowserItem item)
     {
         if (item == null)
         {

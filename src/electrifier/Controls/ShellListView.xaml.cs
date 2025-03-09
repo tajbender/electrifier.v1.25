@@ -24,13 +24,13 @@ namespace electrifier.Controls;
 public sealed partial class ShellListView : UserControl
 {
     internal ItemsView NativeItemsView => ItemsView;
-    public ObservableCollection<BrowserItem> Items = [];
+    public ObservableCollection<ShellBrowserItem> Items = [];
 //    public readonly AdvancedCollectionView AdvancedCollectionView;
 
     public ShellListView()
     {
         this.InitializeComponent();
 
-        //Items.Add(new BrowserItem(ShellFolder.Desktop.PIDL, true));
+        //Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
     }
 }
