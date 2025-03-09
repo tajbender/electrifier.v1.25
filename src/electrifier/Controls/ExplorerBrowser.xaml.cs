@@ -95,10 +95,19 @@ public sealed partial class ExplorerBrowser : UserControl
 
         if (addedItems.Count < 1)
         {
-            Debug.Fail(".NativeTreeView_SelectionChanged() failed.", "None or less Items added!");
+            if (removedItems.Count < 1)
+            {
+                Debug.Fail(".NativeTreeView_SelectionChanged() failed.", "None or less Items added nor removed");
+            }
         }
 
-        // ~~~
+        foreach (var item in addedItems)
+        {
+            // TODO: Add folders and folder content to ShellListView and group by folder
+            Debug.Print($".NativeTreeView_SelectionChanged(`{item?.ToString()}`) added.");
+        }
+
+        // Misc Debris:
         var selectedFolder = addedItems[0] as BrowserItem;
         var currentTreeNode = owner?.SelectedItem as TreeViewNode;
         if (currentTreeNode != null)
