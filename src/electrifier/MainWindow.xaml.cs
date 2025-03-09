@@ -1,4 +1,6 @@
-﻿using electrifier.Helpers;
+﻿using System.Runtime.InteropServices;
+using electrifier.Helpers;
+using System.Runtime.InteropServices; // For DllImport
 
 using Windows.UI.ViewManagement;
 
