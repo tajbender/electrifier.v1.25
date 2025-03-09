@@ -13,18 +13,24 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <local:ShellNamespaceTreeControl x:Name="PrimaryShellTreeView"
-                                         Grid.Column="0"
-                                         BorderThickness="3"/>
+                                         Grid.Column="0"/>
         <local:ShellListView x:Name="PrimaryShellListView"
-                             Grid.Column="1"
-                             BorderThickness="3" />
+                             Grid.Column="1"/>
         <local:ShellNamespaceTreeControl x:Name="SecondaryShellTreeView"
-                                         Grid.Column="2"
-                                         BorderThickness="3"/>
+                                         Grid.Column="2"/>
         <local:ShellListView x:Name="SecondaryShellListView"
-                             Grid.Column="3"
-                             BorderThickness="3" />
+                             Grid.Column="3"/>
+        <StackPanel x:Name="SideBarStackPanel"
+                    Grid.Column="4" 
+                    Orientation="Vertical" >
+            <RichTextBlock>
+                <Paragraph>
+                    <Run Text="This is a test of the emergency broadcast system."/>
+                </Paragraph>
+            </RichTextBlock>
+        </StackPanel>
     </Grid>
 </UserControl>
