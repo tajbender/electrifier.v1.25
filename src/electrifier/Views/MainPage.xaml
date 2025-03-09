@@ -14,7 +14,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <controls:ExplorerBrowser Grid.ColumnSpan="2" Grid.Row="0"/>
-        <controls:ShellListView Grid.Column="0" Grid.Row="1"/>
-        <controls:ShellNamespaceTreeControl Grid.Column="1" Grid.Row="1" />
+        <controls:ShellListView Grid.Column="0" Grid.Row="1" Background="Aqua"/>
+        <controls:ShellNamespaceTreeControl Grid.Column="1" Grid.Row="1" Background="AntiqueWhite"/>
     </Grid>
 </Page>
