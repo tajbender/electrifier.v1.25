@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -25,8 +26,6 @@ using static Vanara.PInvoke.ComCtl32;
 namespace electrifier.Controls;
 public sealed partial class ExplorerBrowser : UserControl
 {
-    public int ItemCount;
-
     private bool _isLoading;
 
     public bool IsLoading
@@ -45,14 +44,20 @@ public sealed partial class ExplorerBrowser : UserControl
     }
 
     public event EventHandler<NavigatedEventArgs> Navigated;
-    //    public event EventHandler<NavigationFailedEventArgs> NavigationFailed;
+    public event EventHandler<Vanara.Windows.Shell.NavigationFailedEventArgs> NavigationFailed;
+    //public static ShellNamespaceService ShellNamespaceService => App.GetService<ShellNamespaceService>();
 
-    //    public static ShellNamespaceService ShellNamespaceService => App.GetService<ShellNamespaceService>();
-
-    public ShellListView ShellListView
+    internal ShellListView ShellListView
     {
-        get; set;
+        get;
     }
+
+    /// <summary>The default text that is displayed when an empty folder is shown</summary>
+    [Category("Appearance"), DefaultValue("This folder is empty."), Description("The default text that is displayed when an empty folder is shown.")]
+    public string EmptyFolderText { get; set; } = "This folder is empty.";
+
+    [Category("Appearance"), DefaultValue("This group is empty."), Description("The default text that is displayed when an empty group is shown.")]
+    public string EmptyGroupText { get; set; } = "This group is empty.";
 
     public ExplorerBrowser()
     {
