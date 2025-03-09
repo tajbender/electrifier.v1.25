@@ -13,8 +13,9 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <controls:ExplorerBrowser Grid.ColumnSpan="2" Grid.Row="0"/>
-        <controls:ShellListView Grid.Column="0" Grid.Row="1" Background="Aqua"/>
-        <controls:ShellNamespaceTreeControl Grid.Column="1" Grid.Row="1" Background="AntiqueWhite"/>
+        <Button Grid.Row="0" AnimatedIcon.State="None">New Shell...</Button>
+        <controls:ShellNamespaceTreeControl Grid.Column="1" Grid.Row="0" Background="AntiqueWhite"/>
+        <controls:ShellListView Grid.Row="1" Grid.ColumnSpan="2"/>
+        <!-- @todo: add filmstrip to the bottom for recent tabs and editors -->
     </Grid>
 </Page>
