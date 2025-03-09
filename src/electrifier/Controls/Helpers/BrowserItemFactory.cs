@@ -35,7 +35,16 @@ public abstract class AbstractBrowserItem<T> // TODO: IDisposable
     protected AbstractBrowserItem(bool? isFolder, List<AbstractBrowserItem<T>>? childItems)
     {
         ChildItems = childItems ?? [];
-        IsFolder = isFolder;
+        if (childItems is null)
+        {
+            IsFolder = isFolder;
+        }
+        else
+        {
+            IsFolder = true;    // We have child items, so we are a folder.
+            EnumChildItems();   // Enumerate child items.
+        }
+
         //todo: var propertBag = new ArrayList<object owner, string key, object value>();
         //todo: var pb = new PropertyBag();
     }

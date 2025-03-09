@@ -9,6 +9,12 @@
     d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
     mc:Ignorable="d">
     <Grid x:Name="MainPageContent">
-        <controls:ExplorerBrowser Grid.Row="1"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <controls:ExplorerBrowser Grid.ColumnSpan="2" Grid.Row="0"/>
+        <controls:ShellListView Grid.Column="0" Grid.Row="1"/>
+        <controls:ShellNamespaceTreeControl Grid.Column="1" Grid.Row="1" />
     </Grid>
 </Page>
