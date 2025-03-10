@@ -10,51 +10,25 @@ using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Vanara.PInvoke;
 using Vanara.Windows.Shell;
+using electrifier.Controls.Contracts;
+using static Vanara.PInvoke.Shell32;
 
 namespace electrifier.Controls.Helpers;
 
-class BrowserItemFactory
+public class BrowserItemFactory
 {
-}
-
-/// <summary>Abstract base class ShellBrowserItem of Type <typeparam name="T"/>.</summary>
-/// <typeparam name="T">The derived Type of this abstract class.</typeparam>
-[DebuggerDisplay($"{{{nameof(ToString)}(),nq}}")]
-public abstract class AbstractBrowserItem<T> // TODO: IDisposable
-{
-    public readonly List<AbstractBrowserItem<T>> ChildItems;
-    public readonly bool? IsFolder;
-    public readonly bool IsRootItem;
-
-    /// <summary>Abstract base class ShellBrowserItem of Type <typeparam name="T"/>.</summary>
-    /// <typeparam name="T">The derived Type of this abstract class.</typeparam>
-    /// <param name="isFolder" >
-    /// <value>true</value>
-    /// Default: False.</param>
-    /// <param name="childItems">Default: Create new empty List of child items <typeparam name="T">childItems</typeparam>.</param>
-    protected AbstractBrowserItem(bool? isFolder, List<AbstractBrowserItem<T>>? childItems)
-    {
-        ChildItems = childItems ?? [];
-        if (childItems is null)
-        {
-            IsFolder = isFolder;
-        }
-        else
-        {
-            IsFolder = true;    // We have child items, so we are a folder.
-            EnumChildItems();   // Enumerate child items.
-        }
-
-        //todo: var propertBag = new ArrayList<object owner, string key, object value>();
-        //todo: var pb = new PropertyBag();
+    public static ShellBrowserItem FromPIDL(Shell32.PIDL pidl, bool? isFolder, List<AbstractBrowserItem<ShellItem>>? childItems = default) => new(pidl, isFolder, childItems);
+    public static ShellBrowserItem FromKnownFolderId(Shell32.KNOWNFOLDERID knownFolderId) 
+    { 
+        using var folder = new ShellFolder(knownFolderId);
+        return new ShellBrowserItem(folder.PIDL, isFolder: true);
     }
-
-    public virtual Task EnumChildItems() => Task.CompletedTask;
-
-    //internal void async IconUpdate(int Index, SoftwareBitmapSource bmpSrc);
-    //internal void async StockIconUpdate(STOCKICONID id, SoftwareBitmapSource bmpSrc);
-    //internal void async ChildItemsIconUpdate();
-    public new string ToString() => $"AbstractBrowserItem(<{typeof(T)}>(isFolder {IsFolder}, childItems {ChildItems})";
+    public static ShellBrowserItem FromShellFolder(ShellFolder shellFolder) => FromPIDL(shellFolder.PIDL, isFolder: true);
+    public static ShellBrowserItem HomeShellFolder()
+    {
+        using var homeShellFolder = new ShellItem(@"c:\");
+        return new ShellBrowserItem(homeShellFolder.PIDL, isFolder: true);
+    }
 }
 
 // TODO: IDisposable

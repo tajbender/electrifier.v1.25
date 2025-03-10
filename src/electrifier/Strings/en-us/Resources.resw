@@ -163,7 +163,7 @@
     <value>WebView</value>
   </data>
   <data name="Shell_FileManagement.Content" xml:space="preserve">
-    <value>File Management</value>
+    <value>New Shell...</value>
   </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">
     <value>Personalization</value>

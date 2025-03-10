@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using electrifier.Controls.Helpers;
+using electrifier.Controls.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -25,8 +27,6 @@ using static Vanara.PInvoke.ComCtl32;
 namespace electrifier.Controls;
 public sealed partial class ExplorerBrowser : UserControl
 {
-    public int ItemCount;
-
     private bool _isLoading;
 
     public bool IsLoading
@@ -43,16 +43,21 @@ public sealed partial class ExplorerBrowser : UserControl
             //            OnPropertyChanged();
         }
     }
+    private Shel32NamespaceService Shel32NamespaceService => App.GetService<Shel32NamespaceService>();
+    internal ShellListView ShellListView
+    {
+        get;
+    }
+
+    /// <summary>The default text that is displayed when an empty folder is shown</summary>
+    [Category("Appearance"), DefaultValue("This folder is empty."), Description("The default text that is displayed when an empty folder is shown.")]
+    public string EmptyFolderText { get; set; } = "This folder is empty.";
+
+    [Category("Appearance"), DefaultValue("This group is empty."), Description("The default text that is displayed when an empty group is shown.")]
+    public string EmptyGroupText { get; set; } = "This group is empty.";
 
     public event EventHandler<NavigatedEventArgs> Navigated;
-    //    public event EventHandler<NavigationFailedEventArgs> NavigationFailed;
-
-    //    public static ShellNamespaceService ShellNamespaceService => App.GetService<ShellNamespaceService>();
-
-    public ShellListView ShellListView
-    {
-        get; set;
-    }
+    public event EventHandler<Vanara.Windows.Shell.NavigationFailedEventArgs> NavigationFailed;
 
     public ExplorerBrowser()
     {
@@ -93,13 +98,7 @@ public sealed partial class ExplorerBrowser : UserControl
         var addedItems = e.AddedItems;
         var removedItems = e.RemovedItems;
 
-        if (addedItems.Count < 1)
-        {
-            if (removedItems.Count < 1)
-            {
-                Debug.Fail(".NativeTreeView_SelectionChanged() failed.", "None or less Items added nor removed");
-            }
-        }
+        Debug.WriteIf((addedItems.Count < 1 || removedItems.Count < 1), ".NativeTreeView_SelectionChanged() parameter mismatch.", "None or less Items added nor removed");
 
         foreach (var item in addedItems)
         {

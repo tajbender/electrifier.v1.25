@@ -9,20 +9,21 @@
     xmlns:helpers="using:electrifier.Controls.Helpers"
     mc:Ignorable="d">
 
-    <Grid Width="192">
+    <Grid Width="192" HorizontalAlignment="Left" VerticalAlignment="Stretch">
         <Grid.Resources>
             <DataTemplate x:Name="BrowserItemTemplate"
                           x:DataType="helpers:ShellBrowserItem">
                 <TreeViewItem HasUnrealizedChildren="{x:Bind HasUnrealizedChildren}"
                               IsSelected="{x:Bind TreeViewItemIsSelected}"
                               ItemsSource="{x:Bind ChildItems}">
-                    <Grid>
+                    <Grid BorderBrush="Transparent" BorderThickness="3">
                         <StackPanel HorizontalAlignment="Stretch"
                                     MaxHeight="23"
                                     Orientation="Horizontal">
                             <!-- todo: add overlay for shared, links etc. -->
                             <Image Name="Image"
                                    Source="{x:Bind SoftwareBitmap}"
+                                   Opacity="0.5"
                                    Visibility="Visible" />
                             <TextBlock x:Name="TextBlock"
                                        Margin="5,0,5,0"
@@ -32,8 +33,13 @@
                 </TreeViewItem>
             </DataTemplate>
         </Grid.Resources>
-        <TreeView x:Name="TreeView"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TreeView x:Name="TreeView" Grid.Row="0"
                   ItemsSource="{x:Bind Items}"
                   ItemTemplate="{StaticResource BrowserItemTemplate}" />
+        <TextBlock Grid.Row="1">todo: Put Status Bar here</TextBlock>
     </Grid>
 </UserControl>
