@@ -21,6 +21,7 @@
 # Imprint.
 ## Disclaimer
 - 🔓 electrifier is licensed by [Apache License, Version 2.0](https://opensource.org/license/apache-2-0)
-- ©️ 2025 Thorsten Jung, @tajbender. _Eine Scheunenproduktion_. No animals 🐯 were harmed.
+- ©️ 2025 Thorsten Jung, @tajbender and Contributors.
+-  _Eine Scheunenproduktion_. No animals 🐯 were harmed.
 ---
 📆 02/03/2025 - _May the 4th be with you_
