@@ -58,7 +58,9 @@
                 </NavigationViewItem>
                 <NavigationViewItem x:Uid="Shell_FileManagement" helpers:NavigationHelper.NavigateTo="electrifier.ViewModels.FileManagementViewModel">
                     <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe7c3;"/>
+                        <!-- Glyph 0xE703 Connect -->
+                        <!-- Glyph 0xe80f Home -->
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe703;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItemSeparator />
