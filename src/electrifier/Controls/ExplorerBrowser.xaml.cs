@@ -27,7 +27,7 @@ using static Vanara.PInvoke.ComCtl32;
 namespace electrifier.Controls;
 public sealed partial class ExplorerBrowser : UserControl
 {
-    private bool _isLoading;
+    private bool _isLoading = true;
 
     public bool IsLoading
     {
@@ -131,6 +131,22 @@ public sealed partial class ExplorerBrowser : UserControl
         // => TODO: currentTreeNode as TreeViewNode ; (owner as ShellNamespaceTreeControl)
         _ = Navigate(selectedFolder, owner);
     }
+
+    /*
+    public void Navigate(ShellItem? shellItem,
+        IExplorerBrowser.ExplorerBrowser.ExplorerBrowserNavigationItemCategory category =
+            IExplorerBrowser.ExplorerBrowser.ExplorerBrowserNavigationItemCategory.Default)
+    {
+        Debug.Assert(shellItem != null);
+
+        Debug.WriteLineIf(!shellItem.IsFolder, $"Navigate({shellItem.ToString()}) => is not a folder!");
+        // TODO: If no folder, or drive empty, etc... show empty listview with error message
+
+        // TODO: Find TreeItem here!
+        BrowserItem targetItem = new(shellItem.PIDL, null, null);
+        _currentNavigationTask = Navigate(targetItem);
+    }     
+     */
 
     internal async Task<HRESULT> Navigate(ShellBrowserItem target, ShellNamespaceTreeControl shTreeControl)
     {
