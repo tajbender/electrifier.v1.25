@@ -19,8 +19,8 @@
 | ![ReSharper logo](https://resources.jetbrains.com/storage/products/company/brand/logos/ReSharper.png) | [JetBrains s.r.o.](https://www.jetbrains.com/) _Copyright © 2000-2024 JetBrains s.r.o. <br><br> JetBrains and the JetBrains logo are registered trademarks of [JetBrains s.r.o.](https://www.jetbrains.com/)_ |
 
 # Imprint.
-|||
-|:--------------|--------:|
-|©️ Copyright 2025 Thorsten Jung, tajbender|_Eine Scheunenproduktion_. No animals 🐯 were harmed.|
-|🔓 electrifier is Open Source. [Apache License, Version 2.0](https://opensource.org/license/apache-2-0)|📆 02/03/2025 - _May the 4th be with you_|
-|||
+## Disclaimer
+- 🔓 electrifier is licensed by [Apache License, Version 2.0](https://opensource.org/license/apache-2-0)
+- ©️ 2025 Thorsten Jung, @tajbender. _Eine Scheunenproduktion_. No animals 🐯 were harmed.
+---
+📆 02/03/2025 - _May the 4th be with you_
