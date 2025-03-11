@@ -12,7 +12,8 @@
 - https://github.com/electrifier/Classic-electrifier
 ----
 # Contributors.
-## 3rd Party Packages and Development ⚙ 
+## 3rd Party Packages, ⚙ and other Contributions
+
 | What | Regards |
 |--------------|:--------|
 | ![Vanara](https://raw.githubusercontent.com/dahall/Vanara/master/docs/icons/Vanara64x64.png) | Support, Help and Inspiration when using [Vanara](https://github.com/dahall/Vanara). Teached that disposing things that didn't belong to you is a bad idea 💡 |
