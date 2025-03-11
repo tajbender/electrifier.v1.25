@@ -9,6 +9,10 @@
 	mc:Ignorable="d">
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
         <SplitView x:Name="LeftSplitView"  
 				   Grid.Column="0"
 				   PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
@@ -17,13 +21,13 @@
 				   CompactPaneLength="48" 
 				   DisplayMode="Inline">
             <SplitView.Pane>
-                <local:ShellNamespaceTreeControl x:Name="PrimaryShellTreeView"/>
+                <local:ShellNamespaceTreeControl x:Name="PrimaryShellTreeView" Grid.Column="0"/>
             </SplitView.Pane>
             <Grid>
                 <local:ShellListView x:Name="PrimaryShellListView" Grid.Column="1"/>
             </Grid>
         </SplitView>
-        <SplitView x:Name="RightSplitView" 
+        <!--<SplitView x:Name="RightSplitView" 
 				   Grid.Column="1"
 				   PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
 				   IsPaneOpen="True" 
@@ -31,38 +35,36 @@
 				   CompactPaneLength="48" 
 				   DisplayMode="Inline">
             <SplitView.Pane>
-                <local:ShellListView x:Name="SecondaryShellTreeView" Grid.Column="1"/>
+                <local:ShellListView x:Name="SecondaryShellTreeView" Grid.Column="2"/>
             </SplitView.Pane>
             <Grid>
-                <local:ShellListView x:Name="SecondaryShellListView" Grid.Column="1"/>
+                <local:ShellListView x:Name="SecondaryShellListView" Grid.Column="3"/>
             </Grid>
-        </SplitView>
-        <Grid>
-            <StackPanel x:Name="SideBarStackPanel"
-		Grid.Column="3" 
-		Orientation="Vertical" >
-                <FlipView MaxWidth="400" Height="270">
-                    <Image Source="ms-appx:///Assets/SampleMedia/cliff.jpg" AutomationProperties.Name="Cliff"/>
-                    <Image Source="ms-appx:///Assets/SampleMedia/grapes.jpg" AutomationProperties.Name="Grapes"/>
-                    <Image Source="ms-appx:///Assets/SampleMedia/rainier.jpg" AutomationProperties.Name="Rainier"/>
-                    <Image Source="ms-appx:///Assets/SampleMedia/sunset.jpg" AutomationProperties.Name="Sunset"/>
-                    <Image Source="ms-appx:///Assets/SampleMedia/valley.jpg" AutomationProperties.Name="Valley"/>
-                    <FlipView.ItemsPanel >
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Orientation="Vertical"/>
-                        </ItemsPanelTemplate>
-                    </FlipView.ItemsPanel>
-                </FlipView>
-            </StackPanel>
-        </Grid>
-        <!--<SplitButton x:Name="SplitButton" 
+        </SplitView>-->
+        <StackPanel x:Name="SideBarStackPanel" Grid.Column="1"
+						Orientation="Vertical" >
+            <FlipView MaxWidth="400" Height="270">
+                <Image Source="ms-appx:///Assets/SampleMedia/cliff.jpg" AutomationProperties.Name="Cliff"/>
+                <Image Source="ms-appx:///Assets/SampleMedia/grapes.jpg" AutomationProperties.Name="Grapes"/>
+                <Image Source="ms-appx:///Assets/SampleMedia/rainier.jpg" AutomationProperties.Name="Rainier"/>
+                <Image Source="ms-appx:///Assets/SampleMedia/sunset.jpg" AutomationProperties.Name="Sunset"/>
+                <Image Source="ms-appx:///Assets/SampleMedia/valley.jpg" AutomationProperties.Name="Valley"/>
+                <FlipView.ItemsPanel >
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </FlipView.ItemsPanel>
+            </FlipView>
+        </StackPanel>
+    </Grid>
+    <!--<SplitButton x:Name="SplitButton" 
 					 Grid.Column="2" 
 					 Content="Split" 
 					 HorizontalAlignment="Center" 
 					 VerticalAlignment="Center"   />
 					 -->
-        <!-- info: Click="SplitButton_Click"> -->
-        <!--
+    <!-- info: Click="SplitButton_Click"> -->
+    <!--
 		<StackPanel x:Name="SideBarStackPanel"
 					Grid.Column="3" 
 					Orientation="Vertical" >
@@ -79,7 +81,6 @@
 				</FlipView.ItemsPanel>
 			</FlipView>
 		</StackPanel>-->
-    </Grid>
     <!--<Grid>
 		<local:ShellNamespaceTreeControl x:Name="PrimaryShellTreeView"
 										 Grid.Column="0"/>
