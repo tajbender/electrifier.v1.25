@@ -12,7 +12,7 @@
 - https://github.com/electrifier/Classic-electrifier
 ----
 # Contributors.
-## 3rd Party Packages, ⚙ and other Contributions
+## 🔓 3rd Party Packages, ⚙ or other Contributions
 
 | What | Regards |
 |--------------|:--------|
