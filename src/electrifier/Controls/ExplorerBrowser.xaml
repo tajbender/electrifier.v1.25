@@ -7,13 +7,45 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+
     <Grid>
+        <SplitView x:Name="LeftSplitView"  Grid.Column="0"
+               PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
+               IsPaneOpen="True" 
+               OpenPaneLength="256" 
+               CompactPaneLength="48" 
+               DisplayMode="Inline">
+        <SplitView.Pane>
+                <local:ShellNamespaceTreeControl x:Name="PrimaryShellTreeView"/>
+        </SplitView.Pane>
+        <Grid>
+            <local:ShellListView x:Name="PrimaryShellListView" Grid.Column="1"/>
+        </Grid>
+    </SplitView>
+    <SplitView x:Name="RightSplitView" Grid.Column="1"
+               PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
+               IsPaneOpen="True" 
+               OpenPaneLength="256" 
+               CompactPaneLength="48" 
+               DisplayMode="Inline">
+        <SplitView.Pane>
+            <local:ShellNamespaceTreeControl x:Name="SecondaryShellTreeView"/>
+        </SplitView.Pane>
+        <Grid>
+            <local:ShellListView x:Name="SecondaryShellListView" Grid.Column="1"/>
+        </Grid>
+    </SplitView>
+    </Grid>
+
+    <!--<Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <local:ShellNamespaceTreeControl x:Name="PrimaryShellTreeView"
                                          Grid.Column="0"/>
@@ -39,5 +71,5 @@
                 </FlipView.ItemsPanel>
              </FlipView>
         </StackPanel>
-    </Grid>
+    </Grid>-->
 </UserControl>
