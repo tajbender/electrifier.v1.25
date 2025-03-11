@@ -47,6 +47,18 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         Items = [];
 
 
+        /*  // SelectionChanged = (sender, e) =>
+            //{
+            //    if (e.AddedItems.Count > 0)
+            //    {
+            //        if (e.AddedItems[0] is ShellBrowserItem item)
+            //        {
+            //            var args = new SelectionChangedEventArgs(Array.Empty<object>(), Array.Empty<object>());
+            //            SelectionChanged(this, args);
+            //        }
+            //    }
+            //}; */
+
         //AdvancedCollectionView = new AdvancedCollectionView(Items, true);
         //NativeTreeView.ItemsSource = AdvancedCollectionView;
 

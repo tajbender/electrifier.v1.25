@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using electrifier.Controls;
 using electrifier.Controls.Helpers;
 using electrifier.Controls.Services;
 using Microsoft.UI.Xaml;
@@ -25,6 +26,13 @@ using static Vanara.PInvoke.ComCtl32;
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace electrifier.Controls;
+
+/// <summary>
+/// A WinUI 3 control that displays a <see cref="electrifier.Controls.ShellNamespaceTreeControl"/>
+/// and <see cref="electrifier.Controls.ShellListView"/> for navigating through the shell namespace.
+/// 
+/// This replaces the <see cref="Microsoft.WindowsAPICodePack.Controls.ExplorerBrowser"/> control.
+/// </summary>
 public sealed partial class ExplorerBrowser : UserControl
 {
     private bool _isLoading = true;
@@ -78,18 +86,6 @@ public sealed partial class ExplorerBrowser : UserControl
         PrimaryShellTreeView.Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
         PrimaryShellTreeView.Items.FirstOrDefault(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true)).TreeViewItemIsSelected = true;
     }
-
-    /*  // SelectionChanged = (sender, e) =>
-        //{
-        //    if (e.AddedItems.Count > 0)
-        //    {
-        //        if (e.AddedItems[0] is ShellBrowserItem item)
-        //        {
-        //            var args = new SelectionChangedEventArgs(Array.Empty<object>(), Array.Empty<object>());
-        //            SelectionChanged(this, args);
-        //        }
-        //    }
-        //}; */
 
     private void NativeTreeView_SelectionChanged(object sender, TreeViewSelectionChangedEventArgs e)
     {
