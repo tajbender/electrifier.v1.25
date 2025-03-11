@@ -81,12 +81,27 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
     {
         Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, isFolder: true));
         Items.Add(BrowserItemFactory.HomeShellFolder());
+        // TODO: Add seperator
+        // TODO: Add this as child items of the rootItem
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_SkyDrive));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Downloads));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Documents));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Pictures));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Music));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Videos));
+
+        Items[0].EnumChildItems();
+        Items[0].TreeViewItemIsSelected = true;
+        // Items[0].Expand(); TODO: Property AutoExpand! => true
+    }
+
+    /// <summary>
+    /// <code>AutoExpandAfterSelection</code>The default text that is displayed when an empty folder is shown
+    /// </summary>
+    public bool AutoExpandAfterSelection
+    {
+        get;
+        set;
     }
 
     // TODO: Bind to Property
