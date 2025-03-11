@@ -73,8 +73,8 @@ public sealed partial class ExplorerBrowser : UserControl
         DataContext = this;
 
         Loading += ExplorerBrowser_Loading;
-        PrimaryShellTreeView.SelectionChanged += NativeTreeView_SelectionChanged;
-        SecondaryShellTreeView.SelectionChanged += NativeTreeView_SelectionChanged;
+        //PrimaryShellTreeView.SelectionChanged += NativeTreeView_SelectionChanged;
+        //SecondaryShellTreeView.SelectionChanged += NativeTreeView_SelectionChanged;
 
         // Navigate(PrimaryShellTreeView.Items[0] as ShellBrowserItem);
         // . PrimaryShellTreeView.Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
