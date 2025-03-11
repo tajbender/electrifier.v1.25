@@ -44,7 +44,7 @@ public sealed partial class ExplorerBrowser : UserControl
         }
     }
     private Shel32NamespaceService Shel32NamespaceService => App.GetService<Shel32NamespaceService>();
-    internal ShellListView ShellListView
+    private ShellListView ShellListView
     {
         get;
     }
@@ -52,7 +52,7 @@ public sealed partial class ExplorerBrowser : UserControl
     /// <summary>The default text that is displayed when an empty folder is shown</summary>
     [Category("Appearance"), DefaultValue("This folder is empty."), Description("The default text that is displayed when an empty folder is shown.")]
     public string EmptyFolderText { get; set; } = "This folder is empty.";
-
+    /// <summary>The default text that is displayed when an empty group is shown</summary>
     [Category("Appearance"), DefaultValue("This group is empty."), Description("The default text that is displayed when an empty group is shown.")]
     public string EmptyGroupText { get; set; } = "This group is empty.";
 
@@ -75,23 +75,22 @@ public sealed partial class ExplorerBrowser : UserControl
 
     private void ExplorerBrowser_Loading(FrameworkElement sender, object args)
     {
-        //_ = Navigate(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
+        PrimaryShellTreeView.Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
+        PrimaryShellTreeView.Items.FirstOrDefault(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true)).TreeViewItemIsSelected = true;
     }
 
-    /*
-            //SelectionChanged = (sender, e) =>
-            //{
-            //    if (e.AddedItems.Count > 0)
-            //    {
-            //        if (e.AddedItems[0] is ShellBrowserItem item)
-            //        {
-            //            var args = new SelectionChangedEventArgs(Array.Empty<object>(), Array.Empty<object>());
-            //            SelectionChanged(this, args);
-            //        }
-            //    }
-            //};
+    /*  // SelectionChanged = (sender, e) =>
+        //{
+        //    if (e.AddedItems.Count > 0)
+        //    {
+        //        if (e.AddedItems[0] is ShellBrowserItem item)
+        //        {
+        //            var args = new SelectionChangedEventArgs(Array.Empty<object>(), Array.Empty<object>());
+        //            SelectionChanged(this, args);
+        //        }
+        //    }
+        //}; */
 
-     */
     private void NativeTreeView_SelectionChanged(object sender, TreeViewSelectionChangedEventArgs e)
     {
         var owner = sender as ShellNamespaceTreeControl;
