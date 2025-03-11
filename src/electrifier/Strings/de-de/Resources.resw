@@ -59,8 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-              xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -125,7 +124,7 @@
     <value>electrifier</value>
   </data>
   <data name="Shell_Main.Content" xml:space="preserve">
-    <value>Workbench</value>
+    <value>Werkbank</value>
   </data>
   <data name="WebView_Loading.Text" xml:space="preserve">
     <value>Loading...</value>
@@ -134,25 +133,25 @@
     <value>Seite konnte nicht geladen werden. Prüfen Sie Ihre Verbindung und laden Sie sie erneut: Check connection and reload.</value>
   </data>
   <data name="BrowserBackButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Browse back in Navigation History</value>
+    <value>Zurück im Navigations Logbuch</value>
   </data>
   <data name="BrowserBackButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
-    <value>Browse back</value>
+    <value>Zurück navigieren</value>
   </data>
   <data name="BrowserForwardButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Browse forward in Navigation History</value>
+    <value>Vorwärts im Navigation Logbuch</value>
   </data>
   <data name="BrowserForwardButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
-    <value>Browse forward</value>
+    <value>Nach Vorne navigieren</value>
   </data>
   <data name="WebView_Reload.Content" xml:space="preserve">
     <value>Reload</value>
   </data>
   <data name="ReloadButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Reload</value>
+    <value>Aktualisieren</value>
   </data>
   <data name="ReloadButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
-    <value>Reload</value>
+    <value>Aktualisieren</value>
   </data>
   <data name="OpenInBrowserButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Open in browser</value>
@@ -161,10 +160,10 @@
     <value>Open in browser</value>
   </data>
   <data name="Shell_WebView.Content" xml:space="preserve">
-    <value>Web Browser</value>
+    <value>Browser...</value>
   </data>
   <data name="Shell_FileManagement.Content" xml:space="preserve">
-    <value>New Shell...</value>
+    <value>Neue Shell...</value>
   </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">
     <value>Personalization</value>
@@ -173,16 +172,16 @@
     <value>Theme</value>
   </data>
   <data name="Settings_Theme_Light.Content" xml:space="preserve">
-    <value>Light</value>
+    <value>Hell</value>
   </data>
   <data name="Settings_Theme_Dark.Content" xml:space="preserve">
-    <value>Dark</value>
+    <value>Dunkel</value>
   </data>
   <data name="Settings_Theme_Default.Content" xml:space="preserve">
     <value>Default</value>
   </data>
   <data name="Settings_About.Text" xml:space="preserve">
-    <value>About electrifier</value>
+    <value>über electrifier</value>
   </data>
   <data name="Settings_AboutDescription.Text" xml:space="preserve">
     <value>electrifier desktop.</value>

@@ -67,8 +67,10 @@
             </NavigationView.MenuItems>
             <NavigationView.PaneFooter>
                 <StackPanel x:Name="FooterStackPanel" Orientation="Vertical" Visibility="Visible">
-                    <NavigationViewItem Icon="Clock" AutomationProperties.Name="history" />
-                    <NavigationViewItem Icon="Favorite" AutomationProperties.Name="favorite" />
+                    <NavigationViewItem Icon="Clock" AutomationProperties.Name="Nav2History" />
+                    <NavigationViewItem Icon="Favorite" AutomationProperties.Name="Nav2Favorites" />
+                    <NavigationViewItem Icon="Clock" AutomationProperties.Name="Nav2FileManagement" />
+                    <NavigationViewItem Icon="Favorite" AutomationProperties.Name="Nav2Browser" />
                 </StackPanel>
             </NavigationView.PaneFooter>
             <i:Interaction.Behaviors>

@@ -160,7 +160,7 @@
     <value>Open in browser</value>
   </data>
   <data name="Shell_WebView.Content" xml:space="preserve">
-    <value>Web Browser</value>
+    <value>Browser...</value>
   </data>
   <data name="Shell_FileManagement.Content" xml:space="preserve">
     <value>New Shell...</value>
@@ -181,7 +181,7 @@
     <value>Default</value>
   </data>
   <data name="Settings_About.Text" xml:space="preserve">
-    <value>About electrifier</value>
+    <value>about electrifier</value>
   </data>
   <data name="Settings_AboutDescription.Text" xml:space="preserve">
     <value>electrifier desktop.</value>
