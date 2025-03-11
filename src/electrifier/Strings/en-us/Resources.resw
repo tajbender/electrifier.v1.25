@@ -160,7 +160,7 @@
     <value>Open in browser</value>
   </data>
   <data name="Shell_WebView.Content" xml:space="preserve">
-    <value>New Browser...</value>
+    <value>Web Browser</value>
   </data>
   <data name="Shell_FileManagement.Content" xml:space="preserve">
     <value>New Shell...</value>
