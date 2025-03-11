@@ -56,6 +56,18 @@
                     </ItemsPanelTemplate>
                 </FlipView.ItemsPanel>
             </FlipView>
+            <Button x:Name="SplitButton1">
+                TODO: Hier ein Carousel einbauen, für alle Views btw. ShellListView Ansichten offen sind.
+                TODO: Hier ein Carousel einbauen, für alle Clipboard Items die in der Zwischenablage sind.
+            </Button>
+            <Button x:Name="SplitButton2">
+                TODO: Hier ein Carousel einbauen, für alle Views btw. ShellListView Ansichten offen sind.
+                TODO: Hier ein Carousel einbauen, für alle Clipboard Items die in der Zwischenablage sind.
+            </Button>
+            <Button x:Name="SplitButton3">
+                TODO: Hier ein Carousel einbauen, für alle Views btw. ShellListView Ansichten offen sind.
+                TODO: Hier ein Carousel einbauen, für alle Clipboard Items die in der Zwischenablage sind.
+            </Button>
         </StackPanel>
     </Grid>
     <!--<SplitButton x:Name="SplitButton" 
