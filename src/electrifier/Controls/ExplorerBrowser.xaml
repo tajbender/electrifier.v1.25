@@ -56,14 +56,6 @@
                     </ItemsPanelTemplate>
                 </FlipView.ItemsPanel>
             </FlipView>
-            <Button x:Name="SplitButton1">
-                TODO: Hier ein Carousel einbauen, für alle Views btw. ShellListView Ansichten offen sind.
-                TODO: Hier ein Carousel einbauen, für alle Clipboard Items die in der Zwischenablage sind.
-            </Button>
-            <Button x:Name="SplitButton2">
-                TODO: Hier ein Carousel einbauen, für alle Views btw. ShellListView Ansichten offen sind.
-                TODO: Hier ein Carousel einbauen, für alle Clipboard Items die in der Zwischenablage sind.
-            </Button>
             <Button x:Name="SplitButton3">
                 TODO: Hier ein Carousel einbauen, für alle Views btw. ShellListView Ansichten offen sind.
                 TODO: Hier ein Carousel einbauen, für alle Clipboard Items die in der Zwischenablage sind.
@@ -103,21 +95,6 @@
 										 Grid.Column="2"/>
 		<local:ShellListView x:Name="SecondaryShellListView"
 							 Grid.Column="3"/>
-		<StackPanel x:Name="SideBarStackPanel"
-					Grid.Column="4" 
-					Orientation="Vertical" >
-			<FlipView MaxWidth="400" Height="270">
-				<Image Source="ms-appx:///Assets/SampleMedia/cliff.jpg" AutomationProperties.Name="Cliff"/>
-				<Image Source="ms-appx:///Assets/SampleMedia/grapes.jpg" AutomationProperties.Name="Grapes"/>
-				<Image Source="ms-appx:///Assets/SampleMedia/rainier.jpg" AutomationProperties.Name="Rainier"/>
-				<Image Source="ms-appx:///Assets/SampleMedia/sunset.jpg" AutomationProperties.Name="Sunset"/>
-				<Image Source="ms-appx:///Assets/SampleMedia/valley.jpg" AutomationProperties.Name="Valley"/>
-				<FlipView.ItemsPanel >
-					<ItemsPanelTemplate>
-						<VirtualizingStackPanel Orientation="Vertical"/>
-					</ItemsPanelTemplate>
-				</FlipView.ItemsPanel>
-			 </FlipView>
-		</StackPanel>
+
 	</Grid>-->
 </UserControl>
