@@ -10,14 +10,14 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <SplitView x:Name="LeftSplitView"  
 				   Grid.Column="0"
 				   PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
 				   IsPaneOpen="True" 
-				   OpenPaneLength="256" 
+				   OpenPaneLength="192"
 				   CompactPaneLength="48" 
 				   DisplayMode="Inline">
             <SplitView.Pane>
@@ -69,23 +69,6 @@
 					 VerticalAlignment="Center"   />
 					 -->
     <!-- info: Click="SplitButton_Click"> -->
-    <!--
-		<StackPanel x:Name="SideBarStackPanel"
-					Grid.Column="3" 
-					Orientation="Vertical" >
-			<FlipView MaxWidth="400" Height="270">
-				<Image Source="ms-appx:///Assets/SampleMedia/cliff.jpg" AutomationProperties.Name="Cliff"/>
-				<Image Source="ms-appx:///Assets/SampleMedia/grapes.jpg" AutomationProperties.Name="Grapes"/>
-				<Image Source="ms-appx:///Assets/SampleMedia/rainier.jpg" AutomationProperties.Name="Rainier"/>
-				<Image Source="ms-appx:///Assets/SampleMedia/sunset.jpg" AutomationProperties.Name="Sunset"/>
-				<Image Source="ms-appx:///Assets/SampleMedia/valley.jpg" AutomationProperties.Name="Valley"/>
-				<FlipView.ItemsPanel >
-					<ItemsPanelTemplate>
-						<VirtualizingStackPanel Orientation="Vertical"/>
-					</ItemsPanelTemplate>
-				</FlipView.ItemsPanel>
-			</FlipView>
-		</StackPanel>-->
     <!--<Grid>
 		<local:ShellNamespaceTreeControl x:Name="PrimaryShellTreeView"
 										 Grid.Column="0"/>
@@ -94,7 +77,5 @@
 		<local:ShellNamespaceTreeControl x:Name="SecondaryShellTreeView"
 										 Grid.Column="2"/>
 		<local:ShellListView x:Name="SecondaryShellListView"
-							 Grid.Column="3"/>
-
-	</Grid>-->
+							 Grid.Column="3"/></Grid>-->
 </UserControl>
