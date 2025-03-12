@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace electrifier.Controls.Helpers;
 
-class ShellDragDropHelper
+public class ShellDragDropHelper
 {
 }

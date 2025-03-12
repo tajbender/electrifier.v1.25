@@ -10,7 +10,8 @@
     xmlns:helpers="using:electrifier.Controls.Helpers"
     mc:Ignorable="d">
 
-    <Grid>
+    <Grid BorderBrush="AliceBlue" 
+          BorderThickness="7">
         <Grid.Resources>
             <DataTemplate x:Key="ItemsViewBrowserItemTemplate"
                           x:DataType="helpers:ShellBrowserItem">
