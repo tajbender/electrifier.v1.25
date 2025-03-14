@@ -40,7 +40,7 @@ public sealed partial class ExplorerBrowser : UserControl
     public bool IsLoading
     {
         get => _isLoading;
-        set
+        private set
         {
             if (value == _isLoading)
             {
