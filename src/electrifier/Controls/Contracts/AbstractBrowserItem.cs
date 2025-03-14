@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace electrifier.Controls.Contracts;
 
-class AbstractBrowserItem
-{
-}
-
-/// <summary>Abstract base class ShellBrowserItem of Type <typeparam name="T"/>.</summary>
-/// <typeparam name="T">The derived Type of this abstract class.</typeparam>
+/// <summary>Abstract base class ShellBrowserItem.
+/// Enclosing Type <typeparam name="T">ShellItem</typeparam> as reference to the underlying Shell Namespace Item reference.
+/// </summary>
 [DebuggerDisplay($"{{{nameof(ToString)}(),nq}}")]
 public abstract class AbstractBrowserItem<T> // TODO: IDisposable
 {

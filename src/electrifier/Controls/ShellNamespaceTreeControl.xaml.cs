@@ -25,10 +25,17 @@ namespace electrifier.Controls;
 
 public sealed partial class ShellNamespaceTreeControl : UserControl
 {
-    public TreeView NativeTreeView => TreeView;
-    public ObservableCollection<ShellBrowserItem> Items;
+    private TreeView NativeTreeView => TreeView;
+    internal ObservableCollection<ShellBrowserItem> Items;
     //    internal readonly AdvancedCollectionView AdvancedCollectionView;
     //    public static ShellNamespaceService NamespaceService => App.GetService<ShellNamespaceService>();
+
+    public bool AutoExpandAfterSelection
+    {
+        get;
+        set;
+    }
+
     public Action<object, TreeViewSelectionChangedEventArgs> SelectionChanged
     {
         get;
@@ -81,7 +88,7 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
     {
         Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, isFolder: true));
         Items.Add(BrowserItemFactory.HomeShellFolder());
-        // TODO: Add seperator
+        // TODO: Add separator
         // TODO: Add this as child items of the rootItem
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_SkyDrive));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Downloads));
@@ -93,15 +100,6 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         Items[0].EnumChildItems();
         Items[0].TreeViewItemIsSelected = true;
         // Items[0].Expand(); TODO: Property AutoExpand! => true
-    }
-
-    /// <summary>
-    /// <code>AutoExpandAfterSelection</code>The default text that is displayed when an empty folder is shown
-    /// </summary>
-    public bool AutoExpandAfterSelection
-    {
-        get;
-        set;
     }
 
     // TODO: Bind to Property

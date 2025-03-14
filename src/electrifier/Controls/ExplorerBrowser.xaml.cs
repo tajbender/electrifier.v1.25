@@ -135,7 +135,7 @@ public sealed partial class ExplorerBrowser : UserControl
         Debug.Assert(shellItem != null);
 
         Debug.WriteLineIf(!shellItem.IsFolder, $"Navigate({shellItem.ToString()}) => is not a folder!");
-        // TODO: If no folder, or drive empty, etc... show empty listview with error message
+        // TODO: If no folder, or drive empty, etc... show empty list view with error message
 
         // TODO: Find TreeItem here!
         BrowserItem targetItem = new(shellItem.PIDL, null, null);
@@ -147,7 +147,7 @@ public sealed partial class ExplorerBrowser : UserControl
     {
         var shTargetItem = target.ShellItem;
         Debug.Assert(shTargetItem is not null);
-        // TODO: If no folder, or drive empty, etc... show empty listview with error message
+        // TODO: If no folder, or drive empty, etc... show empty list view with error message
 
         // TODO: init ShellNamespaceService
         try
