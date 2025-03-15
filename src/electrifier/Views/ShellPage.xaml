@@ -89,7 +89,16 @@
                 </behaviors:NavigationViewHeaderBehavior>
             </i:Interaction.Behaviors>
             <Grid Margin="{StaticResource NavigationViewPageContentMargin}">
-                <Frame x:Name="NavigationFrame" />
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <controls:PropertySizer HorizontalAlignment="Left"
+                                        Binding="{x:Bind NavigationViewControl.OpenPaneLength, Mode=TwoWay}"
+                                        Maximum="440"
+                                        Minimum="52"
+                                        Visibility="{x:Bind NavigationViewControl.IsPaneOpen, Mode=OneWay}" />
+                <Frame x:Name="NavigationFrame" Grid.Column="1"/>
             </Grid>
         </NavigationView>
     </Grid>

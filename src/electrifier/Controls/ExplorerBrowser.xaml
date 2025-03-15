@@ -243,6 +243,14 @@
             <Grid>
                 <local:ShellListView x:Name="PrimaryShellListView" Grid.Column="1"/>
             </Grid>
+            
+<!--        <controls:PropertySizer HorizontalAlignment="Left"
+                                    Binding="{x:Bind ViewPanel.OpenPaneLength, Mode=TwoWay}"
+                                    Maximum="440"
+                                    Minimum="52"
+                                    Visibility="{x:Bind ViewPanel.IsPaneOpen, Mode=OneWay}" />-->
+
+            
         </SplitView>
         <SplitView x:Name="RightSplitView" 
 				   Grid.Column="1"
