@@ -52,10 +52,6 @@ public sealed partial class ExplorerBrowser : UserControl
         }
     }
     private Shel32NamespaceService Shel32NamespaceService => App.GetService<Shel32NamespaceService>();
-    private ShellListView ShellListView
-    {
-        get;
-    }
 
     /// <summary>The default text that is displayed when an empty folder is shown</summary>
     [Category("Appearance"), DefaultValue("This folder is empty."), Description("The default text that is displayed when an empty folder is shown.")]
@@ -74,8 +70,8 @@ public sealed partial class ExplorerBrowser : UserControl
 
         Loading += ExplorerBrowser_Loading;
         Loaded += ExplorerBrowser_Loaded;
-        //PrimaryShellTreeView.SelectionChanged += NativeTreeView_SelectionChanged;
-        //SecondaryShellTreeView.SelectionChanged += NativeTreeView_SelectionChanged;
+        PrimaryShellTreeView.SelectionChanged += NativeTreeView_SelectionChanged;
+        SecondaryShellTreeView.SelectionChanged += NativeTreeView_SelectionChanged;
 
         // Navigate(PrimaryShellTreeView.Items[0] as ShellBrowserItem);
         // . PrimaryShellTreeView.Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
@@ -101,7 +97,7 @@ public sealed partial class ExplorerBrowser : UserControl
         var addedItems = e.AddedItems;
         var removedItems = e.RemovedItems;
 
-        Debug.WriteIf((addedItems.Count < 1 || removedItems.Count < 1), ".NativeTreeView_SelectionChanged() parameter mismatch.", "None or less Items added nor removed");
+        Debug.WriteIf((addedItems.Count < 1 || removedItems.Count < 1), "None or less Items added nor removed", ".NativeTreeView_SelectionChanged() parameter mismatch.");
 
         foreach (var item in addedItems)
         {

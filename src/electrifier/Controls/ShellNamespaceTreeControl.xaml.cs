@@ -35,11 +35,10 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         get;
         set;
     }
-
-    public Action<object, TreeViewSelectionChangedEventArgs> SelectionChanged
+    public event TypedEventHandler<TreeView, TreeViewSelectionChangedEventArgs> SelectionChanged
     {
-        get;
-        internal set;
+        add => NativeTreeView.SelectionChanged += value;
+        remove => NativeTreeView.SelectionChanged -= value;
     }
     public TreeViewNode SelectedItem
     {
@@ -99,12 +98,14 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
 
         Items[0].EnumChildItems();
         Items[0].TreeViewItemIsSelected = true;
-        // Items[0].Expand(); TODO: Property AutoExpand! => true
+        // Items[0].Expand(); TODO: Property AutoExpandOnSelect => true
     }
 
     // TODO: Bind to Property
     internal void Navigate(ShellBrowserItem item)
     {
+        // TODO: Use https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper?view=winrt-22621 VisualTreeHelper to find child TreeViewItems
+
         if (item == null)
         {
             return;
