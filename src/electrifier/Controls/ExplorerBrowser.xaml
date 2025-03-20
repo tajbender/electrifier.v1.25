@@ -238,10 +238,10 @@
 				   CompactPaneLength="48" 
 				   DisplayMode="Inline">
             <SplitView.Pane>
-                <local:ShellNamespaceTreeControl x:Name="PrimaryShellTreeView" Grid.Column="0"/>
+                <local:ShellNamespaceTreeControl x:Name="PrimaryShellTreeView"/>
             </SplitView.Pane>
             <Grid>
-                <local:ShellListView x:Name="PrimaryShellListView" Grid.Column="1"/>
+                <local:ShellListView x:Name="PrimaryShellListView"/>
             </Grid>
             
 <!--        <controls:PropertySizer HorizontalAlignment="Left"
