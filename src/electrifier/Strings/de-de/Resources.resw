@@ -124,34 +124,34 @@
     <value>electrifier</value>
   </data>
   <data name="Shell_Main.Content" xml:space="preserve">
-    <value>Workbench</value>
+    <value>Werkbank</value>
   </data>
   <data name="WebView_Loading.Text" xml:space="preserve">
     <value>Loading...</value>
   </data>
   <data name="WebView_FailedMessage.Text" xml:space="preserve">
-    <value>Page failed to load. Check connection and reload.</value>
+    <value>Seite konnte nicht geladen werden. Prüfen Sie Ihre Verbindung und laden Sie sie erneut: Check connection and reload.</value>
   </data>
   <data name="BrowserBackButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Browse back in Navigation History</value>
+    <value>Zurück im Navigations Logbuch</value>
   </data>
   <data name="BrowserBackButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
-    <value>Browse back</value>
+    <value>Zurück navigieren</value>
   </data>
   <data name="BrowserForwardButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Browse forward in Navigation History</value>
+    <value>Vorwärts im Navigation Logbuch</value>
   </data>
   <data name="BrowserForwardButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
-    <value>Browse forward</value>
+    <value>Nach Vorne navigieren</value>
   </data>
   <data name="WebView_Reload.Content" xml:space="preserve">
     <value>Reload</value>
   </data>
   <data name="ReloadButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Reload</value>
+    <value>Aktualisieren</value>
   </data>
   <data name="ReloadButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
-    <value>Reload</value>
+    <value>Aktualisieren</value>
   </data>
   <data name="OpenInBrowserButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Open in browser</value>
@@ -163,7 +163,7 @@
     <value>Browser...</value>
   </data>
   <data name="Shell_FileManagement.Content" xml:space="preserve">
-    <value>New Shell...</value>
+    <value>Neue Shell...</value>
   </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">
     <value>Personalization</value>
@@ -172,16 +172,16 @@
     <value>Theme</value>
   </data>
   <data name="Settings_Theme_Light.Content" xml:space="preserve">
-    <value>Light</value>
+    <value>Hell</value>
   </data>
   <data name="Settings_Theme_Dark.Content" xml:space="preserve">
-    <value>Dark</value>
+    <value>Dunkel</value>
   </data>
   <data name="Settings_Theme_Default.Content" xml:space="preserve">
     <value>Default</value>
   </data>
   <data name="Settings_About.Text" xml:space="preserve">
-    <value>about electrifier</value>
+    <value>über electrifier</value>
   </data>
   <data name="Settings_AboutDescription.Text" xml:space="preserve">
     <value>electrifier desktop.</value>

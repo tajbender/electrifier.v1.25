@@ -25,14 +25,20 @@ namespace electrifier.Controls;
 
 public sealed partial class ShellNamespaceTreeControl : UserControl
 {
-    public TreeView NativeTreeView => TreeView;
-    public ObservableCollection<ShellBrowserItem> Items;
+    private TreeView NativeTreeView => TreeView;
+    internal ObservableCollection<ShellBrowserItem> Items;
     //    internal readonly AdvancedCollectionView AdvancedCollectionView;
     //    public static ShellNamespaceService NamespaceService => App.GetService<ShellNamespaceService>();
-    public Action<object, TreeViewSelectionChangedEventArgs> SelectionChanged
+
+    public bool AutoExpandAfterSelection
     {
         get;
-        internal set;
+        set;
+    }
+    public event TypedEventHandler<TreeView, TreeViewSelectionChangedEventArgs> SelectionChanged
+    {
+        add => NativeTreeView.SelectionChanged += value;
+        remove => NativeTreeView.SelectionChanged -= value;
     }
     public TreeViewNode SelectedItem
     {
@@ -46,6 +52,18 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         DataContext = this;
         Items = [];
 
+
+        /*  // SelectionChanged = (sender, e) =>
+            //{
+            //    if (e.AddedItems.Count > 0)
+            //    {
+            //        if (e.AddedItems[0] is ShellBrowserItem item)
+            //        {
+            //            var args = new SelectionChangedEventArgs(Array.Empty<object>(), Array.Empty<object>());
+            //            SelectionChanged(this, args);
+            //        }
+            //    }
+            //}; */
 
         //AdvancedCollectionView = new AdvancedCollectionView(Items, true);
         //NativeTreeView.ItemsSource = AdvancedCollectionView;
@@ -69,17 +87,25 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
     {
         Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, isFolder: true));
         Items.Add(BrowserItemFactory.HomeShellFolder());
+        // TODO: Add separator
+        // TODO: Add this as child items of the rootItem
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_SkyDrive));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Downloads));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Documents));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Pictures));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Music));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Videos));
+
+        Items[0].EnumChildItems();
+        Items[0].TreeViewItemIsSelected = true;
+        // Items[0].Expand(); TODO: Property AutoExpandOnSelect => true
     }
 
     // TODO: Bind to Property
     internal void Navigate(ShellBrowserItem item)
     {
+        // TODO: Use https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper?view=winrt-22621 VisualTreeHelper to find child TreeViewItems
+
         if (item == null)
         {
             return;
