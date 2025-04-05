@@ -40,6 +40,7 @@ public abstract class AbstractBrowserItem<T> // TODO: IDisposable
         //todo: var pb = new PropertyBag();
     }
 
+    // WARN: Why is this used / introduced?
     public virtual Task EnumChildItems() => Task.CompletedTask;
 
     //internal void async IconUpdate(int Index, SoftwareBitmapSource bmpSrc);
