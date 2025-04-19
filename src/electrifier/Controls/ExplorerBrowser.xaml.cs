@@ -170,7 +170,7 @@ public sealed partial class ExplorerBrowser : UserControl
                 using var shFolder = new ShellFolder(target.ShellItem);
 
                 target.ChildItems.Clear();
-                //                ShellListView.Items.Clear();
+                PrimaryShellListView.Items.Clear();
                 foreach (var child in shFolder)
                 {
                     var shStockIconId = child.IsFolder
@@ -189,6 +189,7 @@ public sealed partial class ExplorerBrowser : UserControl
                     // TODO: if(child.IsLink) => Add Link-Overlay
 
                     target.ChildItems.Add(ebItem);
+                    PrimaryShellListView.Items.Add(ebItem);
                     // TODO: Update PrimaryShellListView.Items => target.ChildItems with asynchronous loading;
                 }
 
@@ -198,6 +199,16 @@ public sealed partial class ExplorerBrowser : UserControl
             else
             {
                 Debug.WriteLine(".Navigate() => Cache hit!");
+                PrimaryShellListView.Items.Clear();
+                foreach (var child in target.ChildItems)
+                {
+                    var ebItem = child as ShellBrowserItem;
+                    if (ebItem is not null)
+                    {
+                        PrimaryShellListView.Items.Add(ebItem);
+                    }
+                }
+
             }
 
             //if (shTreeControl == PrimaryShellTreeView)

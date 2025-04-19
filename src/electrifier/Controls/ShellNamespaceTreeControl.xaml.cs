@@ -112,3 +112,23 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         }
     }
 }
+
+
+/*
+public class ShellNamespaceTreeControlSelectionChangedEventArgs : EventArgs
+{
+    public ShellNamespaceTreeControlSelectionChangedEventArgs(TreeView treeView, TreeViewSelectionChangedEventArgs args)
+    {
+        TreeView = treeView;
+        SelectionChangedEventArgs = args;
+    }
+    public TreeView TreeView
+    {
+        get;
+    }
+    public TreeViewSelectionChangedEventArgs SelectionChangedEventArgs
+    {
+        get;
+    }
+}
+*/
