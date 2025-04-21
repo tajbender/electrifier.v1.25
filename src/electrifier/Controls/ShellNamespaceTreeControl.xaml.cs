@@ -101,18 +101,10 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         // Items[0].Expand(); TODO: Property AutoExpandOnSelect => true
     }
 
-    // TODO: Bind to Property 
-    internal void Navigate(ShellBrowserItem item)
-    {
-        // TODO: Use https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper?view=winrt-22621 VisualTreeHelper to find child TreeViewItems
 
-        if (item == null)
-        {
-            return;
-        }
-    }
+    public delegate void NavigatedEventHandler(object sender, NavigatedEventArgs e);
+    public event NavigatedEventHandler Navigated;
 
-    public event TypedEventHandler<ShellNamespaceTreeControl, ShellBrowserItem> SelectedItemChangedEventHandler;
     private void OnNativeTreeViewSelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs e)
     {
         var addedItems = e.AddedItems;
@@ -142,7 +134,8 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
             Debug.Print(".OnNativeTreeViewSelectionChanged(): shellBrowserItem is null!");
             return;
         }
-
-        SelectedItemChangedEventHandler?.BeginInvoke(this, shellBrowserItem, null, null);
+        var selectedFolder = new ShellFolder(shellBrowserItem.ShellItem);
+        Navigated?.Invoke(this, new NavigatedEventArgs(selectedFolder));
+        //Navigated?.BeginInvoke(this, shellBrowserItem, null, null);
     }
 }

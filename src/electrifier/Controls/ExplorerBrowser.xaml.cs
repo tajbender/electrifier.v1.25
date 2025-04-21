@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -53,6 +54,9 @@ public sealed partial class ExplorerBrowser : UserControl
     }
     private Shel32NamespaceService Shel32NamespaceService => App.GetService<Shel32NamespaceService>();
 
+    public ObservableCollection<ShellBrowserItem> CurrentItems;
+
+
     /// <summary>The default text that is displayed when an empty folder is shown</summary>
     [Category("Appearance"), DefaultValue("This folder is empty."), Description("The default text that is displayed when an empty folder is shown.")]
     public string EmptyFolderText { get; set; } = "This folder is empty.";
@@ -72,6 +76,8 @@ public sealed partial class ExplorerBrowser : UserControl
 
         Loading += ExplorerBrowser_Loading;
         Loaded += ExplorerBrowser_Loaded;
+
+        PrimaryShellTreeView.Navigated += PrimaryShellTreeView_Navigated;
         //PrimaryShellTreeView.SelectedItemChangedEventHandler += OnPrimaryShellTreeViewSelectedItemChanged;
         //        PrimaryShellTreeView.SelectionChanged += PrimaryTreeViewSelectionChanged;
         //        SecondaryShellTreeView.SelectionChanged += SecondaryTreeViewSelectionChanged;
@@ -79,6 +85,14 @@ public sealed partial class ExplorerBrowser : UserControl
         // Navigate(PrimaryShellTreeView.Items[0] as ShellBrowserItem);
         // . PrimaryShellTreeView.Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
         // . SecondaryShellTreeView.Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
+    }
+
+    private void PrimaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
+    {
+        Debug.Print($".PrimaryShellTreeView_Navigated() to {e.NewLocation.Name}");
+        PrimaryShellListView.Items.Clear();
+        PrimaryShellListView.Items.Add(new ShellBrowserItem(e.NewLocation.PIDL, true));
+        //var enumeration =  Shel32NamespaceService.Enumerate(e.NewLocation);
     }
 
     private void ExplorerBrowser_Loading(FrameworkElement sender, object args)
