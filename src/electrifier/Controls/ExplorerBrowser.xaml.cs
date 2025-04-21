@@ -78,6 +78,7 @@ public sealed partial class ExplorerBrowser : UserControl
         Loaded += ExplorerBrowser_Loaded;
 
         PrimaryShellTreeView.Navigated += PrimaryShellTreeView_Navigated;
+        SecondaryShellTreeView.Navigated += SecondaryShellTreeView_Navigated;
         //PrimaryShellTreeView.SelectedItemChangedEventHandler += OnPrimaryShellTreeViewSelectedItemChanged;
         //        PrimaryShellTreeView.SelectionChanged += PrimaryTreeViewSelectionChanged;
         //        SecondaryShellTreeView.SelectionChanged += SecondaryTreeViewSelectionChanged;
@@ -91,8 +92,25 @@ public sealed partial class ExplorerBrowser : UserControl
     {
         Debug.Print($".PrimaryShellTreeView_Navigated() to {e.NewLocation.Name}");
         PrimaryShellListView.Items.Clear();
-        PrimaryShellListView.Items.Add(new ShellBrowserItem(e.NewLocation.PIDL, true));
-        //var enumeration =  Shel32NamespaceService.Enumerate(e.NewLocation);
+
+        var items = new ShellFolder(e.NewLocation.PIDL).EnumerateChildren(FolderItemFilter.Storage);
+        foreach (var item in items)
+        {
+            // TODO: shNamespaceService.RetrieveChildItemsAsync().select()...;
+            PrimaryShellListView.Items.Add(new ShellBrowserItem(item.PIDL, null));
+        }
+    }
+    private void SecondaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
+    {
+        Debug.Print($".SecondaryShellTreeView_Navigated() to {e.NewLocation.Name}");
+        SecondaryShellListView.Items.Clear();
+
+        var items = new ShellFolder(e.NewLocation.PIDL).EnumerateChildren(FolderItemFilter.Storage);
+        foreach (var item in items)
+        {
+            // TODO: shNamespaceService.RetrieveChildItemsAsync().select()...;
+            SecondaryShellListView.Items.Add(new ShellBrowserItem(item.PIDL, null));
+        }
     }
 
     private void ExplorerBrowser_Loading(FrameworkElement sender, object args)
