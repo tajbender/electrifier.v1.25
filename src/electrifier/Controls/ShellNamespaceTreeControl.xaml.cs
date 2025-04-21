@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -35,12 +36,19 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         get;
         set;
     }
-    public event TypedEventHandler<TreeView, TreeViewSelectionChangedEventArgs> SelectionChanged
-    {
-        add => NativeTreeView.SelectionChanged += value;
-        remove => NativeTreeView.SelectionChanged -= value;
-    }
     public TreeViewNode? SelectedItem => NativeTreeView.SelectedNode as TreeViewNode;
+
+
+    //    public event TypedEventHandler<ShellNamespaceTreeControl, TreeViewNode> SelectionChanged
+    //    {
+    //        add => NativeTreeView.SelectionChanged += value;
+    //        remove => NativeTreeView.SelectionChanged -= value;
+    //    }
+    //public event EventHandler FolderItemsChanged
+    //{
+    //    add => ;
+    //    remove => ;
+    //}
 
     public ShellNamespaceTreeControl()
     {
@@ -70,16 +78,12 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         //rootItem.EnumChildItems();
         //rootItem.TreeViewItemIsSelected = true;
 
-        Loading += ShellNamespaceTreeControl_Loading;
-
-        /*  SelectionChanged = (sender, e) =>
-            {   if (e.AddedItems.Count > 0)
-                {   if (e.AddedItems[0] is ShellBrowserItem item)
-                    {   var args = new SelectionChangedEventArgs(Array.Empty<object>(), Array.Empty<object>());
-                        SelectionChanged(this, args); } } }; */
+        Loading += OnShellNamespaceTreeControlLoading;
+        NativeTreeView.SelectionChanged += OnNativeTreeViewSelectionChanged;
     }
 
-    private void ShellNamespaceTreeControl_Loading(FrameworkElement sender, object args)
+
+    private void OnShellNamespaceTreeControlLoading(FrameworkElement sender, object args)
     {
         Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, isFolder: true));
         Items.Add(BrowserItemFactory.HomeShellFolder());
@@ -97,7 +101,7 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         // Items[0].Expand(); TODO: Property AutoExpandOnSelect => true
     }
 
-    // TODO: Bind to Property
+    // TODO: Bind to Property 
     internal void Navigate(ShellBrowserItem item)
     {
         // TODO: Use https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper?view=winrt-22621 VisualTreeHelper to find child TreeViewItems
@@ -107,24 +111,38 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
             return;
         }
     }
-}
 
+    public event TypedEventHandler<ShellNamespaceTreeControl, ShellBrowserItem> SelectedItemChangedEventHandler;
+    private void OnNativeTreeViewSelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs e)
+    {
+        var addedItems = e.AddedItems;
+        var removedItems = e.RemovedItems;
 
-/*
-public class ShellNamespaceTreeControlSelectionChangedEventArgs : EventArgs
-{
-    public ShellNamespaceTreeControlSelectionChangedEventArgs(TreeView treeView, TreeViewSelectionChangedEventArgs args)
-    {
-        TreeView = treeView;
-        SelectionChangedEventArgs = args;
-    }
-    public TreeView TreeView
-    {
-        get;
-    }
-    public TreeViewSelectionChangedEventArgs SelectionChangedEventArgs
-    {
-        get;
+        Debug.WriteIf((addedItems.Count < 1 && removedItems.Count < 1), "None or less Items added nor removed", ".OnNativeTreeViewSelectionChanged() parameter mismatch.");
+
+        foreach (var item in addedItems)
+        {
+            // TODO: Add folders and folder content to ShellListView and group by folder
+            Debug.Print($".OnNativeTreeViewSelectionChanged(Item `{item?.ToString()}`) has been added to TreeView' selected items.");
+        }
+        foreach (var item in removedItems)
+        {
+            // TODO: Add folders and folder content to ShellListView and group by folder
+            Debug.Print($".OnNativeTreeViewSelectionChanged(Item `{item?.ToString()}`) has been deselected.");
+        }
+
+        var selectedNode = addedItems[0];
+        if (selectedNode is null)
+        {
+            Debug.Print(".OnNativeTreeViewSelectionChanged(): selectedNode is null!");
+            return;
+        }
+        if (selectedNode is not ShellBrowserItem shellBrowserItem)
+        {
+            Debug.Print(".OnNativeTreeViewSelectionChanged(): shellBrowserItem is null!");
+            return;
+        }
+
+        SelectedItemChangedEventHandler?.BeginInvoke(this, shellBrowserItem, null, null);
     }
 }
-*/

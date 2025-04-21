@@ -72,9 +72,10 @@ public sealed partial class ExplorerBrowser : UserControl
 
         Loading += ExplorerBrowser_Loading;
         Loaded += ExplorerBrowser_Loaded;
-        PrimaryShellTreeView.SelectionChanged += PrimaryTreeViewSelectionChanged;
-        SecondaryShellTreeView.SelectionChanged += SecondaryTreeViewSelectionChanged;
-
+        //PrimaryShellTreeView.SelectedItemChangedEventHandler += OnPrimaryShellTreeViewSelectedItemChanged;
+        //        PrimaryShellTreeView.SelectionChanged += PrimaryTreeViewSelectionChanged;
+        //        SecondaryShellTreeView.SelectionChanged += SecondaryTreeViewSelectionChanged;
+        //
         // Navigate(PrimaryShellTreeView.Items[0] as ShellBrowserItem);
         // . PrimaryShellTreeView.Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
         // . SecondaryShellTreeView.Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
@@ -93,14 +94,17 @@ public sealed partial class ExplorerBrowser : UserControl
 //        }
     }
 
-    private void PrimaryTreeViewSelectionChanged(object sender, TreeViewSelectionChangedEventArgs e)
-    {
-        NativeTreeView_SelectionChanged(PrimaryShellTreeView, PrimaryShellListView, e);
-    }
+    //private void PrimaryTreeViewSelectionChanged(object sender, TreeViewSelectionChangedEventArgs e)
+    //{
+    //    NativeTreeView_SelectionChanged(PrimaryShellTreeView, PrimaryShellListView, e);
+    //}
 
-    private void SecondaryTreeViewSelectionChanged(object sender, TreeViewSelectionChangedEventArgs e)
+    //private void SecondaryTreeViewSelectionChanged(object sender, TreeViewSelectionChangedEventArgs e)
+    //{
+    //    NativeTreeView_SelectionChanged(SecondaryShellTreeView, SecondaryShellListView, e);
+    //}
+    private void OnPrimaryShellTreeViewSelectedItemChanged(ShellNamespaceTreeControl sender, ShellBrowserItem args)
     {
-        NativeTreeView_SelectionChanged(SecondaryShellTreeView, SecondaryShellListView, e);
     }
 
     private void NativeTreeView_SelectionChanged(ShellNamespaceTreeControl senderTreeView, ShellListView shListView, TreeViewSelectionChangedEventArgs e)
