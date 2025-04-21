@@ -40,11 +40,7 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         add => NativeTreeView.SelectionChanged += value;
         remove => NativeTreeView.SelectionChanged -= value;
     }
-    public TreeViewNode SelectedItem
-    {
-        get;
-        internal set;
-    }
+    public TreeViewNode? SelectedItem => NativeTreeView.SelectedNode as TreeViewNode;
 
     public ShellNamespaceTreeControl()
     {

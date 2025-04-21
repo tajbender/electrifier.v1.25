@@ -68,10 +68,12 @@ public sealed partial class ExplorerBrowser : UserControl
         InitializeComponent();
         DataContext = this;
 
+        //var initialNavigationTarget = ShellBrowserItem.HomeShellFolder();
+
         Loading += ExplorerBrowser_Loading;
         Loaded += ExplorerBrowser_Loaded;
-        PrimaryShellTreeView.SelectionChanged += NativeTreeView_SelectionChanged;
-        SecondaryShellTreeView.SelectionChanged += NativeTreeView_SelectionChanged;
+        PrimaryShellTreeView.SelectionChanged += PrimaryTreeViewSelectionChanged;
+        SecondaryShellTreeView.SelectionChanged += SecondaryTreeViewSelectionChanged;
 
         // Navigate(PrimaryShellTreeView.Items[0] as ShellBrowserItem);
         // . PrimaryShellTreeView.Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
@@ -80,7 +82,7 @@ public sealed partial class ExplorerBrowser : UserControl
 
     private void ExplorerBrowser_Loading(FrameworkElement sender, object args)
     {
-        //var initialNavigationTarget = ShellBrowserItem.HomeShellFolder();
+        // Enumerate the root items of the shell namespace
     }
     private void ExplorerBrowser_Loaded(object sender, RoutedEventArgs e)
     {
@@ -91,86 +93,80 @@ public sealed partial class ExplorerBrowser : UserControl
 //        }
     }
 
-    private void NativeTreeView_SelectionChanged(object sender, TreeViewSelectionChangedEventArgs e)
+    private void PrimaryTreeViewSelectionChanged(object sender, TreeViewSelectionChangedEventArgs e)
     {
-        var owner = sender as ShellNamespaceTreeControl;
+        NativeTreeView_SelectionChanged(PrimaryShellTreeView, PrimaryShellListView, e);
+    }
+
+    private void SecondaryTreeViewSelectionChanged(object sender, TreeViewSelectionChangedEventArgs e)
+    {
+        NativeTreeView_SelectionChanged(SecondaryShellTreeView, SecondaryShellListView, e);
+    }
+
+    private void NativeTreeView_SelectionChanged(ShellNamespaceTreeControl senderTreeView, ShellListView shListView, TreeViewSelectionChangedEventArgs e)
+    {
         var addedItems = e.AddedItems;
         var removedItems = e.RemovedItems;
 
-        Debug.WriteIf((addedItems.Count < 1 || removedItems.Count < 1), "None or less Items added nor removed", ".NativeTreeView_SelectionChanged() parameter mismatch.");
+        Debug.WriteIf((addedItems.Count < 1 && removedItems.Count < 1), "None or less Items added nor removed", ".NativeTreeView_SelectionChanged() parameter mismatch.");
 
         foreach (var item in addedItems)
         {
             // TODO: Add folders and folder content to ShellListView and group by folder
-            Debug.Print($".NativeTreeView_SelectionChanged(`{item?.ToString()}`) added.");
+            Debug.Print($".NativeTreeView_SelectionChanged(Item `{item?.ToString()}`) has been added to TreeView' selected items.");
+        }
+        foreach (var item in removedItems)
+        {
+            // TODO: Add folders and folder content to ShellListView and group by folder
+            Debug.Print($".NativeTreeView_SelectionChanged(Item `{item?.ToString()}`) has been deselected.");
         }
 
-        // Misc Debris:
-        var selectedFolder = addedItems[0] as ShellBrowserItem;
-        var currentTreeNode = owner?.SelectedItem as TreeViewNode;
-        if (currentTreeNode != null)
+        var selectedNode = addedItems[0];
+        if (selectedNode is null)
         {
-            Debug.Print($".NativeTreeView_SelectionChanged(`{selectedFolder?.DisplayName}`, treeNode: {currentTreeNode?.ToString()}).");
+            Debug.Print(".NativeTreeView_SelectionChanged(): selectedNode is null!");
+            shListView.Items.Clear();
+            return;
         }
-
-        // var currentTreeNode = PrimaryShellTreeView.NativeTreeView.SelectedItem;
-        // Items.Add(rootItem);
-
-        Debug.Print($".NativeTreeView_SelectionChanged(`{selectedFolder?.DisplayName}`, treeNode: {currentTreeNode?.ToString()}).");
-
-        // check sender!
-        // TODO: ShellTreeView.NativeTreeView.SelectedItem = newTreeNode(find TreeNode
-
-        if (selectedFolder?.PIDL is null)
+        if (selectedNode is not ShellBrowserItem shellBrowserItem)
         {
-            Debug.Print(".NativeTreeView_SelectionChanged(): selectedFolder.PIDL is null!");
+            Debug.Print(".NativeTreeView_SelectionChanged(): shellBrowserItem is null!");
+            shListView.Items.Clear();
             return;
         }
 
-        // => TODO: currentTreeNode as TreeViewNode ; (owner as ShellNamespaceTreeControl)
-        _ = Navigate(selectedFolder, owner);
+        _ = Navigate(shellBrowserItem, shListView);
     }
 
-    /*
-    public void Navigate(ShellItem? shellItem,
-        IExplorerBrowser.ExplorerBrowser.ExplorerBrowserNavigationItemCategory category =
-            IExplorerBrowser.ExplorerBrowser.ExplorerBrowserNavigationItemCategory.Default)
-    {
-        Debug.Assert(shellItem != null);
-
-        Debug.WriteLineIf(!shellItem.IsFolder, $"Navigate({shellItem.ToString()}) => is not a folder!");
-        // TODO: If no folder, or drive empty, etc... show empty list view with error message
-
-        // TODO: Find TreeItem here!
-        BrowserItem targetItem = new(shellItem.PIDL, null, null);
-        _currentNavigationTask = Navigate(targetItem);
-    }     
-     */
-
-    internal async Task<HRESULT> Navigate(ShellBrowserItem target, ShellNamespaceTreeControl shTreeControl)
+    internal async Task<HRESULT> Navigate(ShellBrowserItem target, ShellListView shListView)
     {
         var shTargetItem = target.ShellItem;
         Debug.Assert(shTargetItem is not null);
         // TODO: If no folder, or drive empty, etc... show empty list view with error message
 
-        // TODO: init ShellNamespaceService
         try
         {
-            //            if (_currentNavigationTask is { IsCompleted: false })
-            //          {
-            //              Debug.Print("ERROR! <_currentNavigationTask> already running");
-            //              // cancel current task
-            //              //CurrentNavigationTask
-            //          }
-
             IsLoading = true;
 
-            if (target.ChildItems.Count <= 0)
+            if (target.ChildItems.Count > 0)
             {
-                using var shFolder = new ShellFolder(target.ShellItem);
+                Debug.WriteLine(".Navigate() => Cache hit!");
+                shListView.Items.Clear();
+                foreach (var child in target.ChildItems)
+                {
+                    var ebItem = child as ShellBrowserItem;
+                    if (ebItem is not null)
+                    {
+                        shListView.Items.Add(ebItem);
+                    }
+                }
+            }
+            else
+            {
+                using var shFolder = new ShellFolder(shTargetItem);
 
                 target.ChildItems.Clear();
-                PrimaryShellListView.Items.Clear();
+                shListView.Items.Clear();
                 foreach (var child in shFolder)
                 {
                     var shStockIconId = child.IsFolder
@@ -189,57 +185,11 @@ public sealed partial class ExplorerBrowser : UserControl
                     // TODO: if(child.IsLink) => Add Link-Overlay
 
                     target.ChildItems.Add(ebItem);
-                    PrimaryShellListView.Items.Add(ebItem);
+                    shListView.Items.Add(ebItem);
                     // TODO: Update PrimaryShellListView.Items => target.ChildItems with asynchronous loading;
                 }
-
-
                 // TODO: Update PrimaryShellListView.Items => target.ChildItems with asynchronous loading;
             }
-            else
-            {
-                Debug.WriteLine(".Navigate() => Cache hit!");
-                PrimaryShellListView.Items.Clear();
-                foreach (var child in target.ChildItems)
-                {
-                    var ebItem = child as ShellBrowserItem;
-                    if (ebItem is not null)
-                    {
-                        PrimaryShellListView.Items.Add(ebItem);
-                    }
-                }
-
-            }
-
-            //if (shTreeControl == PrimaryShellTreeView)
-            //{
-            //    var shListView = PrimaryShellListView;
-            //    shListView.Items = new();
-
-            //    foreach (var child in target.ChildItems)
-            //    {
-            //        var ebItem = child as ShellBrowserItem;
-            //        if (ebItem is not null)
-            //        {
-            //            shListView.Items.Add(ebItem);
-            //        }
-            //    }
-            //}
-            //else if (shTreeControl == SecondaryShellTreeView)
-            //{
-            //    var shListView = PrimaryShellListView;
-            //    shListView.Items = new();
-
-            //    foreach (var child in target.ChildItems)
-            //    {
-            //        var ebItem = child as ShellBrowserItem;
-            //        if (ebItem is not null)
-            //        {
-            //            shListView.Items.Add(ebItem);
-            //        }
-            //    }
-            //}
-            // TODO: Load folder-open icon and overlays
         }
         catch (COMException comEx)
         {
