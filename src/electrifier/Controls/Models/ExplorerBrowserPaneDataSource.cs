@@ -16,15 +16,14 @@ internal record ExplorerBrowserPaneDataSource(ShellItem ShellItem
     public string DisplayName => ExplicitDisplayName ?? ShellItem.Name ?? ToString();
     public string? ExplicitDisplayName
     {
-        get; set;
+        get;
     } = ExplicitDisplayName;
     public IEnumerable<ShellItem> Items
     {
         get; set;
     } = Items;
 
-    public ExplorerBrowserPaneDataSource(ShellItem shellItem) : this(shellItem, null, []) { }
+    public ExplorerBrowserPaneDataSource(ShellItem shellItem) : this(shellItem, default, []) { }
 
     public event PropertyChangedEventHandler? PropertyChanged;
-
 }

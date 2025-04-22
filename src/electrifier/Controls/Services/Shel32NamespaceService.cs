@@ -37,13 +37,5 @@ internal class Shel32NamespaceService
         //    .ToList());
     }
 
-
-    /// <summary>
-    /// Gets the debugger display.
-    /// </summary>
-    /// <returns>A <see cref="string" represnteation of this object for debugging purposes./></returns>
-    private string GetDebuggerDisplay()
-    {
-        return ToString() ?? string.Empty;
-    }
+    private string GetDebuggerDisplay() => $"{nameof(Shel32NamespaceService)}>";
 }
