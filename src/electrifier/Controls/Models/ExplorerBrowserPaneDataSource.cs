@@ -10,23 +10,20 @@ namespace electrifier.Controls.Models;
 
 internal record ExplorerBrowserPaneDataSource(ShellItem ShellItem
 , string? ExplicitDisplayName
-, IEnumerable<ShellItem>? Items
+, IEnumerable<ShellItem> Items
 ) : INotifyPropertyChanged
 {
-    public string DisplayName
-    {
-        get => ExplicitDisplayName ?? ShellItem.Name;
-    }
+    public string DisplayName => ExplicitDisplayName ?? ShellItem.Name ?? ToString();
     public string? ExplicitDisplayName
     {
         get; set;
     } = ExplicitDisplayName;
-    public IEnumerable<ShellItem>? Items
+    public IEnumerable<ShellItem> Items
     {
         get; set;
     } = Items;
 
-    public ExplorerBrowserPaneDataSource(ShellItem shellItem) : this(shellItem, shellItem.Name, []) { }
+    public ExplorerBrowserPaneDataSource(ShellItem shellItem) : this(shellItem, null, []) { }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
