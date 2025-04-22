@@ -29,28 +29,20 @@ using static Vanara.PInvoke.ComCtl32;
 namespace electrifier.Controls;
 
 /// <summary>
-/// A WinUI 3 control that displays a <see cref="electrifier.Controls.ShellNamespaceTreeControl"/>
-/// and <see cref="electrifier.Controls.ShellListView"/> for navigating through the shell namespace.
-/// 
-/// This replaces the <see cref="Microsoft.WindowsAPICodePack.Controls.ExplorerBrowser"/> control.
+/// <see href="Microsoft.WindowsAPICodePack.Controls.ExplorerBrowser">ExplorerBrowser</see> like control for WinUI 3 and Windows App SDK.
+/// Microsoft.WindowsAPICodePack.Controls.ExplorerBrowser
+/// <see href="https://github.com/dahall/Vanara">Vanara</see>.
+/// <see href="Microsoft.WindowsAPICodePack.Controls.ExplorerBrowser"/>
+/// <see cref="electrifier.Controls.ShellNamespaceTreeControl"/>
+/// <see cref="electrifier.Controls.ShellListView"/> 
+/// for navigating through the shell namespace.
 /// </summary>
 public sealed partial class ExplorerBrowser : UserControl
 {
-    private bool _isLoading = true;
-
     public bool IsLoading
     {
-        get => _isLoading;
-        private set
-        {
-            if (value == _isLoading)
-            {
-                return;
-            }
-
-            _isLoading = value;
-            // OnPropertyChanged();
-        }
+        get;
+        private set;
     }
     private Shel32NamespaceService Shel32NamespaceService => App.GetService<Shel32NamespaceService>();
     public ObservableCollection<ShellBrowserItem> CurrentItems;
