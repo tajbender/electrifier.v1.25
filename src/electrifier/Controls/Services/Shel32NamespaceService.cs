@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,13 @@ namespace electrifier.Controls.Services;
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 internal class Shel32NamespaceService
 {
+    /// <summary>The default text that is displayed when an empty folder is shown</summary>
+    [Category("Appearance"), DefaultValue("This folder is empty."), Description("The default text that is displayed when an empty folder is shown.")]
+    public string EmptyFolderText { get; set; } = "This folder is empty.";
+    /// <summary>The default text that is displayed when an empty group is shown</summary>
+    [Category("Appearance"), DefaultValue("This group is empty."), Description("The default text that is displayed when an empty group is shown.")]
+    public string EmptyGroupText { get; set; } = "This group is empty.";
+
     public ObservableCollection<ShellBrowserItem> Enumerate(ShellItem shellItem)
     {
         var result = new ObservableCollection<ShellBrowserItem>();

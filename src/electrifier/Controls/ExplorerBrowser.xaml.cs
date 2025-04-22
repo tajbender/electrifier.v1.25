@@ -53,17 +53,7 @@ public sealed partial class ExplorerBrowser : UserControl
         }
     }
     private Shel32NamespaceService Shel32NamespaceService => App.GetService<Shel32NamespaceService>();
-
     public ObservableCollection<ShellBrowserItem> CurrentItems;
-
-
-    /// <summary>The default text that is displayed when an empty folder is shown</summary>
-    [Category("Appearance"), DefaultValue("This folder is empty."), Description("The default text that is displayed when an empty folder is shown.")]
-    public string EmptyFolderText { get; set; } = "This folder is empty.";
-    /// <summary>The default text that is displayed when an empty group is shown</summary>
-    [Category("Appearance"), DefaultValue("This group is empty."), Description("The default text that is displayed when an empty group is shown.")]
-    public string EmptyGroupText { get; set; } = "This group is empty.";
-
     public event EventHandler<NavigatedEventArgs> Navigated;
     public event EventHandler<Vanara.Windows.Shell.NavigationFailedEventArgs> NavigationFailed;
 
@@ -79,13 +69,19 @@ public sealed partial class ExplorerBrowser : UserControl
 
         PrimaryShellTreeView.Navigated += PrimaryShellTreeView_Navigated;
         SecondaryShellTreeView.Navigated += SecondaryShellTreeView_Navigated;
-        //PrimaryShellTreeView.SelectedItemChangedEventHandler += OnPrimaryShellTreeViewSelectedItemChanged;
-        //        PrimaryShellTreeView.SelectionChanged += PrimaryTreeViewSelectionChanged;
-        //        SecondaryShellTreeView.SelectionChanged += SecondaryTreeViewSelectionChanged;
-        //
-        // Navigate(PrimaryShellTreeView.Items[0] as ShellBrowserItem);
-        // . PrimaryShellTreeView.Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
-        // . SecondaryShellTreeView.Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL, true));
+    }
+
+    private void ExplorerBrowser_Loading(FrameworkElement sender, object args)
+    {
+        // Enumerate the root items of the shell namespace
+    }
+    private void ExplorerBrowser_Loaded(object sender, RoutedEventArgs e)
+    {
+        //        if (PrimaryShellTreeView.Items[0] is ShellBrowserItem initialNavigationTarget)
+        //        {
+        //            _ = Navigate(initialNavigationTarget, PrimaryShellTreeView);
+        //            initialNavigationTarget.TreeViewItemIsSelected = true;  // TODO: Bind property to TreeViewItem.IsSelected
+        //        }
     }
 
     private void PrimaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
@@ -111,67 +107,6 @@ public sealed partial class ExplorerBrowser : UserControl
             // TODO: shNamespaceService.RetrieveChildItemsAsync().select()...;
             SecondaryShellListView.Items.Add(new ShellBrowserItem(item.PIDL, null));
         }
-    }
-
-    private void ExplorerBrowser_Loading(FrameworkElement sender, object args)
-    {
-        // Enumerate the root items of the shell namespace
-    }
-    private void ExplorerBrowser_Loaded(object sender, RoutedEventArgs e)
-    {
-        //        if (PrimaryShellTreeView.Items[0] is ShellBrowserItem initialNavigationTarget)
-        //        {
-        //            _ = Navigate(initialNavigationTarget, PrimaryShellTreeView);
-        //            initialNavigationTarget.TreeViewItemIsSelected = true;  // TODO: Bind property to TreeViewItem.IsSelected
-        //        }
-    }
-
-    //private void PrimaryTreeViewSelectionChanged(object sender, TreeViewSelectionChangedEventArgs e)
-    //{
-    //    NativeTreeView_SelectionChanged(PrimaryShellTreeView, PrimaryShellListView, e);
-    //}
-
-    //private void SecondaryTreeViewSelectionChanged(object sender, TreeViewSelectionChangedEventArgs e)
-    //{
-    //    NativeTreeView_SelectionChanged(SecondaryShellTreeView, SecondaryShellListView, e);
-    //}
-    private void OnPrimaryShellTreeViewSelectedItemChanged(ShellNamespaceTreeControl sender, ShellBrowserItem args)
-    {
-    }
-
-    private void NativeTreeView_SelectionChanged(ShellNamespaceTreeControl senderTreeView, ShellListView shListView, TreeViewSelectionChangedEventArgs e)
-    {
-        var addedItems = e.AddedItems;
-        var removedItems = e.RemovedItems;
-
-        Debug.WriteIf((addedItems.Count < 1 && removedItems.Count < 1), "None or less Items added nor removed", ".NativeTreeView_SelectionChanged() parameter mismatch.");
-
-        foreach (var item in addedItems)
-        {
-            // TODO: Add folders and folder content to ShellListView and group by folder
-            Debug.Print($".NativeTreeView_SelectionChanged(Item `{item?.ToString()}`) has been added to TreeView' selected items.");
-        }
-        foreach (var item in removedItems)
-        {
-            // TODO: Add folders and folder content to ShellListView and group by folder
-            Debug.Print($".NativeTreeView_SelectionChanged(Item `{item?.ToString()}`) has been deselected.");
-        }
-
-        var selectedNode = addedItems[0];
-        if (selectedNode is null)
-        {
-            Debug.Print(".NativeTreeView_SelectionChanged(): selectedNode is null!");
-            shListView.Items.Clear();
-            return;
-        }
-        if (selectedNode is not ShellBrowserItem shellBrowserItem)
-        {
-            Debug.Print(".NativeTreeView_SelectionChanged(): shellBrowserItem is null!");
-            shListView.Items.Clear();
-            return;
-        }
-
-        _ = Navigate(shellBrowserItem, shListView);
     }
 
     internal async Task<HRESULT> Navigate(ShellBrowserItem target, ShellListView shListView)
