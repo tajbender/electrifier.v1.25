@@ -40,9 +40,6 @@ internal class Shel32NamespaceService
             result.Add(browserItem);
         }
         return result;
-        //return new ObservableCollection<ShellBrowserItem>(shellItem.EnumChildItems()
-        //    .Select(item => BrowserItemFactory.FromPIDL(item, item.IsFolder, null))
-        //    .ToList());
     }
 
     private string GetDebuggerDisplay() => $"{nameof(Shel32NamespaceService)}>";

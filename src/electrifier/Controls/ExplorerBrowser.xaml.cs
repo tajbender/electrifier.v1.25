@@ -39,12 +39,7 @@ namespace electrifier.Controls;
 /// </summary>
 public sealed partial class ExplorerBrowser : UserControl
 {
-    public bool IsLoading
-    {
-        get;
-        private set;
-    }
-    private Shel32NamespaceService Shel32NamespaceService => App.GetService<Shel32NamespaceService>();
+
     public ObservableCollection<ShellBrowserItem> CurrentItems;
     public event EventHandler<NavigatedEventArgs> Navigated;
     public event EventHandler<Vanara.Windows.Shell.NavigationFailedEventArgs> NavigationFailed;
@@ -109,8 +104,6 @@ public sealed partial class ExplorerBrowser : UserControl
 
         try
         {
-            IsLoading = true;
-
             using var shFolder = new ShellFolder(shTargetItem);
 
             target.ChildItems.Clear();
@@ -149,10 +142,6 @@ public sealed partial class ExplorerBrowser : UserControl
         {
             Debug.Fail($"[Error] Navigate(<{target}>) failed, reason unknown: {ex.Message}");
             throw;
-        }
-        finally
-        {
-            IsLoading = false;
         }
 
         return HRESULT.S_OK;
