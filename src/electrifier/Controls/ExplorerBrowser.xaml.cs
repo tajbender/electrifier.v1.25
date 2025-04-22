@@ -119,11 +119,11 @@ public sealed partial class ExplorerBrowser : UserControl
     }
     private void ExplorerBrowser_Loaded(object sender, RoutedEventArgs e)
     {
-//        if (PrimaryShellTreeView.Items[0] is ShellBrowserItem initialNavigationTarget)
-//        {
-//            _ = Navigate(initialNavigationTarget, PrimaryShellTreeView);
-//            initialNavigationTarget.TreeViewItemIsSelected = true;  // TODO: Bind property to TreeViewItem.IsSelected
-//        }
+        //        if (PrimaryShellTreeView.Items[0] is ShellBrowserItem initialNavigationTarget)
+        //        {
+        //            _ = Navigate(initialNavigationTarget, PrimaryShellTreeView);
+        //            initialNavigationTarget.TreeViewItemIsSelected = true;  // TODO: Bind property to TreeViewItem.IsSelected
+        //        }
     }
 
     //private void PrimaryTreeViewSelectionChanged(object sender, TreeViewSelectionChangedEventArgs e)
@@ -184,48 +184,32 @@ public sealed partial class ExplorerBrowser : UserControl
         {
             IsLoading = true;
 
-            if (target.ChildItems.Count > 0)
+            using var shFolder = new ShellFolder(shTargetItem);
+
+            target.ChildItems.Clear();
+            shListView.Items.Clear();
+            foreach (var child in shFolder)
             {
-                Debug.WriteLine(".Navigate() => Cache hit!");
-                shListView.Items.Clear();
-                foreach (var child in target.ChildItems)
+                var shStockIconId = child.IsFolder
+                    ? Shell32.SHSTOCKICONID.SIID_FOLDER
+                    : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
+
+                // TODO: check if item is a link. Will cause exception if not a link
+                // SHSTOCKICONID.Link and SHSTOCKICONID.SlowFile have to be used as overlay
+                // var softBitmap = await StockIconFactory.GetStockIconBitmapSource(shStockIconId);
+
+                var ebItem = new ShellBrowserItem(child.PIDL, child.IsFolder)
                 {
-                    var ebItem = child as ShellBrowserItem;
-                    if (ebItem is not null)
-                    {
-                        shListView.Items.Add(ebItem);
-                    }
-                }
-            }
-            else
-            {
-                using var shFolder = new ShellFolder(shTargetItem);
+                    //                        SoftwareBitmap = softBitmap
+                };
 
-                target.ChildItems.Clear();
-                shListView.Items.Clear();
-                foreach (var child in shFolder)
-                {
-                    var shStockIconId = child.IsFolder
-                        ? Shell32.SHSTOCKICONID.SIID_FOLDER
-                        : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
+                // TODO: if(child.IsLink) => Add Link-Overlay
 
-                    // TODO: check if item is a link. Will cause exception if not a link
-                    // SHSTOCKICONID.Link and SHSTOCKICONID.SlowFile have to be used as overlay
-                    // var softBitmap = await StockIconFactory.GetStockIconBitmapSource(shStockIconId);
-
-                    var ebItem = new ShellBrowserItem(child.PIDL, child.IsFolder)
-                    {
-                        //                        SoftwareBitmap = softBitmap
-                    };
-
-                    // TODO: if(child.IsLink) => Add Link-Overlay
-
-                    target.ChildItems.Add(ebItem);
-                    shListView.Items.Add(ebItem);
-                    // TODO: Update PrimaryShellListView.Items => target.ChildItems with asynchronous loading;
-                }
+                target.ChildItems.Add(ebItem);
+                shListView.Items.Add(ebItem);
                 // TODO: Update PrimaryShellListView.Items => target.ChildItems with asynchronous loading;
             }
+            // TODO: Update PrimaryShellListView.Items => target.ChildItems with asynchronous loading;
         }
         catch (COMException comEx)
         {
