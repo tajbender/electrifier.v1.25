@@ -238,6 +238,48 @@
             <Grid>
                 <local:ShellListView x:Name="PrimaryShellListView" />
             </Grid>
+            <!--<CommandBar x:Name="StatusCommandBar"
+                        HorizontalAlignment="Left"
+                        HorizontalContentAlignment="Left"
+                        VerticalAlignment="Stretch"
+                        VerticalContentAlignment="Center">
+                <AppBarButton IsCompact="True">
+                    <TextBlock>
+                    <Run FontWeight="SemiBold"
+                         Text="Items: " />
+                    </TextBlock>
+                </AppBarButton>
+                <AppBarSeparator />
+                <AppBarButton IsCompact="True">
+                    <TextBlock>
+                    <Run FontWeight="SemiBold"
+                         Text="Folders: " />
+                    </TextBlock>
+                </AppBarButton>
+                <AppBarSeparator />
+                <AppBarButton IsCompact="True">
+                    <TextBlock>
+                    <Run FontWeight="SemiBold"
+                         Text="Files: " />
+                    </TextBlock>
+                </AppBarButton>
+                <AppBarSeparator />
+                <AppBarButton IsCompact="True">
+                    <TextBlock>
+                    <Run FontWeight="SemiBold"
+                         Text="Size: " />
+                    <Run Text="KB" />
+                    </TextBlock>
+                </AppBarButton>
+                <AppBarSeparator />
+                <AppBarButton IsCompact="True">
+                    <TextBlock>
+                    <Run FontWeight="SemiBold"
+                         Text="Hidden: " />
+                    </TextBlock>
+                </AppBarButton>
+            </CommandBar>-->
+
         </SplitView>
         <SplitView x:Name="RightSplitView"
                    Grid.Column="1"

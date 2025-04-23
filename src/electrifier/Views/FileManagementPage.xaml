@@ -10,57 +10,8 @@
     mc:Ignorable="d">
     <Grid x:Name="ContentArea">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <controls:ExplorerBrowser Grid.Row="0"/>
-        <CommandBar x:Name="StatusCommandBar"
-                    Grid.Row="1"
-                    DefaultLabelPosition="Collapsed"
-                    HorizontalAlignment="Left"
-                    HorizontalContentAlignment="Left"
-                    VerticalAlignment="Stretch"
-                    VerticalContentAlignment="Center">
-            <AppBarButton IsCompact="True"
-                          IsEnabled="False">
-                <TextBlock>
-                    <Run FontWeight="SemiBold"
-                         Text="Items: " />
-                </TextBlock>
-            </AppBarButton>
-            <AppBarSeparator />
-            <AppBarButton IsCompact="True"
-                          IsEnabled="False">
-                <TextBlock>
-                    <Run FontWeight="SemiBold"
-                         Text="Folders: " />
-                </TextBlock>
-            </AppBarButton>
-            <AppBarSeparator />
-            <AppBarButton IsCompact="True"
-                          IsEnabled="False">
-                <TextBlock>
-                    <Run FontWeight="SemiBold"
-                         Text="Files: " />
-                </TextBlock>
-            </AppBarButton>
-            <AppBarSeparator />
-            <AppBarButton IsCompact="True"
-                          IsEnabled="False">
-                <TextBlock>
-                    <Run FontWeight="SemiBold"
-                         Text="Size: " />
-                    <Run Text="KB" />
-                </TextBlock>
-            </AppBarButton>
-            <AppBarSeparator />
-            <AppBarButton IsCompact="True"
-                          IsEnabled="False">
-                <TextBlock>
-                    <Run FontWeight="SemiBold"
-                         Text="Hidden: " />
-                </TextBlock>
-            </AppBarButton>
-        </CommandBar>
     </Grid>
 </Page>
