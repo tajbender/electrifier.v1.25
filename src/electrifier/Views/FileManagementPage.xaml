@@ -10,7 +10,7 @@
     mc:Ignorable="d">
     <Grid x:Name="ContentArea">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <controls:ExplorerBrowser Grid.Row="0"/>
     </Grid>

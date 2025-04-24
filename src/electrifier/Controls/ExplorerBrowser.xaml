@@ -14,6 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <CommandBar x:Name="CommandBar"
                     Grid.ColumnSpan="2"
@@ -238,49 +239,50 @@
             <Grid>
                 <local:ShellListView x:Name="PrimaryShellListView" />
             </Grid>
-            <!--<CommandBar x:Name="StatusCommandBar"
-                        HorizontalAlignment="Left"
-                        HorizontalContentAlignment="Left"
-                        VerticalAlignment="Stretch"
-                        VerticalContentAlignment="Center">
-                <AppBarButton IsCompact="True">
-                    <TextBlock>
+        </SplitView>
+        <CommandBar x:Name="LeftStatusCommandBar"
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    HorizontalAlignment="Left"
+                    HorizontalContentAlignment="Left"
+                    VerticalAlignment="Stretch"
+                    VerticalContentAlignment="Center">
+            <AppBarButton IsCompact="True">
+                <TextBlock>
                     <Run FontWeight="SemiBold"
                          Text="Items: " />
-                    </TextBlock>
-                </AppBarButton>
-                <AppBarSeparator />
-                <AppBarButton IsCompact="True">
-                    <TextBlock>
+                </TextBlock>
+            </AppBarButton>
+            <AppBarSeparator />
+            <AppBarButton IsCompact="True">
+                <TextBlock>
                     <Run FontWeight="SemiBold"
                          Text="Folders: " />
-                    </TextBlock>
-                </AppBarButton>
-                <AppBarSeparator />
-                <AppBarButton IsCompact="True">
-                    <TextBlock>
+                </TextBlock>
+            </AppBarButton>
+            <AppBarSeparator />
+            <AppBarButton IsCompact="True">
+                <TextBlock>
                     <Run FontWeight="SemiBold"
                          Text="Files: " />
-                    </TextBlock>
-                </AppBarButton>
-                <AppBarSeparator />
-                <AppBarButton IsCompact="True">
-                    <TextBlock>
+                </TextBlock>
+            </AppBarButton>
+            <AppBarSeparator />
+            <AppBarButton IsCompact="True">
+                <TextBlock>
                     <Run FontWeight="SemiBold"
                          Text="Size: " />
                     <Run Text="KB" />
-                    </TextBlock>
-                </AppBarButton>
-                <AppBarSeparator />
-                <AppBarButton IsCompact="True">
-                    <TextBlock>
+                </TextBlock>
+            </AppBarButton>
+            <AppBarSeparator />
+            <AppBarButton IsCompact="True">
+                <TextBlock>
                     <Run FontWeight="SemiBold"
                          Text="Hidden: " />
-                    </TextBlock>
-                </AppBarButton>
-            </CommandBar>-->
-
-        </SplitView>
+                </TextBlock>
+            </AppBarButton>
+        </CommandBar>
         <SplitView x:Name="RightSplitView"
                    Grid.Column="1"
                    Grid.Row="1"
@@ -296,5 +298,48 @@
                 <local:ShellListView x:Name="SecondaryShellListView" />
             </Grid>
         </SplitView>
+        <CommandBar x:Name="RightStatusCommandBar"
+                    Grid.Column="1"
+                    Grid.Row="2"
+                    HorizontalAlignment="Left"
+                    HorizontalContentAlignment="Left"
+                    VerticalAlignment="Stretch"
+                    VerticalContentAlignment="Center">
+            <AppBarButton IsCompact="True">
+                <TextBlock>
+                    <Run FontWeight="SemiBold"
+                         Text="Items: " />
+                </TextBlock>
+            </AppBarButton>
+            <AppBarSeparator />
+            <AppBarButton IsCompact="True">
+                <TextBlock>
+                    <Run FontWeight="SemiBold"
+                         Text="Folders: " />
+                </TextBlock>
+            </AppBarButton>
+            <AppBarSeparator />
+            <AppBarButton IsCompact="True">
+                <TextBlock>
+                    <Run FontWeight="SemiBold"
+                         Text="Files: " />
+                </TextBlock>
+            </AppBarButton>
+            <AppBarSeparator />
+            <AppBarButton IsCompact="True">
+                <TextBlock>
+                    <Run FontWeight="SemiBold"
+                         Text="Size: " />
+                    <Run Text="KB" />
+                </TextBlock>
+            </AppBarButton>
+            <AppBarSeparator />
+            <AppBarButton IsCompact="True">
+                <TextBlock>
+                    <Run FontWeight="SemiBold"
+                         Text="Hidden: " />
+                </TextBlock>
+            </AppBarButton>
+        </CommandBar>
     </Grid>
 </UserControl>
