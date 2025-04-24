@@ -23,7 +23,7 @@ internal record ExplorerBrowserPaneDataSource(ShellItem ShellItem
         get; set;
     } = Items;
 
-    public ExplorerBrowserPaneDataSource(ShellItem shellItem) : this(shellItem, default, []) { }
+    public ExplorerBrowserPaneDataSource(ShellItem shellItem) : this(shellItem, null, []) { }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 }

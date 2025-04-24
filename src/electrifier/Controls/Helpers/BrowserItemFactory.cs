@@ -17,7 +17,7 @@ namespace electrifier.Controls.Helpers;
 
 public class BrowserItemFactory
 {
-    public static ShellBrowserItem FromPIDL(Shell32.PIDL pidl, bool? isFolder, List<AbstractBrowserItem<ShellItem>>? childItems = default) => new(pidl, isFolder, childItems);
+    public static ShellBrowserItem FromPIDL(Shell32.PIDL pidl, bool? isFolder, List<AbstractBrowserItem<ShellItem>>? childItems = null) => new(pidl, isFolder, childItems);
     public static ShellBrowserItem FromKnownFolderId(Shell32.KNOWNFOLDERID knownFolderId) => new(new ShellFolder(knownFolderId).PIDL, isFolder: true);
     public static ShellBrowserItem FromShellFolder(ShellFolder shellFolder) => FromPIDL(shellFolder.PIDL, isFolder: true);
     public static ShellBrowserItem HomeShellFolder()
@@ -64,7 +64,7 @@ public class BrowserItemFactory
 
         // TODO: Listen for ShellItem Property changes
         public ShellBrowserItem(Shell32.PIDL pidl, bool? isFolder,
-            List<AbstractBrowserItem<ShellItem>>? childItems = default) : base(isFolder, childItems ?? [])
+            List<AbstractBrowserItem<ShellItem>>? childItems = null) : base(isFolder, childItems ?? [])
         {
             PIDL = new Shell32.PIDL(pidl);
             ShellItem = new ShellItem(pidl);
