@@ -39,12 +39,9 @@ public sealed partial class ShellListView : UserControl
         // Put this into thread
         _items = [];
         AdvancedCollectionView = new AdvancedCollectionView(_items, true);
-        AdvancedCollectionView.SortDescriptions.Add(new SortDescription(SortDirection.Ascending,new DefaultBrowserItemComparer()));
+        AdvancedCollectionView.SortDescriptions.Add(new SortDescription(SortDirection.Ascending));
         Debug.Assert(NativeItemsView != null, nameof(NativeItemsView) + " != null");
         NativeItemsView.ItemsSource = AdvancedCollectionView;
-
-        //        this.OnGotFocus += ShellListView_GotFocus;
-        //        this.OnLostFocus += ShellListView_LostFocus;
     }
 
     public void AddItem(ShellBrowserItem shellBrowserItem)
@@ -57,28 +54,6 @@ public sealed partial class ShellListView : UserControl
         using (AdvancedCollectionView.DeferRefresh())
         {
             _items.Clear();
-        }
-    }
-
-    /// <summary>
-    /// Default sort of <see cref="BrowserItem"/>s.
-    /// <b>WARN: This is not</b> the exact Comparison Windows File Explorer uses.
-    /// </summary>
-    public class DefaultBrowserItemComparer : IComparer
-    {
-        public int Compare(object? x, object? y)
-        {
-            if (x is not ShellBrowserItem left || y is not ShellBrowserItem right)
-            {
-                return new Comparer(CultureInfo.InvariantCulture).Compare(x, y);
-            }
-
-            return left.IsFolder switch
-            {
-                true when right.IsFolder == false => -1,
-                false when right.IsFolder == true => 1,
-                _ => string.Compare(left.DisplayName, right.DisplayName, StringComparison.OrdinalIgnoreCase)
-            };
         }
     }
 }
