@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using electrifier.Controls.Helpers;
+using Microsoft.UI.Xaml.Media.Imaging;
+using Vanara.PInvoke;
 using Vanara.Windows.Shell;
 
 namespace electrifier.Controls.Services;
@@ -20,6 +20,8 @@ namespace electrifier.Controls.Services;
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 internal class Shel32NamespaceService
 {
+    private readonly Dictionary<Shell32.SHSTOCKICONID, SoftwareBitmapSource> _stockIconDictionary = [];
+
     /// <summary>The default text that is displayed when an empty folder is shown</summary>
     [Category("Appearance"), DefaultValue("This folder is empty."), Description("The default text that is displayed when an empty folder is shown.")]
     public string EmptyFolderText { get; set; } = "This folder is empty.";
@@ -40,6 +42,46 @@ internal class Shel32NamespaceService
             result.Add(browserItem);
         }
         return result;
+    }
+
+    /// <summary>Get associated <seealso cref="SoftwareBitmapSource"/> for given <param name="bitmapIcon">Icon</param></summary>
+    /// <remarks>TODO: INFO: Investigate <seealso href="https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.imaging.writeablebitmap?view=winrt-26100">uwp/api/windows.ui.xaml.media.imaging.WriteableBitmap (WARN: Links to UWP)</seealso></remarks>
+    /// <param name="bitmapIcon">The <seealso cref="WinUIEx.Icon">Icon</seealso>.</param>
+    /// <returns>Task&lt;SoftwareBitmapSource?&gt;</returns>
+    public static async Task<SoftwareBitmapSource?> GetWinUi3BitmapSourceFromIcon(System.Drawing.Icon bitmapIcon)
+    {
+        ArgumentNullException.ThrowIfNull(bitmapIcon);
+
+        return await GetWinUi3BitmapSourceFromGdiBitmap(bitmapIcon.ToBitmap());
+    }
+
+    /// <summary>Get associated <seealso cref="SoftwareBitmapSource"/> for given <param name="gdiBitmap">gdiBitmap</param></summary>
+    /// <remarks>TODO: INFO: Investigate <seealso href="https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.imaging.writeablebitmap?view=winrt-26100">uwp/api/windows.ui.xaml.media.imaging.WriteableBitmap (WARN: Links to UWP)</seealso></remarks>
+    /// <param name="gdiBitmap">The <seealso cref="Bitmap">GDI+ bitmap</seealso>.</param>
+    /// <returns>Task&lt;SoftwareBitmapSource?&gt;</returns>
+    public static async Task<SoftwareBitmapSource?> GetWinUi3BitmapSourceFromGdiBitmap(Bitmap gdiBitmap)
+    {
+        ArgumentNullException.ThrowIfNull(gdiBitmap);
+
+        // get pixels as an array of bytes
+        // TODO: See in vanara IconExtractor in terms of getting byte data array
+        var data = gdiBitmap.LockBits(new Rectangle(0, 0, gdiBitmap.Width, gdiBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, gdiBitmap.PixelFormat);
+        var bytes = new byte[data.Stride * data.Height];
+        Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
+        gdiBitmap.UnlockBits(data);
+
+        // get WinRT SoftwareBitmap
+        var softwareBitmap = new Windows.Graphics.Imaging.SoftwareBitmap(
+            Windows.Graphics.Imaging.BitmapPixelFormat.Bgra8,
+            gdiBitmap.Width,
+            gdiBitmap.Height,
+            Windows.Graphics.Imaging.BitmapAlphaMode.Premultiplied);
+        softwareBitmap.CopyFromBuffer(bytes.AsBuffer());
+
+        // build WinUI3 SoftwareBitmapSource
+        var source = new SoftwareBitmapSource();
+        await source.SetBitmapAsync(softwareBitmap);
+        return source;
     }
 
     private string GetDebuggerDisplay() => $"{nameof(Shel32NamespaceService)}>";
