@@ -76,7 +76,7 @@ public sealed partial class ExplorerBrowser : UserControl
     private async void PrimaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
     {
         Debug.Print($".PrimaryShellTreeView_Navigated() to {e.NewLocation.Name}");
-        PrimaryShellListView.Items.Clear();
+        PrimaryShellListView.ClearItems();
 
         var items = new ShellFolder(e.NewLocation.PIDL).EnumerateChildren(FolderItemFilter.Storage);
         foreach (var item in items)
@@ -97,14 +97,14 @@ public sealed partial class ExplorerBrowser : UserControl
             };
 
             // TODO: shNamespaceService.RetrieveChildItemsAsync().select()...;
-            PrimaryShellListView.Items.Add(ebItem);
+            PrimaryShellListView.AddItem(ebItem);
         }
     }
 
     private async void SecondaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
     {
         Debug.Print($".SecondaryShellTreeView_Navigated() to {e.NewLocation.Name}");
-        SecondaryShellListView.Items.Clear();
+        SecondaryShellListView.ClearItems();
 
         var items = new ShellFolder(e.NewLocation.PIDL).EnumerateChildren(FolderItemFilter.Storage);
         foreach (var item in items)
@@ -125,7 +125,7 @@ public sealed partial class ExplorerBrowser : UserControl
             };
 
             // TODO: shNamespaceService.RetrieveChildItemsAsync().select()...;
-            SecondaryShellListView.Items.Add(ebItem);
+            SecondaryShellListView.AddItem(ebItem);
         }
     }
 
@@ -140,7 +140,7 @@ public sealed partial class ExplorerBrowser : UserControl
             using var shFolder = new ShellFolder(shTargetItem);
 
             target.ChildItems.Clear();
-            shListView.Items.Clear();
+            shListView.ClearItems();
             foreach (var child in shFolder)
             {
                 var shStockIconId = child.IsFolder
@@ -151,15 +151,17 @@ public sealed partial class ExplorerBrowser : UserControl
                 // SHSTOCKICONID.Link and SHSTOCKICONID.SlowFile have to be used as overlay
                 // var softBitmap = await StockIconFactory.GetStockIconBitmapSource(shStockIconId);
 
+                var softBitmap = await Shel32NamespaceService.GetStockIconBitmapSource(shStockIconId);
+
                 var ebItem = new ShellBrowserItem(child.PIDL, child.IsFolder)
                 {
-                    //                        SoftwareBitmap = softBitmap
+                    SoftwareBitmap = softBitmap
                 };
 
                 // TODO: if(child.IsLink) => Add Link-Overlay
 
                 target.ChildItems.Add(ebItem);
-                shListView.Items.Add(ebItem);
+                shListView.AddItem(ebItem);
                 // TODO: Update PrimaryShellListView.Items => target.ChildItems with asynchronous loading;
             }
             // TODO: Update PrimaryShellListView.Items => target.ChildItems with asynchronous loading;

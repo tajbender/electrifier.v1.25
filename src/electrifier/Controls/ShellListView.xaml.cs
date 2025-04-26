@@ -28,7 +28,7 @@ namespace electrifier.Controls;
 public sealed partial class ShellListView : UserControl
 {
     internal ItemsView NativeItemsView => ItemsView;
-    public ObservableCollection<ShellBrowserItem> Items;
+    private ObservableCollection<ShellBrowserItem> _items;
     public readonly AdvancedCollectionView AdvancedCollectionView;
 
     public ShellListView()
@@ -37,8 +37,8 @@ public sealed partial class ShellListView : UserControl
         DataContext = this;
 
         // Put this into thread
-        Items = [];
-        AdvancedCollectionView = new AdvancedCollectionView(Items, true);
+        _items = [];
+        AdvancedCollectionView = new AdvancedCollectionView(_items, true);
         AdvancedCollectionView.SortDescriptions.Add(new SortDescription(SortDirection.Ascending,new DefaultBrowserItemComparer()));
         Debug.Assert(NativeItemsView != null, nameof(NativeItemsView) + " != null");
         NativeItemsView.ItemsSource = AdvancedCollectionView;
@@ -47,10 +47,14 @@ public sealed partial class ShellListView : UserControl
         //        this.OnLostFocus += ShellListView_LostFocus;
     }
 
-    public void Navigate(ShellBrowserItem shellBrowserItem)
+    public void AddItem(ShellBrowserItem shellBrowserItem)
     {
-        Items.Clear();
-        Items.Add(shellBrowserItem);
+        _items.Add(shellBrowserItem);
+    }
+
+    public void ClearItems()
+    {
+        _items.Clear();
     }
 
     /// <summary>
