@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -20,7 +21,7 @@ namespace electrifier.Controls.Services;
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 internal class Shel32NamespaceService
 {
-    private readonly Dictionary<Shell32.SHSTOCKICONID, SoftwareBitmapSource> _stockIconDictionary = [];
+    private static readonly Dictionary<Shell32.SHSTOCKICONID, SoftwareBitmapSource> StockIconDictionary = [];
 
     /// <summary>The default text that is displayed when an empty folder is shown</summary>
     [Category("Appearance"), DefaultValue("This folder is empty."), Description("The default text that is displayed when an empty folder is shown.")]
@@ -42,6 +43,33 @@ internal class Shel32NamespaceService
             result.Add(browserItem);
         }
         return result;
+    }
+
+    public static async Task<SoftwareBitmapSource> GetStockIconBitmapSource(Shell32.SHSTOCKICONID shStockIconId)
+    {
+        if (StockIconDictionary.TryGetValue(shStockIconId, out var source))
+        {
+            return source;
+        }
+
+        var siFlags = Shell32.SHGSI.SHGSI_LARGEICON | Shell32.SHGSI.SHGSI_ICON;
+        var icninfo = Shell32.SHSTOCKICONINFO.Default;
+        Shell32.SHGetStockIconInfo(shStockIconId, siFlags, ref icninfo)
+            .ThrowIfFailed($"SHGetStockIconInfo({shStockIconId})");
+
+        var hIcon = icninfo.hIcon;
+        var icnHandle = hIcon.ToIcon();
+        var bmpSource = GetWinUi3BitmapSourceFromIcon(icnHandle);
+        await bmpSource;
+        var softBitmap = bmpSource.Result;
+
+        if (softBitmap != null)
+        {
+            _ = StockIconDictionary.TryAdd(shStockIconId, softBitmap); // WARN: Is this thread safe?
+            return softBitmap;
+        }
+
+        throw new ArgumentOutOfRangeException($"Can't get StockIcon for SHSTOCKICONID: {shStockIconId.ToString()}");
     }
 
     /// <summary>Get associated <seealso cref="SoftwareBitmapSource"/> for given <param name="bitmapIcon">Icon</param></summary>
