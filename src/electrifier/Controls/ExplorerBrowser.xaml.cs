@@ -22,6 +22,8 @@ using Vanara.Windows.Shell;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using static Vanara.PInvoke.ComCtl32;
+using static Vanara.PInvoke.Kernel32;
+using static Vanara.PInvoke.Shell32;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -43,7 +45,7 @@ public sealed partial class ExplorerBrowser : UserControl
     public ObservableCollection<ShellBrowserItem> CurrentItems;
     public event EventHandler<NavigatedEventArgs> Navigated;
     public event EventHandler<Vanara.Windows.Shell.NavigationFailedEventArgs> NavigationFailed;
-
+    
     public ExplorerBrowser()
     {
         InitializeComponent();
@@ -71,7 +73,7 @@ public sealed partial class ExplorerBrowser : UserControl
         //        }
     }
 
-    private void PrimaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
+    private async void PrimaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
     {
         Debug.Print($".PrimaryShellTreeView_Navigated() to {e.NewLocation.Name}");
         PrimaryShellListView.Items.Clear();
@@ -79,11 +81,27 @@ public sealed partial class ExplorerBrowser : UserControl
         var items = new ShellFolder(e.NewLocation.PIDL).EnumerateChildren(FolderItemFilter.Storage);
         foreach (var item in items)
         {
+            var shStockIconId = item.IsFolder
+                ? Shell32.SHSTOCKICONID.SIID_FOLDER
+                : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
+
+            // TODO: check if item is a link. Will cause exception if not a link
+            // SHSTOCKICONID.Link and SHSTOCKICONID.SlowFile have to be used as overlay
+            // var softBitmap = await StockIconFactory.GetStockIconBitmapSource(shStockIconId);
+
+            var softBitmap = await Shel32NamespaceService.GetStockIconBitmapSource(shStockIconId);
+
+            var ebItem = new ShellBrowserItem(item.PIDL, item.IsFolder)
+            {
+                SoftwareBitmap = softBitmap
+            };
+
             // TODO: shNamespaceService.RetrieveChildItemsAsync().select()...;
-            PrimaryShellListView.Items.Add(new ShellBrowserItem(item.PIDL, null));
+            PrimaryShellListView.Items.Add(ebItem);
         }
     }
-    private void SecondaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
+
+    private async void SecondaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
     {
         Debug.Print($".SecondaryShellTreeView_Navigated() to {e.NewLocation.Name}");
         SecondaryShellListView.Items.Clear();
@@ -91,8 +109,23 @@ public sealed partial class ExplorerBrowser : UserControl
         var items = new ShellFolder(e.NewLocation.PIDL).EnumerateChildren(FolderItemFilter.Storage);
         foreach (var item in items)
         {
+            var shStockIconId = item.IsFolder
+                ? Shell32.SHSTOCKICONID.SIID_FOLDER
+                : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
+
+            // TODO: check if item is a link. Will cause exception if not a link
+            // SHSTOCKICONID.Link and SHSTOCKICONID.SlowFile have to be used as overlay
+            // var softBitmap = await StockIconFactory.GetStockIconBitmapSource(shStockIconId);
+
+            var softBitmap = await Shel32NamespaceService.GetStockIconBitmapSource(shStockIconId);
+
+            var ebItem = new ShellBrowserItem(item.PIDL, item.IsFolder)
+            {
+                SoftwareBitmap = softBitmap
+            };
+
             // TODO: shNamespaceService.RetrieveChildItemsAsync().select()...;
-            SecondaryShellListView.Items.Add(new ShellBrowserItem(item.PIDL, null));
+            SecondaryShellListView.Items.Add(ebItem);
         }
     }
 
