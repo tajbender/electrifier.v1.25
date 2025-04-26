@@ -54,7 +54,10 @@ public sealed partial class ShellListView : UserControl
 
     public void ClearItems()
     {
-        _items.Clear();
+        using (AdvancedCollectionView.DeferRefresh())
+        {
+            _items.Clear();
+        }
     }
 
     /// <summary>
