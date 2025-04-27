@@ -56,4 +56,31 @@ public sealed partial class ShellListView : UserControl
             _items.Clear();
         }
     }
+
+    private void ItemsView_OnDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+    {
+        if (e.Handled)
+        {
+            return;
+        }
+
+        try
+        {
+            var item = (sender as ListViewBase)?.SelectedItem as ShellBrowserItem;
+            Debug.Print($"ItemsView_OnDoubleTapped({item?.ToString()})");
+
+            if (item == null)
+            {
+                return;
+            }
+
+            //(sender as ShellNamespaceTreeControl).Navigate(ShellBrowserItem);
+            e.Handled = true;
+        }
+        catch (Exception exception)
+        {
+            Debug.Fail(exception.ToString());
+            throw;
+        }
+    }
 }
