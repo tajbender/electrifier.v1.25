@@ -28,7 +28,12 @@ namespace electrifier.Controls;
 public sealed partial class ShellListView : UserControl
 {
     internal ItemsView NativeItemsView => ItemsView;
-    private ObservableCollection<ShellBrowserItem> _items;
+
+    public ObservableCollection<ShellBrowserItem> Items
+    {
+        get;
+    }
+
     public readonly AdvancedCollectionView AdvancedCollectionView;
 
     public ShellListView()
@@ -37,20 +42,20 @@ public sealed partial class ShellListView : UserControl
         DataContext = this;
 
         // Put this into thread
-        _items = [];
-        AdvancedCollectionView = new AdvancedCollectionView(_items, true);
+        Items = [];
+        AdvancedCollectionView = new AdvancedCollectionView(Items, true);
         AdvancedCollectionView.SortDescriptions.Add(new SortDescription(SortDirection.Ascending));
         Debug.Assert(NativeItemsView != null, nameof(NativeItemsView) + " != null");
         NativeItemsView.ItemsSource = AdvancedCollectionView;
     }
 
-    public void AddItem(ShellBrowserItem shellBrowserItem) => _items.Add(shellBrowserItem);
+    public void AddItem(ShellBrowserItem shellBrowserItem) => Items.Add(shellBrowserItem);
 
     public void ClearItems()
     {
         using (AdvancedCollectionView.DeferRefresh())
         {
-            _items.Clear();
+            Items.Clear();
         }
     }
 
