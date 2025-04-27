@@ -69,7 +69,7 @@ public sealed partial class ExplorerBrowser : UserControl
         //        if (PrimaryShellTreeView.Items[0] is ShellBrowserItem initialNavigationTarget)
         //        {
         //            _ = Navigate(initialNavigationTarget, PrimaryShellTreeView);
-        //            initialNavigationTarget.TreeViewItemIsSelected = true;  // TODO: Bind property to TreeViewItem.IsSelected
+        //            initialNavigationTarget.IsSelected = true;  // TODO: Bind property to TreeViewItem.IsSelected
         //        }
     }
 

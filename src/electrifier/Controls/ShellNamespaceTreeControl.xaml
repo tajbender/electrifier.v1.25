@@ -14,7 +14,7 @@
             <DataTemplate x:Name="BrowserItemTemplate"
                           x:DataType="helpers:ShellBrowserItem">
                 <TreeViewItem HasUnrealizedChildren="{x:Bind HasUnrealizedChildren}"
-                              IsSelected="{x:Bind TreeViewItemIsSelected}"
+                              IsSelected="{x:Bind IsSelected}"
                               ItemsSource="{x:Bind ChildItems}">
                     <Grid BorderBrush="Transparent" BorderThickness="3">
                         <StackPanel HorizontalAlignment="Stretch"

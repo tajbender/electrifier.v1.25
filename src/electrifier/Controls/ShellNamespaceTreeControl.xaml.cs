@@ -65,26 +65,17 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Music));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Videos));
 
-        Items[0].TreeViewItemIsSelected = true;
+        Items[0].IsSelected = true;
     }
 
     private void OnSelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs e)
     {
-        var addedItems = e.AddedItems;
-        var removedItems = e.RemovedItems;
-
-        Debug.WriteIf((addedItems.Count < 1 && removedItems.Count < 1), "None or less Items added nor removed", ".OnSelectionChanged() parameter mismatch.");
-        if (addedItems[0] is null)
+        Debug.WriteIf((e.AddedItems.Count < 1 && e.RemovedItems.Count < 1), "None or less Items added nor removed", ".OnSelectionChanged() parameter mismatch.");
+        if (e.AddedItems[0] is not ShellBrowserItem shellBrowserItem)
         {
-            Debug.Fail(".OnSelectionChanged(): selectedNode is null!");
-            return;
-        }
-        if (addedItems[0] is not ShellBrowserItem shellBrowserItem)
-        {
-            Debug.Fail(".OnSelectionChanged(): shellBrowserItem is null!");
+            Debug.Fail(".OnSelectionChanged(): Invalid item");
             return;
         }
         Navigated?.Invoke(this, new NavigatedEventArgs(new ShellFolder(shellBrowserItem.ShellItem)));
-        //Navigated?.BeginInvoke(this, shellBrowserItem, null, null);
     }
 }

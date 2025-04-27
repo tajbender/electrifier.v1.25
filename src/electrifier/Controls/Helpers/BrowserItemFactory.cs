@@ -36,19 +36,19 @@ public class BrowserItemFactory
         public readonly Shell32.PIDL PIDL;
         public ShellItem ShellItem;
         public SoftwareBitmapSource? SoftwareBitmap;
-        private bool _treeViewItemIsSelected;
+        private bool _isSelected;
 
-        public bool TreeViewItemIsSelected
+        public bool IsSelected
         {
-            get => _treeViewItemIsSelected;
+            get => _isSelected;
             set
             {
-                if (value == _treeViewItemIsSelected)
+                if (value == _isSelected)
                 {
                     return;
                 }
 
-                _treeViewItemIsSelected = value;
+                _isSelected = value;
                 OnPropertyChanged();
             }
         }
