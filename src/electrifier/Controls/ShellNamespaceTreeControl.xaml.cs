@@ -65,7 +65,7 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Music));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Videos));
 
-        Navigated?.Invoke(this, new NavigatedEventArgs(new ShellFolder(Items[0].ShellItem)));
+        Items[0].TreeViewItemIsSelected = true;
     }
 
     private void OnSelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs e)
