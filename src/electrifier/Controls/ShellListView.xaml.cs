@@ -44,10 +44,7 @@ public sealed partial class ShellListView : UserControl
         NativeItemsView.ItemsSource = AdvancedCollectionView;
     }
 
-    public void AddItem(ShellBrowserItem shellBrowserItem)
-    {
-        _items.Add(shellBrowserItem);
-    }
+    public void AddItem(ShellBrowserItem shellBrowserItem) => _items.Add(shellBrowserItem);
 
     public void ClearItems()
     {
@@ -59,28 +56,32 @@ public sealed partial class ShellListView : UserControl
 
     private void ItemsView_OnDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
     {
-        if (e.Handled)
+        switch (e.Handled)
         {
-            return;
-        }
-
-        try
-        {
-            var item = (sender as ListViewBase)?.SelectedItem as ShellBrowserItem;
-            Debug.Print($"ItemsView_OnDoubleTapped({item?.ToString()})");
-
-            if (item == null)
-            {
+            case true:
                 return;
-            }
+            default:
+                try
+                {
+                    var item = (sender as ListViewBase)?.SelectedItem as ShellBrowserItem;
+                    Debug.Print($"ItemsView_OnDoubleTapped({item?.ToString()})");
 
-            //(sender as ShellNamespaceTreeControl).Navigate(ShellBrowserItem);
-            e.Handled = true;
-        }
-        catch (Exception exception)
-        {
-            Debug.Fail(exception.ToString());
-            throw;
+                    switch (item)
+                    {
+                        case null:
+                            return;
+                        default:
+                            e.Handled = true;
+                            break;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Debug.Fail(exception.ToString());
+                    throw;
+                }
+
+                break;
         }
     }
 }
