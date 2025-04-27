@@ -36,6 +36,9 @@ public sealed partial class ShellListView : UserControl
 
     public readonly AdvancedCollectionView AdvancedCollectionView;
 
+    public delegate void NavigatedEventHandler(object sender, NavigatedEventArgs e);
+    public event NavigatedEventHandler? Navigated;
+
     public ShellListView()
     {
         InitializeComponent();
@@ -76,6 +79,8 @@ public sealed partial class ShellListView : UserControl
                         case null:
                             return;
                         default:
+                            Navigated?.Invoke(this, new NavigatedEventArgs(new ShellFolder(item.ShellItem)));
+                            //Navigated?.BeginInvoke(this, item, null, null);
                             e.Handled = true;
                             break;
                     }
