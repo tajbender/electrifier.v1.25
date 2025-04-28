@@ -19,9 +19,15 @@
         <CommandBar x:Name="CommandBar"
                     Grid.ColumnSpan="2"
                     Grid.Row="0"
-                    DefaultLabelPosition="Right"
+                    DefaultLabelPosition="Collapsed"
                     HorizontalAlignment="Left">
-            <!-- CommandBar.Visibility="{x:Bind TopCommandBarVisibility}" -->
+            <AppBarButton Icon="Back"
+                          Label="Back" />
+            <AppBarButton Icon="Forward"
+                          Label="Forward" />
+            <AppBarButton Icon="Up"
+                          Label="Parent Folder" />
+            <AppBarSeparator />
             <AppBarButton Icon="OpenFile"
                           Label="New">
                 <AppBarButton.Flyout>
