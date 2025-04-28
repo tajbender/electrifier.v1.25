@@ -57,7 +57,9 @@ public sealed partial class ExplorerBrowser : UserControl
         Loaded += ExplorerBrowser_Loaded;
 
         PrimaryShellTreeView.Navigated += PrimaryShellTreeView_Navigated;
+        PrimaryShellListView.Navigated += PrimaryShellTreeView_Navigated;
         SecondaryShellTreeView.Navigated += SecondaryShellTreeView_Navigated;
+        SecondaryShellListView.Navigated += SecondaryShellTreeView_Navigated;
     }
 
     private void ExplorerBrowser_Loading(FrameworkElement sender, object args)

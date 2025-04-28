@@ -71,15 +71,17 @@ public sealed partial class ShellListView : UserControl
             default:
                 try
                 {
-                    var item = (sender as ListViewBase)?.SelectedItem as ShellBrowserItem;
-                    Debug.Print($"ItemsView_OnDoubleTapped({item?.ToString()})");
+                    var item = this.NativeItemsView.SelectedItem;
+                    var shItem = item as ShellBrowserItem;
+                    Debug.Print($"ItemsView_OnDoubleTapped({shItem?.ToString()})");
 
+                    // TODO: Check if item is a folder
                     switch (item)
                     {
                         case null:
                             return;
                         default:
-                            Navigated?.Invoke(this, new NavigatedEventArgs(new ShellFolder(item.ShellItem)));
+                            Navigated?.Invoke(this, new NavigatedEventArgs(new ShellFolder(shItem?.ShellItem)));
                             //Navigated?.BeginInvoke(this, item, null, null);
                             e.Handled = true;
                             break;
