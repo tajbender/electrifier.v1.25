@@ -44,7 +44,6 @@ public sealed partial class ShellListView : UserControl
         InitializeComponent();
         DataContext = this;
 
-        // Put this into thread
         Items = [];
         AdvancedCollectionView = new AdvancedCollectionView(Items, true);
         AdvancedCollectionView.SortDescriptions.Add(new SortDescription(SortDirection.Ascending));
@@ -64,36 +63,27 @@ public sealed partial class ShellListView : UserControl
 
     private void ItemsView_OnDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
     {
-        switch (e.Handled)
+        if (!e.Handled)
         {
-            case true:
-                return;
-            default:
-                try
+            try
+            {
+                var shellBrowserItem = (NativeItemsView.SelectedItem) as ShellBrowserItem;
+                var shellItem = shellBrowserItem?.ShellItem;
+                Debug.Assert(shellItem != null, nameof(shellItem) + " != null");
+                if (shellItem.IsFolder)
                 {
-                    var item = this.NativeItemsView.SelectedItem;
-                    var shItem = item as ShellBrowserItem;
-                    Debug.Print($"ItemsView_OnDoubleTapped({shItem?.ToString()})");
+                    var shFolder = new ShellFolder(shellItem);
 
-                    // TODO: Check if item is a folder
-                    switch (item)
-                    {
-                        case null:
-                            return;
-                        default:
-                            Navigated?.Invoke(this, new NavigatedEventArgs(new ShellFolder(shItem?.ShellItem)));
-                            //Navigated?.BeginInvoke(this, item, null, null);
-                            e.Handled = true;
-                            break;
-                    }
+                    Navigated?.Invoke(this, new NavigatedEventArgs(shFolder));
+                    //Navigated?.BeginInvoke(this, item, null, null);
+                    e.Handled = true;
                 }
-                catch (Exception exception)
-                {
-                    Debug.Fail(exception.ToString());
-                    throw;
-                }
-
-                break;
+            }
+            catch (Exception exception)
+            {
+                Debug.Fail(exception.ToString());
+                throw;
+            }
         }
     }
 }
