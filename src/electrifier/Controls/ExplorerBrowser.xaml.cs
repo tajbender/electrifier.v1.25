@@ -30,18 +30,8 @@ using static Vanara.PInvoke.Shell32;
 
 namespace electrifier.Controls;
 
-/// <summary>
-/// <see href="Microsoft.WindowsAPICodePack.Controls.ExplorerBrowser">ExplorerBrowser</see> like control for WinUI 3 and Windows App SDK.
-/// Microsoft.WindowsAPICodePack.Controls.ExplorerBrowser
-/// <see href="https://github.com/dahall/Vanara">Vanara</see>.
-/// <see href="Microsoft.WindowsAPICodePack.Controls.ExplorerBrowser"/>
-/// <see cref="electrifier.Controls.ShellNamespaceTreeControl"/>
-/// <see cref="electrifier.Controls.ShellListView"/> 
-/// for navigating through the shell namespace.
-/// </summary>
 public sealed partial class ExplorerBrowser : UserControl
 {
-
     public ObservableCollection<ShellBrowserItem> CurrentItems;
     public event EventHandler<NavigatedEventArgs> Navigated;
     public event EventHandler<Vanara.Windows.Shell.NavigationFailedEventArgs> NavigationFailed;

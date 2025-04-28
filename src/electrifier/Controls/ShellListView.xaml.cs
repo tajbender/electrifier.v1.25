@@ -73,10 +73,12 @@ public sealed partial class ShellListView : UserControl
                 if (shellItem.IsFolder)
                 {
                     var shFolder = new ShellFolder(shellItem);
-
-                    Navigated?.Invoke(this, new NavigatedEventArgs(shFolder));
-                    //Navigated?.BeginInvoke(this, item, null, null);
-                    e.Handled = true;
+                    if (shFolder != null)
+                    {
+                        Navigated?.Invoke(this, new NavigatedEventArgs(shFolder));
+                        //Navigated?.BeginInvoke(this, item, null, null);
+                        e.Handled = true;
+                    }
                 }
             }
             catch (Exception exception)
