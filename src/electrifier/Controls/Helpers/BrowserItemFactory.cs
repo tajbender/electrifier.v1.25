@@ -7,10 +7,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using electrifier.Controls.Contracts;
+using electrifier.Controls.Services;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Vanara.PInvoke;
 using Vanara.Windows.Shell;
-using electrifier.Controls.Contracts;
+using Windows.Graphics.Imaging;
 using static Vanara.PInvoke.Shell32;
 
 namespace electrifier.Controls.Helpers;
@@ -27,67 +29,84 @@ public class BrowserItemFactory
     }
 }
 
-    // TODO: IDisposable
-    // TODO: IComparable
-    [DebuggerDisplay($"{{{nameof(ToString)}(),nq}}")]
-    public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyPropertyChanged
+// TODO: IDisposable
+// TODO: IComparable
+[DebuggerDisplay($"{{{nameof(ToString)}(),nq}}")]
+public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyPropertyChanged
+{
+    public string DisplayName => ShellItem.GetDisplayName(ShellItemDisplayString.NormalDisplay) ?? ShellItem.ToString();
+    public readonly Shell32.PIDL PIDL;
+    public ShellItem ShellItem;
+    public SoftwareBitmapSource? SoftwareBitmap;
+    private bool _isSelected;
+
+    public bool IsSelected
     {
-        public string DisplayName => ShellItem.GetDisplayName(ShellItemDisplayString.NormalDisplay) ?? ShellItem.ToString();
-        public readonly Shell32.PIDL PIDL;
-        public ShellItem ShellItem;
-        public SoftwareBitmapSource? SoftwareBitmap;
-        private bool _isSelected;
-
-        public bool IsSelected
+        get => _isSelected;
+        set
         {
-            get => _isSelected;
-            set
+            if (value == _isSelected)
             {
-                if (value == _isSelected)
-                {
-                    return;
-                }
-
-                _isSelected = value;
-                OnPropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// HasUnrealizedChildren checks for flag ´SFGAO_HASSUBFOLDER´.
-        ///
-        /// <seealso href="https://learn.microsoft.com/en-us/windows/win32/shell/sfgao"/>
-        /// The specified folders have subfolders. The SFGAO_HASSUBFOLDER attribute is only advisory and might be returned by Shell folder implementations even if they do not contain subfolders. Note, however, that the converse—failing to return SFGAO_HASSUBFOLDER—definitively states that the folder objects do not have subfolders.
-        /// Returning SFGAO_HASSUBFOLDER is recommended whenever a significant amount of time is required to determine whether any subfolders exist. For example, the Shell always returns SFGAO_HASSUBFOLDER when a folder is located on a network drive.
-        /// </summary>
-        public bool HasUnrealizedChildren => ShellItem.Attributes.HasFlag(ShellItemAttribute.HasSubfolder);
-
-        // TODO: Listen for ShellItem Property changes
-        public ShellBrowserItem(Shell32.PIDL pidl, bool? isFolder,
-            List<AbstractBrowserItem<ShellItem>>? childItems = null) : base(isFolder, childItems ?? [])
-        {
-            PIDL = new Shell32.PIDL(pidl);
-            ShellItem = new ShellItem(pidl);
-            //ChildItems = childItems ?? []; note: base ctor
-            //SoftwareBitmap = ConfiguredTaskAwaitable GetStockIconBitmapSource()
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value))
-            {
-                return false;
+                return;
             }
 
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
+            _isSelected = value;
+            OnPropertyChanged();
         }
     }
+
+    /// <summary>
+    /// HasUnrealizedChildren checks for flag ´SFGAO_HASSUBFOLDER´.
+    ///
+    /// <seealso href="https://learn.microsoft.com/en-us/windows/win32/shell/sfgao"/>
+    /// The specified folders have subfolders. The SFGAO_HASSUBFOLDER attribute is only advisory and might be returned by Shell folder implementations even if they do not contain subfolders. Note, however, that the converse—failing to return SFGAO_HASSUBFOLDER—definitively states that the folder objects do not have subfolders.
+    /// Returning SFGAO_HASSUBFOLDER is recommended whenever a significant amount of time is required to determine whether any subfolders exist. For example, the Shell always returns SFGAO_HASSUBFOLDER when a folder is located on a network drive.
+    /// </summary>
+    public bool HasUnrealizedChildren => ShellItem.Attributes.HasFlag(ShellItemAttribute.HasSubfolder);
+
+    // TODO: Listen for ShellItem Property changes
+    public ShellBrowserItem(Shell32.PIDL pidl, bool? isFolder,
+        List<AbstractBrowserItem<ShellItem>>? childItems = null) : base(isFolder, childItems ?? [])
+    {
+        PIDL = new Shell32.PIDL(pidl);
+        ShellItem = new ShellItem(pidl);
+        //ChildItems = childItems ?? []; note: base ctor
+        //SoftwareBitmap = ConfiguredTaskAwaitable GetStockIconBitmapSource()
+
+        _ = InitializeSoftwareBitmapAsync();
+    }
+
+    private async Task<SoftwareBitmapSource> InitializeSoftwareBitmapAsync()
+    {
+        // TODO: check if item is a link. Will cause exception if not a link
+        // SHSTOCKICONID.Link and SHSTOCKICONID.SlowFile have to be used as overlay
+        // var softBitmap = await StockIconFactory.GetStockIconBitmapSource(shStockIconId);
+
+        var shStockIconId = ShellItem.IsFolder
+            ? Shell32.SHSTOCKICONID.SIID_FOLDER
+            : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
+
+        var softwareBitmapSource = await Shel32NamespaceService.GetStockIconBitmapSource(shStockIconId);
+        SetField(ref SoftwareBitmap, softwareBitmapSource);
+        return softwareBitmapSource;
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value))
+        {
+            return false;
+        }
+
+        field = value;
+        OnPropertyChanged(propertyName);
+        return true;
+    }
+}

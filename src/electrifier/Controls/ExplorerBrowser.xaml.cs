@@ -41,28 +41,10 @@ public sealed partial class ExplorerBrowser : UserControl
         InitializeComponent();
         DataContext = this;
 
-        //var initialNavigationTarget = ShellBrowserItem.HomeShellFolder();
-
-        Loading += ExplorerBrowser_Loading;
-        Loaded += ExplorerBrowser_Loaded;
-
         PrimaryShellTreeView.Navigated += PrimaryShellTreeView_Navigated;
         PrimaryShellListView.Navigated += PrimaryShellTreeView_Navigated;
         SecondaryShellTreeView.Navigated += SecondaryShellTreeView_Navigated;
         SecondaryShellListView.Navigated += SecondaryShellTreeView_Navigated;
-    }
-
-    private void ExplorerBrowser_Loading(FrameworkElement sender, object args)
-    {
-        // Enumerate the root items of the shell namespace
-    }
-    private void ExplorerBrowser_Loaded(object sender, RoutedEventArgs e)
-    {
-        //        if (PrimaryShellTreeView.Items[0] is ShellBrowserItem initialNavigationTarget)
-        //        {
-        //            _ = Navigate(initialNavigationTarget, PrimaryShellTreeView);
-        //            initialNavigationTarget.IsSelected = true;  // TODO: Bind property to TreeViewItem.IsSelected
-        //        }
     }
 
     private async void PrimaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
@@ -70,26 +52,24 @@ public sealed partial class ExplorerBrowser : UserControl
         Debug.Print($".PrimaryShellTreeView_Navigated() to {e.NewLocation.Name}");
         PrimaryShellListView.ClearItems();
 
-        var items = new ShellFolder(e.NewLocation.PIDL).EnumerateChildren(FolderItemFilter.Storage);
-        foreach (var item in items)
+        try
         {
-            var shStockIconId = item.IsFolder
-                ? Shell32.SHSTOCKICONID.SIID_FOLDER
-                : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
-
-            // TODO: check if item is a link. Will cause exception if not a link
-            // SHSTOCKICONID.Link and SHSTOCKICONID.SlowFile have to be used as overlay
-            // var softBitmap = await StockIconFactory.GetStockIconBitmapSource(shStockIconId);
-
-            var softBitmap = await Shel32NamespaceService.GetStockIconBitmapSource(shStockIconId);
-
-            var ebItem = new ShellBrowserItem(item.PIDL, item.IsFolder)
+            var items = new ShellFolder(e.NewLocation.PIDL).EnumerateChildren(FolderItemFilter.Storage);
+            foreach (var item in items)
             {
-                SoftwareBitmap = softBitmap
-            };
-
-            // TODO: shNamespaceService.RetrieveChildItemsAsync().select()...;
-            PrimaryShellListView.AddItem(ebItem);
+                PrimaryShellListView.AddItem(new ShellBrowserItem(item.PIDL, item.IsFolder));
+            }
+        }
+        catch (COMException comEx)
+        {
+            Debug.Fail(
+                $"[Error] Navigate(<{e.NewLocation.Name}>) failed. COMException: <HResult: {comEx.HResult}>: `{comEx.Message}`");
+            //NavigationFailed?.Invoke(this, new NavigationFailedEventArgs(comEx));
+        }
+        catch (Exception ex)
+        {
+            Debug.Fail($"[Error] Navigate(<{e.NewLocation.Name}>) failed, reason unknown: {ex.Message}");
+            throw;
         }
     }
 
@@ -98,26 +78,24 @@ public sealed partial class ExplorerBrowser : UserControl
         Debug.Print($".SecondaryShellTreeView_Navigated() to {e.NewLocation.Name}");
         SecondaryShellListView.ClearItems();
 
-        var items = new ShellFolder(e.NewLocation.PIDL).EnumerateChildren(FolderItemFilter.Storage);
-        foreach (var item in items)
+        try
         {
-            var shStockIconId = item.IsFolder
-                ? Shell32.SHSTOCKICONID.SIID_FOLDER
-                : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
-
-            // TODO: check if item is a link. Will cause exception if not a link
-            // SHSTOCKICONID.Link and SHSTOCKICONID.SlowFile have to be used as overlay
-            // var softBitmap = await StockIconFactory.GetStockIconBitmapSource(shStockIconId);
-
-            var softBitmap = await Shel32NamespaceService.GetStockIconBitmapSource(shStockIconId);
-
-            var ebItem = new ShellBrowserItem(item.PIDL, item.IsFolder)
+            var items = new ShellFolder(e.NewLocation.PIDL).EnumerateChildren(FolderItemFilter.Storage);
+            foreach (var item in items)
             {
-                SoftwareBitmap = softBitmap
-            };
-
-            // TODO: shNamespaceService.RetrieveChildItemsAsync().select()...;
-            SecondaryShellListView.AddItem(ebItem);
+                SecondaryShellListView.AddItem(new ShellBrowserItem(item.PIDL, item.IsFolder));
+            }
+        }
+        catch (COMException comEx)
+        {
+            Debug.Fail(
+                $"[Error] Navigate(<{e.NewLocation.Name}>) failed. COMException: <HResult: {comEx.HResult}>: `{comEx.Message}`");
+            //NavigationFailed?.Invoke(this, new NavigationFailedEventArgs(comEx));
+        }
+        catch (Exception ex)
+        {
+            Debug.Fail($"[Error] Navigate(<{e.NewLocation.Name}>) failed, reason unknown: {ex.Message}");
+            throw;
         }
     }
 
