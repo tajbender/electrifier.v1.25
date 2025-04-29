@@ -33,7 +33,7 @@ namespace electrifier.Controls;
 public sealed partial class ExplorerBrowser : UserControl
 {
     public ObservableCollection<ShellBrowserItem> CurrentItems;
-    public event EventHandler<NavigatedEventArgs> Navigated;
+    public event EventHandler<Vanara.Windows.Shell.NavigatedEventArgs> Navigated;
     public event EventHandler<Vanara.Windows.Shell.NavigationFailedEventArgs> NavigationFailed;
     
     public ExplorerBrowser()
@@ -97,58 +97,5 @@ public sealed partial class ExplorerBrowser : UserControl
             Debug.Fail($"[Error] Navigate(<{e.NewLocation.Name}>) failed, reason unknown: {ex.Message}");
             throw;
         }
-    }
-
-    internal async Task<HRESULT> Navigate(ShellBrowserItem target, ShellListView shListView)
-    {
-        var shTargetItem = target.ShellItem;
-        Debug.Assert(shTargetItem is not null);
-        // TODO: If no folder, or drive empty, etc... show empty list view with error message
-
-        try
-        {
-            using var shFolder = new ShellFolder(shTargetItem);
-
-            target.ChildItems.Clear();
-            shListView.ClearItems();
-            foreach (var child in shFolder)
-            {
-                var shStockIconId = child.IsFolder
-                    ? Shell32.SHSTOCKICONID.SIID_FOLDER
-                    : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
-
-                // TODO: check if item is a link. Will cause exception if not a link
-                // SHSTOCKICONID.Link and SHSTOCKICONID.SlowFile have to be used as overlay
-                // var softBitmap = await StockIconFactory.GetStockIconBitmapSource(shStockIconId);
-
-                var softBitmap = await Shel32NamespaceService.GetStockIconBitmapSource(shStockIconId);
-
-                var ebItem = new ShellBrowserItem(child.PIDL, child.IsFolder)
-                {
-                    SoftwareBitmap = softBitmap
-                };
-
-                // TODO: if(child.IsLink) => Add Link-Overlay
-
-                target.ChildItems.Add(ebItem);
-                shListView.AddItem(ebItem);
-                // TODO: Update PrimaryShellListView.Items => target.ChildItems with asynchronous loading;
-            }
-            // TODO: Update PrimaryShellListView.Items => target.ChildItems with asynchronous loading;
-        }
-        catch (COMException comEx)
-        {
-            Debug.Fail(
-                $"[Error] Navigate(<{target}>) failed. COMException: <HResult: {comEx.HResult}>: `{comEx.Message}`");
-
-            return new HRESULT(comEx.HResult);
-        }
-        catch (Exception ex)
-        {
-            Debug.Fail($"[Error] Navigate(<{target}>) failed, reason unknown: {ex.Message}");
-            throw;
-        }
-
-        return HRESULT.S_OK;
     }
 }

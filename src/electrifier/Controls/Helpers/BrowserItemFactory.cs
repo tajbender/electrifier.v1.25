@@ -64,6 +64,8 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
     /// </summary>
     public bool HasUnrealizedChildren => ShellItem.Attributes.HasFlag(ShellItemAttribute.HasSubfolder);
 
+    public bool IsHidden => ShellItem.Attributes.HasFlag(ShellItemAttribute.Hidden);
+
     // TODO: Listen for ShellItem Property changes
     public ShellBrowserItem(Shell32.PIDL pidl, bool? isFolder,
         List<AbstractBrowserItem<ShellItem>>? childItems = null) : base(isFolder, childItems ?? [])
