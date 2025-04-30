@@ -55,6 +55,8 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
         }
     }
 
+    public bool IsLink => ShellItem.IsLink;
+
     /// <summary>
     /// HasUnrealizedChildren checks for flag ´SFGAO_HASSUBFOLDER´.
     ///
@@ -72,13 +74,18 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
     {
         PIDL = new Shell32.PIDL(pidl);
         ShellItem = new ShellItem(pidl);
+
+        if (IsLink)
+        {
+            Debug.Print("Link Item has been enumerated.");
+        }
         //ChildItems = childItems ?? []; note: base ctor
         //SoftwareBitmap = ConfiguredTaskAwaitable GetStockIconBitmapSource()
 
-        _ = InitializeSoftwareBitmapAsync();
+        _ = GetStockIconBitmapAsync();
     }
 
-    private async Task<SoftwareBitmapSource> InitializeSoftwareBitmapAsync()
+    private async Task<SoftwareBitmapSource> GetStockIconBitmapAsync()
     {
         // TODO: check if item is a link. Will cause exception if not a link
         // SHSTOCKICONID.Link and SHSTOCKICONID.SlowFile have to be used as overlay
@@ -87,6 +94,9 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
         var shStockIconId = ShellItem.IsFolder
             ? Shell32.SHSTOCKICONID.SIID_FOLDER
             : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
+
+        // if IsHidden... do overlay
+        // is IsLink... do overlay
 
         var softwareBitmapSource = await Shel32NamespaceService.GetStockIconBitmapSource(shStockIconId);
         SetField(ref SoftwareBitmap, softwareBitmapSource, nameof(SoftwareBitmap));

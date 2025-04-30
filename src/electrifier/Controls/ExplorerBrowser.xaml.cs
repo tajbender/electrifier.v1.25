@@ -56,7 +56,7 @@ public sealed partial class ExplorerBrowser : UserControl
         {
             var rootItem = new ShellFolder(e.NewLocation.PIDL);
 
-            var childItems = rootItem?.EnumerateChildren(FolderItemFilter.Folders | FolderItemFilter.NonFolders);
+            var childItems = rootItem?.EnumerateChildren(FolderItemFilter.Folders | FolderItemFilter.NonFolders | FolderItemFilter.IncludeHidden);
             if (childItems == null)
             {
                 Debug.Fail($"[Error] Navigate(<{e.NewLocation.Name}>) failed. No items found.");
@@ -93,7 +93,7 @@ public sealed partial class ExplorerBrowser : UserControl
         {
             var rootItem = new ShellFolder(e.NewLocation.PIDL);
 
-            var childItems = rootItem?.EnumerateChildren(FolderItemFilter.Folders | FolderItemFilter.NonFolders);
+            var childItems = rootItem?.EnumerateChildren(FolderItemFilter.Folders | FolderItemFilter.NonFolders | FolderItemFilter.IncludeHidden);
             if (childItems == null)
             {
                 Debug.Fail($"[Error] Navigate(<{e.NewLocation.Name}>) failed. No items found.");
