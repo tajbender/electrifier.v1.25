@@ -54,11 +54,22 @@ public sealed partial class ExplorerBrowser : UserControl
 
         try
         {
-            var items = new ShellFolder(e.NewLocation.PIDL).EnumerateChildren(FolderItemFilter.Storage);
-            foreach (var item in items)
+            var rootItem = new ShellFolder(e.NewLocation.PIDL);
+
+            var childItems = rootItem?.EnumerateChildren(FolderItemFilter.Folders | FolderItemFilter.NonFolders);
+            if (childItems == null)
             {
-                PrimaryShellListView.AddItem(new ShellBrowserItem(item.PIDL, item.IsFolder));
+                Debug.Fail($"[Error] Navigate(<{e.NewLocation.Name}>) failed. No items found.");
+                return;
             }
+
+            var newBrowserItems = new List<ShellBrowserItem>();
+            foreach (var item in childItems)
+            {
+                newBrowserItems.Add(new ShellBrowserItem(item.PIDL));
+            }
+
+            PrimaryShellListView.AddItems(newBrowserItems);
         }
         catch (COMException comEx)
         {
@@ -80,11 +91,22 @@ public sealed partial class ExplorerBrowser : UserControl
 
         try
         {
-            var items = new ShellFolder(e.NewLocation.PIDL).EnumerateChildren(FolderItemFilter.Storage);
-            foreach (var item in items)
+            var rootItem = new ShellFolder(e.NewLocation.PIDL);
+
+            var childItems = rootItem?.EnumerateChildren(FolderItemFilter.Folders | FolderItemFilter.NonFolders);
+            if (childItems == null)
             {
-                SecondaryShellListView.AddItem(new ShellBrowserItem(item.PIDL, item.IsFolder));
+                Debug.Fail($"[Error] Navigate(<{e.NewLocation.Name}>) failed. No items found.");
+                return;
             }
+
+            var newBrowserItems = new List<ShellBrowserItem>();
+            foreach (var item in childItems)
+            {
+                newBrowserItems.Add(new ShellBrowserItem(item.PIDL));
+            }
+
+            SecondaryShellListView.AddItems(newBrowserItems);
         }
         catch (COMException comEx)
         {

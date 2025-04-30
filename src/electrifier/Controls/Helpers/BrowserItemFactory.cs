@@ -19,13 +19,13 @@ namespace electrifier.Controls.Helpers;
 
 public class BrowserItemFactory
 {
-    public static ShellBrowserItem FromPIDL(Shell32.PIDL pidl, bool? isFolder, List<AbstractBrowserItem<ShellItem>>? childItems = null) => new(pidl, isFolder, childItems);
-    public static ShellBrowserItem FromKnownFolderId(Shell32.KNOWNFOLDERID knownFolderId) => new(new ShellFolder(knownFolderId).PIDL, isFolder: true);
-    public static ShellBrowserItem FromShellFolder(ShellFolder shellFolder) => FromPIDL(shellFolder.PIDL, isFolder: true);
+    public static ShellBrowserItem FromPIDL(Shell32.PIDL pidl, List<AbstractBrowserItem<ShellItem>>? childItems = null) => new(pidl, childItems);
+    public static ShellBrowserItem FromKnownFolderId(Shell32.KNOWNFOLDERID knownFolderId) => new(new ShellFolder(knownFolderId).PIDL);
+    public static ShellBrowserItem FromShellFolder(ShellFolder shellFolder) => FromPIDL(shellFolder.PIDL);
     public static ShellBrowserItem HomeShellFolder()
     {
         using var homeShellFolder = new ShellItem("shell:::{679f85cb-0220-4080-b29b-5540cc05aab6}");
-        return new ShellBrowserItem(homeShellFolder.PIDL, isFolder: true);
+        return new ShellBrowserItem(homeShellFolder.PIDL);
     }
 }
 
@@ -67,8 +67,8 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
     public bool IsHidden => ShellItem.Attributes.HasFlag(ShellItemAttribute.Hidden);
 
     // TODO: Listen for ShellItem Property changes
-    public ShellBrowserItem(Shell32.PIDL pidl, bool? isFolder,
-        List<AbstractBrowserItem<ShellItem>>? childItems = null) : base(isFolder, childItems ?? [])
+    public ShellBrowserItem(Shell32.PIDL pidl,
+        List<AbstractBrowserItem<ShellItem>>? childItems = null) : base(childItems)
     {
         PIDL = new Shell32.PIDL(pidl);
         ShellItem = new ShellItem(pidl);

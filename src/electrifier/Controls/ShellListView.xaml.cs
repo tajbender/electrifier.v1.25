@@ -53,6 +53,17 @@ public sealed partial class ShellListView : UserControl
 
     public void AddItem(ShellBrowserItem shellBrowserItem) => Items.Add(shellBrowserItem);
 
+    public void AddItems(IEnumerable<ShellBrowserItem> shellBrowserItems)
+    {
+        using (AdvancedCollectionView.DeferRefresh())
+        {
+            foreach (var item in shellBrowserItems)
+            {
+                Items.Add(item);
+            }
+        }
+    }
+
     public void ClearItems()
     {
         using (AdvancedCollectionView.DeferRefresh())
