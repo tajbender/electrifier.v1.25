@@ -59,7 +59,7 @@ internal class Shel32NamespaceService
 
         var hIcon = icninfo.hIcon;
         var icnHandle = hIcon.ToIcon();
-        var bmpSource = GetWinUi3BitmapSourceFromIcon(icnHandle);
+        var bmpSource = GetWinUi3BitmapSourceFromIcon(icnHandle);        // TODO: bmpSource.SetBitmapAsync(softwareBitmap); // TODO: SetBitmapAsync(softwareBitmap);
         await bmpSource;
         var softBitmap = bmpSource.Result;
 

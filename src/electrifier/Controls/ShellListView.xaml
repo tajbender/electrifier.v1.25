@@ -20,8 +20,9 @@
                                     VerticalAlignment="Center">
                             <Image MaxHeight="23"
                                    Margin="7,0"
-                                   Source="{x:Bind SoftwareBitmap}"
-                                   VerticalAlignment="Stretch" />
+                                   Source="{x:Bind SoftwareBitmap, Mode=OneWay}"
+                                   VerticalAlignment="Stretch"
+                                   Width="23" />
                             <TextBlock Text="{x:Bind DisplayName}"
                                        VerticalAlignment="Center" />
                         </StackPanel>

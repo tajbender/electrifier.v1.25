@@ -89,7 +89,8 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
             : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
 
         var softwareBitmapSource = await Shel32NamespaceService.GetStockIconBitmapSource(shStockIconId);
-        SetField(ref SoftwareBitmap, softwareBitmapSource);
+        SetField(ref SoftwareBitmap, softwareBitmapSource, nameof(SoftwareBitmap));
+
         return softwareBitmapSource;
     }
 
