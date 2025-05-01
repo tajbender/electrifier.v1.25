@@ -38,6 +38,8 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
     public readonly Shell32.PIDL PIDL;
     public ShellItem ShellItem;
     public SoftwareBitmapSource? SoftwareBitmap;
+    public SoftwareBitmapSource? OverlayBitmapSource;
+    public ShellItemAttribute Attributes => ShellItem.Attributes;
     private bool _isSelected;
 
     public bool IsSelected
@@ -55,8 +57,6 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
         }
     }
 
-    public bool IsLink => ShellItem.IsLink;
-
     /// <summary>
     /// HasUnrealizedChildren checks for flag ´SFGAO_HASSUBFOLDER´.
     ///
@@ -67,6 +67,8 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
     public bool HasUnrealizedChildren => ShellItem.Attributes.HasFlag(ShellItemAttribute.HasSubfolder);
 
     public bool IsHidden => ShellItem.Attributes.HasFlag(ShellItemAttribute.Hidden);
+    public bool IsLink => ShellItem.IsLink;
+    public bool IsFolder => ShellItem.IsFolder;
 
     // TODO: Listen for ShellItem Property changes
     public ShellBrowserItem(Shell32.PIDL pidl,
@@ -82,23 +84,27 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
         //ChildItems = childItems ?? []; note: base ctor
         //SoftwareBitmap = ConfiguredTaskAwaitable GetStockIconBitmapSource()
 
-        _ = GetStockIconBitmapAsync();
-    }
-
-    private async Task<SoftwareBitmapSource> GetStockIconBitmapAsync()
-    {
-        // TODO: check if item is a link. Will cause exception if not a link
-        // SHSTOCKICONID.Link and SHSTOCKICONID.SlowFile have to be used as overlay
-        // var softBitmap = await StockIconFactory.GetStockIconBitmapSource(shStockIconId);
-
-        var shStockIconId = ShellItem.IsFolder
-            ? Shell32.SHSTOCKICONID.SIID_FOLDER
-            : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
 
         // if IsHidden... do overlay
         // is IsLink... do overlay
+        Shell32.SHSTOCKICONID shStockIconId;
+        if (IsLink)
+        {
+            shStockIconId = Shell32.SHSTOCKICONID.SIID_LINK;
+        }
+        else
+        {
+            shStockIconId = IsFolder
+                ? Shell32.SHSTOCKICONID.SIID_FOLDER
+                : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
+        }
 
-        var softwareBitmapSource = await Shel32NamespaceService.GetStockIconBitmapSource(shStockIconId);
+        _ = GetStockIconBitmapAsync(shStockIconId);
+    }
+
+    private async Task<SoftwareBitmapSource> GetStockIconBitmapAsync(Shell32.SHSTOCKICONID stockIconId)
+    {
+        var softwareBitmapSource = await Shel32NamespaceService.GetStockIconBitmapSource(stockIconId);
         SetField(ref SoftwareBitmap, softwareBitmapSource, nameof(SoftwareBitmap));
 
         return softwareBitmapSource;
