@@ -35,10 +35,10 @@ public class BrowserItemFactory
 public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyPropertyChanged
 {
     public string DisplayName => ShellItem.GetDisplayName(ShellItemDisplayString.NormalDisplay) ?? ShellItem.ToString();
-    public readonly Shell32.PIDL PIDL;
+    public Shell32.PIDL PIDL => ShellItem.PIDL;
     public ShellItem ShellItem;
     public SoftwareBitmapSource? SoftwareBitmap;
-    public SoftwareBitmapSource? OverlayBitmapSource;
+    public SoftwareBitmapSource? OverlaySoftwareBitmap;
     public ShellItemAttribute Attributes => ShellItem.Attributes;
     private bool _isSelected;
 
@@ -64,17 +64,15 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
     /// The specified folders have subfolders. The SFGAO_HASSUBFOLDER attribute is only advisory and might be returned by Shell folder implementations even if they do not contain subfolders. Note, however, that the converse—failing to return SFGAO_HASSUBFOLDER—definitively states that the folder objects do not have subfolders.
     /// Returning SFGAO_HASSUBFOLDER is recommended whenever a significant amount of time is required to determine whether any subfolders exist. For example, the Shell always returns SFGAO_HASSUBFOLDER when a folder is located on a network drive.
     /// </summary>
-    public bool HasUnrealizedChildren => ShellItem.Attributes.HasFlag(ShellItemAttribute.HasSubfolder);
-
-    public bool IsHidden => ShellItem.Attributes.HasFlag(ShellItemAttribute.Hidden);
+    public bool HasUnrealizedChildren => Attributes.HasFlag(ShellItemAttribute.HasSubfolder);
+    public new bool IsFolder => ShellItem.IsFolder;
+    public bool IsHidden => Attributes.HasFlag(ShellItemAttribute.Hidden);
     public bool IsLink => ShellItem.IsLink;
-    public bool IsFolder => ShellItem.IsFolder;
 
     // TODO: Listen for ShellItem Property changes
     public ShellBrowserItem(Shell32.PIDL pidl,
         List<AbstractBrowserItem<ShellItem>>? childItems = null) : base(childItems)
     {
-        PIDL = new Shell32.PIDL(pidl);
         ShellItem = new ShellItem(pidl);
 
         if (IsLink)
@@ -90,16 +88,22 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
         Shell32.SHSTOCKICONID shStockIconId;
         if (IsLink)
         {
-            shStockIconId = Shell32.SHSTOCKICONID.SIID_LINK;
-        }
-        else
-        {
-            shStockIconId = IsFolder
-                ? Shell32.SHSTOCKICONID.SIID_FOLDER
-                : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
+            _ = GetStockIconOverlayBitmapAsync(Shell32.SHSTOCKICONID.SIID_LINK);
         }
 
+        shStockIconId = IsFolder
+            ? Shell32.SHSTOCKICONID.SIID_FOLDER
+            : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
         _ = GetStockIconBitmapAsync(shStockIconId);
+
+    }
+
+    private async Task<SoftwareBitmapSource> GetStockIconOverlayBitmapAsync(Shell32.SHSTOCKICONID stockIconId)
+    {
+        var softwareBitmapSource = await Shel32NamespaceService.GetStockIconBitmapSource(stockIconId);
+        SetField(ref OverlaySoftwareBitmap, softwareBitmapSource, nameof(OverlaySoftwareBitmap));
+
+        return softwareBitmapSource;
     }
 
     private async Task<SoftwareBitmapSource> GetStockIconBitmapAsync(Shell32.SHSTOCKICONID stockIconId)

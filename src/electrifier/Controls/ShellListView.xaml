@@ -8,29 +8,35 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="using:electrifier.Controls.Helpers"
              mc:Ignorable="d">
-
     <Grid>
         <Grid.Resources>
             <DataTemplate x:Key="ItemsViewBrowserItemTemplate"
                           x:DataType="helpers:ShellBrowserItem">
                 <ItemContainer AutomationProperties.Name="{x:Bind DisplayName}">
                     <Grid Margin="3">
-                        <StackPanel Orientation="Horizontal"
-                                    VerticalAlignment="Center">
-                            <Image MaxHeight="23"
-                                   Margin="7,0"
-                                   Source="{x:Bind SoftwareBitmap, Mode=OneWay}"
-                                   VerticalAlignment="Stretch"
-                                   Width="23" />
-                            <TextBlock Text="{x:Bind DisplayName}"
-                                       VerticalAlignment="Center" />
-                        </StackPanel>
-                        <!-- Transparent Overlay -->
-                        <Border x:Name="OverlayBorder"
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="32" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image x:Name="ShellIcon"
+                               Grid.Column="0"
+                               Source="{x:Bind SoftwareBitmap, Mode=OneWay}"
+                               VerticalAlignment="Stretch" />
+                        <Image x:Name="ShellIconOverlay"
+                               Grid.Column="0"
+                               Source="{x:Bind OverlaySoftwareBitmap, Mode=OneWay}"
+                               VerticalAlignment="Stretch" />
+                        <Border Grid.Column="0"
+                                x:Name="ShellIconHiddenOverlayBorder"
                                 Background="#80000000"
+                                CornerRadius="7"
                                 HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch" 
-                                Visibility="{x:Bind IsHidden, Mode=OneWay}"/>
+                                VerticalAlignment="Stretch"
+                                Visibility="{x:Bind IsHidden, Mode=OneWay}" />
+                        <TextBlock Grid.Column="1"
+                                   Margin="5,0,5,0"
+                                   Text="{x:Bind DisplayName}"
+                                   VerticalAlignment="Center" />
                     </Grid>
                 </ItemContainer>
             </DataTemplate>
