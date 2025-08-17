@@ -1,0 +1,20 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <NoWarn>$(NoWarn);NU1507</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Collections" Version="8.1.240916" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.1.240916" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Extensions" Version="8.1.240916" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.5.250108004" />
+    <PackageVersion Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
+    <PackageVersion Include="System.Text.Json" Version="9.0.2" />
+    <PackageVersion Include="Vanara.Windows.Shell" Version="4.1.6" />
+    <PackageVersion Include="Vanara.Windows.Shell.Common" Version="4.1.6" />
+    <PackageVersion Include="WinUIEx" Version="2.3.2" />
+  </ItemGroup>
+</Project>

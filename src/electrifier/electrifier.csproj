@@ -9,41 +9,36 @@
     <Platforms>x86;x64;arm64</Platforms>
     <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
     <PublishProfile>Properties\PublishProfiles\win10-$(Platform).pubxml</PublishProfile>
-	<ImplicitUsings>enable</ImplicitUsings>
-	<Nullable>enable</Nullable>
-	<UseWinUI>true</UseWinUI>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
-
-	<PropertyGroup>
-		<LangVersion>12.0</LangVersion>
-		<PackageIcon>Assets/WindowIcon.ico</PackageIcon>
-	</PropertyGroup>
-	
+  <PropertyGroup>
+    <LangVersion>12.0</LangVersion>
+    <PackageIcon>Assets/WindowIcon.ico</PackageIcon>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="Controls\ExplorerBrowser.xaml" />
     <None Remove="Controls\ShellListView.xaml" />
     <None Remove="Controls\ShellNamespaceTreeControl.xaml" />
   </ItemGroup>
-
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="CommunityToolkit.WinUI.Collections" Version="8.1.240916" />
-    <PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.1.240916" />
-    <PackageReference Include="CommunityToolkit.WinUI.Extensions" Version="8.1.240916" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.250108004" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
-    <PackageReference Include="System.Text.Json" Version="9.0.2" />
-    <PackageReference Include="Vanara.Windows.Shell" Version="4.1.6" />
-    <PackageReference Include="Vanara.Windows.Shell.Common" Version="4.1.6" />
-    <PackageReference Include="WinUIEx" Version="2.3.2" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="CommunityToolkit.WinUI.Collections" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" />
+    <PackageReference Include="CommunityToolkit.WinUI.Extensions" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" />
+    <PackageReference Include="System.Text.Json" />
+    <PackageReference Include="Vanara.Windows.Shell" />
+    <PackageReference Include="Vanara.Windows.Shell.Common" />
+    <PackageReference Include="WinUIEx" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\electrifier.Core\electrifier.Core.csproj" />
   </ItemGroup>
@@ -61,16 +56,13 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
   </ItemGroup>
-  
   <ItemGroup>
     <Folder Include="Controls\Models\" />
     <Folder Include="Controls\Resources\" />
   </ItemGroup>
-  
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
   </PropertyGroup>
