@@ -53,11 +53,20 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
     }
 
     private void OnLoading(FrameworkElement sender, object args)
-    {
+    { // HomeShellFolder
+        var folderItem = new ShellFolder(@"shell:::{679f85cb-0220-4080-b29b-5540cc05aab6}");
+        var newItem = BrowserItemFactory.FromShellFolder(folderItem);
+        Items.Add(newItem);
+        /*
+public static ShellBrowserItem HomeShellFolder() => new(new ShellItem("shell:::{679f85cb-0220-4080-b29b-5540cc05aab6}").PIDL);
+         */
+
+        //Items.Add(new ShellBrowserItem(folderItem);
         // TODO: Items.Add(new ShellBrowserItem(/* Home */, isFolder: true));
         // TODO: Items.Add(new ShellBrowserItem(/* Gallery */, isFolder: true));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_SkyDrive));
         // TODO: Add separator and add this as child items of the rootItem as second view option
+        // INFO: The following items are quick access items
         Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Downloads));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Documents));
@@ -65,7 +74,7 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Music));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Videos));
 
-        Items[0].IsSelected = true;
+        Items[2].IsSelected = true;
     }
 
     private void OnSelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs e)

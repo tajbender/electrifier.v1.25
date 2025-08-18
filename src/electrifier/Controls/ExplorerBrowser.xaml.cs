@@ -54,7 +54,7 @@ public sealed partial class ExplorerBrowser : UserControl
 
         try
         {
-            var rootItem = new ShellFolder(e.NewLocation.PIDL);
+            var rootItem = new ShellFolder(e.NewLocation);
 
             var childItems = rootItem?.EnumerateChildren(FolderItemFilter.Folders | FolderItemFilter.NonFolders | FolderItemFilter.IncludeHidden);
             if (childItems == null)
