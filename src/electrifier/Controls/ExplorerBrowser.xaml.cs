@@ -35,7 +35,11 @@ public sealed partial class ExplorerBrowser : UserControl
     public ObservableCollection<ShellBrowserItem> CurrentItems;
     public event EventHandler<Vanara.Windows.Shell.NavigatedEventArgs> Navigated;
     public event EventHandler<Vanara.Windows.Shell.NavigationFailedEventArgs> NavigationFailed;
-    
+
+    private Task<HRESULT>? _currentNavigationTask;
+    private bool _isLoading;
+
+
     public ExplorerBrowser()
     {
         InitializeComponent();
@@ -47,41 +51,77 @@ public sealed partial class ExplorerBrowser : UserControl
         SecondaryShellListView.Navigated += SecondaryShellTreeView_Navigated;
     }
 
-    private async void PrimaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
+    internal async Task<HRESULT> Navigate(ShellBrowserItem target)
     {
-        Debug.Print($".PrimaryShellTreeView_Navigated() to {e.NewLocation.Name}");
-        PrimaryShellListView.ClearItems();
+        var shTargetItem = target.ShellItem;
 
+        Debug.WriteLineIf(!shTargetItem.IsFolder, $".WARN: Navigate({target.DisplayName}) => is not a folder!");
+        // TODO: If no folder, or drive empty, etc... show empty listview with error message
+
+        // TODO: init ShellNamespaceService
         try
         {
-            var rootItem = new ShellFolder(e.NewLocation);
-
-            var childItems = rootItem?.EnumerateChildren(FolderItemFilter.Folders | FolderItemFilter.NonFolders | FolderItemFilter.IncludeHidden);
-            if (childItems == null)
+            if (_currentNavigationTask is { IsCompleted: false })
             {
-                Debug.Fail($"[Error] Navigate(<{e.NewLocation.Name}>) failed. No items found.");
-                return;
+                Debug.Print("ERROR! <_currentNavigationTask> already running");
+                // cancel current task
+                //CurrentNavigationTask
             }
 
-            var newBrowserItems = new List<ShellBrowserItem>();
-            foreach (var item in childItems)
+            // IsLoading = true;
+
+            if (target.ChildItems.Count <= 0)
             {
-                newBrowserItems.Add(new ShellBrowserItem(item.PIDL));
+                using var shFolder = new ShellFolder(target.ShellItem);
+
+                target.ChildItems.Clear();
+                PrimaryShellListView.Items.Clear();
+                foreach (var child in shFolder)
+                {
+                    var ebItem = new ShellBrowserItem(child);
+
+                    target.ChildItems.Add(ebItem);
+                    PrimaryShellListView.Items.Add(ebItem);
+                }
+            }
+            else
+            {
+                Debug.WriteLine(".Navigate() => Cache hit!");
+                PrimaryShellListView.Items.Clear();
+                foreach (var child in target.ChildItems)
+                {
+                    PrimaryShellListView.Items.Add(child);
+                }
             }
 
-            PrimaryShellListView.AddItems(newBrowserItems);
+            // TODO: Load folder-open icon and overlays
         }
         catch (COMException comEx)
         {
             Debug.Fail(
-                $"[Error] Navigate(<{e.NewLocation.Name}>) failed. COMException: <HResult: {comEx.HResult}>: `{comEx.Message}`");
-            //NavigationFailed?.Invoke(this, new NavigationFailedEventArgs(comEx));
+                $"[Error] Navigate(<{target}>) failed. COMException: <HResult: {comEx.HResult}>: `{comEx.Message}`");
+
+            return new HRESULT(comEx.HResult);
         }
         catch (Exception ex)
         {
-            Debug.Fail($"[Error] Navigate(<{e.NewLocation.Name}>) failed, reason unknown: {ex.Message}");
+            Debug.Fail($"[Error] Navigate(<{target}>) failed, reason unknown: {ex.Message}");
             throw;
         }
+        finally
+        {
+            //IsLoading = false;
+        }
+
+        return HRESULT.S_OK;
+    }
+
+
+    private async void PrimaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
+    {
+        Debug.Print($".PrimaryShellTreeView_Navigated() to {e.NewLocation.Name}");
+
+        _ = Navigate(new ShellBrowserItem(e.NewLocation));  // WARN: This is a fire-and-forget call, no await! // WARN: Use existing ShellBrowserItem from TreeView
     }
 
     private async void SecondaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
@@ -103,7 +143,7 @@ public sealed partial class ExplorerBrowser : UserControl
             var newBrowserItems = new List<ShellBrowserItem>();
             foreach (var item in childItems)
             {
-                newBrowserItems.Add(new ShellBrowserItem(item.PIDL));
+                newBrowserItems.Add(new ShellBrowserItem(new(item.PIDL)));
             }
 
             SecondaryShellListView.AddItems(newBrowserItems);

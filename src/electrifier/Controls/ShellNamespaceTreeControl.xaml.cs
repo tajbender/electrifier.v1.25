@@ -67,7 +67,7 @@ public static ShellBrowserItem HomeShellFolder() => new(new ShellItem("shell:::{
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_SkyDrive));
         // TODO: Add separator and add this as child items of the rootItem as second view option
         // INFO: The following items are quick access items
-        Items.Add(new ShellBrowserItem(ShellFolder.Desktop.PIDL));
+        Items.Add(new ShellBrowserItem(ShellFolder.Desktop));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Downloads));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Documents));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Pictures));

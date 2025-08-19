@@ -14,18 +14,11 @@ namespace electrifier.Controls.Contracts;
 public abstract class AbstractBrowserItem<T> // TODO: IDisposable
 {
     public T BaseType;
-    public readonly List<AbstractBrowserItem<T>> ChildItems;
+    public readonly IEnumerable<AbstractBrowserItem<T>>? ChildItems;
     public readonly bool? IsFolder;
 
-    /// <summary>Abstract base class ShellBrowserItem of Type <typeparam name="T"/>.</summary>
-    /// <typeparam name="T">The derived Type of this abstract class.</typeparam>
-    /// <param name="isFolder" >
-    /// <value>true</value>
-    /// Default: False.</param>
-    /// <param name="childItems">Default: Create new empty List of child items <typeparam name="T">childItems</typeparam>.</param>
-    protected AbstractBrowserItem(List<AbstractBrowserItem<T>>? childItems)
+    protected AbstractBrowserItem()
     {
-        ChildItems = childItems ?? [];
         //todo: var propertyBag = new ArrayList<object owner, string key, object value>();
         //todo: var pb = new PropertyBag();
     }

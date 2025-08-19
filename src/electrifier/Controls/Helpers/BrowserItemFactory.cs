@@ -19,13 +19,13 @@ namespace electrifier.Controls.Helpers;
 
 public class BrowserItemFactory
 {
-    public static ShellBrowserItem FromPIDL(Shell32.PIDL pidl, List<AbstractBrowserItem<ShellItem>>? childItems = null) => new(pidl, childItems);
-    public static ShellBrowserItem FromKnownFolderId(Shell32.KNOWNFOLDERID knownFolderId) => new(new ShellFolder(knownFolderId).PIDL);
+    public static ShellBrowserItem FromPIDL(Shell32.PIDL pidl, List<ShellBrowserItem>? childItems = null) => new(new ShellItem(pidl), childItems);
+    public static ShellBrowserItem FromKnownFolderId(Shell32.KNOWNFOLDERID knownFolderId) => new(new ShellFolder(knownFolderId));
     public static ShellBrowserItem FromShellFolder(ShellFolder shellFolder) => FromPIDL(shellFolder.PIDL);
     public static ShellBrowserItem HomeShellFolder()
     {
         using var homeShellFolder = new ShellItem("shell:::{679f85cb-0220-4080-b29b-5540cc05aab6}");
-        return new ShellBrowserItem(homeShellFolder.PIDL);
+        return new ShellBrowserItem(homeShellFolder);
     }
 }
 
@@ -41,6 +41,8 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
     public SoftwareBitmapSource? OverlaySoftwareBitmap;
     public ShellItemAttribute Attributes => ShellItem.Attributes;
     private bool _isSelected;
+
+    public readonly new List<ShellBrowserItem> ChildItems;
 
     public bool IsSelected
     {
@@ -70,15 +72,13 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
     public bool IsLink => ShellItem.IsLink;
 
     // TODO: Listen for ShellItem Property changes
-    public ShellBrowserItem(Shell32.PIDL pidl,
-        List<AbstractBrowserItem<ShellItem>>? childItems = null) : base(childItems)
-    {
-        ShellItem = new ShellItem(pidl);
 
-        if (IsLink)
-        {
-            Debug.Print("Link Item has been enumerated.");
-        }
+    public ShellBrowserItem(ShellItem shItem,
+        List<ShellBrowserItem> childItems = null) : base()
+    {
+        ShellItem = shItem;
+        ChildItems = childItems ?? [];
+
         //ChildItems = childItems ?? []; note: base ctor
         //SoftwareBitmap = ConfiguredTaskAwaitable GetStockIconBitmapSource()
 
