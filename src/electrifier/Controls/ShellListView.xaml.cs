@@ -28,50 +28,75 @@ namespace electrifier.Controls;
 public sealed partial class ShellListView : UserControl
 {
     internal ItemsView NativeItemsView => ItemsView;
-    public ObservableCollection<ShellBrowserItem> Items;
+
+    public ObservableCollection<ShellBrowserItem> Items
+    {
+        get;
+    }
+
     public readonly AdvancedCollectionView AdvancedCollectionView;
+
+    public delegate void NavigatedEventHandler(object sender, NavigatedEventArgs e);
+    public event NavigatedEventHandler? Navigated;
 
     public ShellListView()
     {
         InitializeComponent();
         DataContext = this;
 
-        // Put this into thread
         Items = [];
         AdvancedCollectionView = new AdvancedCollectionView(Items, true);
-        AdvancedCollectionView.SortDescriptions.Add(new SortDescription(SortDirection.Ascending,new DefaultBrowserItemComparer()));
+        AdvancedCollectionView.SortDescriptions.Add(new SortDescription(SortDirection.Ascending));
         Debug.Assert(NativeItemsView != null, nameof(NativeItemsView) + " != null");
         NativeItemsView.ItemsSource = AdvancedCollectionView;
-
-        //        this.OnGotFocus += ShellListView_GotFocus;
-        //        this.OnLostFocus += ShellListView_LostFocus;
     }
 
-    public void Navigate(ShellBrowserItem shellBrowserItem)
-    {
-        Items.Clear();
-        Items.Add(shellBrowserItem);
-    }
+    public void AddItem(ShellBrowserItem shellBrowserItem) => Items.Add(shellBrowserItem);
 
-    /// <summary>
-    /// Default sort of <see cref="BrowserItem"/>s.
-    /// <b>WARN: This is not</b> the exact Comparison Windows File Explorer uses.
-    /// </summary>
-    public class DefaultBrowserItemComparer : IComparer
+    public void AddItems(IEnumerable<ShellBrowserItem> shellBrowserItems)
     {
-        public int Compare(object? x, object? y)
+        using (AdvancedCollectionView.DeferRefresh())
         {
-            if (x is not ShellBrowserItem left || y is not ShellBrowserItem right)
+            foreach (var item in shellBrowserItems)
             {
-                return new Comparer(CultureInfo.InvariantCulture).Compare(x, y);
+                Items.Add(item);
             }
+        }
+    }
 
-            return left.IsFolder switch
+    public void ClearItems()
+    {
+        using (AdvancedCollectionView.DeferRefresh())
+        {
+            Items.Clear();
+        }
+    }
+
+    private void ItemsView_OnDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+    {
+        if (!e.Handled)
+        {
+            try
             {
-                true when right.IsFolder == false => -1,
-                false when right.IsFolder == true => 1,
-                _ => string.Compare(left.DisplayName, right.DisplayName, StringComparison.OrdinalIgnoreCase)
-            };
+                var shellBrowserItem = (NativeItemsView.SelectedItem) as ShellBrowserItem;
+                var shellItem = shellBrowserItem?.ShellItem;
+                Debug.Assert(shellItem != null, nameof(shellItem) + " != null");
+                if (shellItem.IsFolder)
+                {
+                    var shFolder = new ShellFolder(shellItem);
+                    if (shFolder != null)
+                    {
+                        Navigated?.Invoke(this, new NavigatedEventArgs(shFolder));
+                        //Navigated?.BeginInvoke(this, item, null, null);
+                        e.Handled = true;
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.Fail(exception.ToString());
+                throw;
+            }
         }
     }
 }

@@ -101,5 +101,6 @@
                 <Frame x:Name="NavigationFrame" Grid.Column="1"/>
             </Grid>
         </NavigationView>
+        <!-- INFO: Für Navigation View probieren: '<controls:PropertySizer HorizontalAlignment="Left" Visibility="{x:Bind ViewPanel.IsPaneOpen, Mode=OneWay}' -->
     </Grid>
 </Page>
