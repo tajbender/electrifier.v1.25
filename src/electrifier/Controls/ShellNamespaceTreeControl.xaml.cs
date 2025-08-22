@@ -29,11 +29,6 @@ public sealed partial class ShellNamespaceTreeControl : UserControl
     private TreeView NativeTreeView => TreeView;
     internal ObservableCollection<ShellBrowserItem> Items;
 
-    public bool AutoExpandAfterSelection
-    {
-        get;
-        set;
-    }
     public TreeViewNode? SelectedItem => NativeTreeView.SelectedNode as TreeViewNode;
 
     public delegate void NavigatedEventHandler(object sender, NavigatedEventArgs e);
