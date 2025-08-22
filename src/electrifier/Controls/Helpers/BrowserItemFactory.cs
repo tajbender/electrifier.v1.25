@@ -68,8 +68,8 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
     /// </summary>
     public bool HasUnrealizedChildren => Attributes.HasFlag(ShellItemAttribute.HasSubfolder);
     public new bool IsFolder => ShellItem.IsFolder;
-    //public bool IsHidden => Attributes.HasFlag(ShellItemAttribute.Hidden);
-    //public bool IsLink => ShellItem.IsLink;
+    public bool IsHidden => Attributes.HasFlag(ShellItemAttribute.Hidden);
+    public bool IsLink => ShellItem.IsLink;
 
     // TODO: Listen for ShellItem Property changes
 
