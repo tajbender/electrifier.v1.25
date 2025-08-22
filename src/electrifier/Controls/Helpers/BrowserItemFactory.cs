@@ -68,8 +68,8 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
     /// </summary>
     public bool HasUnrealizedChildren => Attributes.HasFlag(ShellItemAttribute.HasSubfolder);
     public new bool IsFolder => ShellItem.IsFolder;
-    public bool IsHidden => Attributes.HasFlag(ShellItemAttribute.Hidden);
-    public bool IsLink => ShellItem.IsLink;
+    //public bool IsHidden => Attributes.HasFlag(ShellItemAttribute.Hidden);
+    //public bool IsLink => ShellItem.IsLink;
 
     // TODO: Listen for ShellItem Property changes
 
@@ -86,11 +86,6 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
         // if IsHidden... do overlay
         // is IsLink... do overlay
         Shell32.SHSTOCKICONID shStockIconId;
-        if (IsLink)
-        {
-            _ = GetStockIconOverlayBitmapAsync(Shell32.SHSTOCKICONID.SIID_LINK);
-        }
-
         shStockIconId = IsFolder
             ? Shell32.SHSTOCKICONID.SIID_FOLDER
             : Shell32.SHSTOCKICONID.SIID_DOCASSOC;

@@ -22,7 +22,7 @@
                                Grid.Column="0"
                                Source="{x:Bind SoftwareBitmap, Mode=OneWay}"
                                VerticalAlignment="Stretch" />
-                        <Image x:Name="ShellIconOverlay"
+                        <!--<Image x:Name="ShellIconOverlay"
                                Grid.Column="0"
                                Source="{x:Bind OverlaySoftwareBitmap, Mode=OneWay}"
                                VerticalAlignment="Stretch" />
@@ -32,7 +32,7 @@
                                 CornerRadius="7"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
-                                Visibility="{x:Bind IsHidden, Mode=OneWay}" />
+                                Visibility="{x:Bind IsHidden, Mode=OneWay}" />-->
                         <TextBlock Grid.Column="1"
                                    Margin="5,0,5,0"
                                    Text="{x:Bind DisplayName}"
