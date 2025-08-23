@@ -29,6 +29,71 @@ public class BrowserItemFactory
     }
 }
 
+/* This comes from: https://github.com/electrifier/electrifier-v1.25/compare/reconfigure...tajbender:electrifier.v1.25:IconExtractor-Branch
+    /// <summary>
+    /// ExtractChildItems uses ShellIconExtractor to asynchronously extract icons for all child items of the given targetFolder.
+    /// </summary>
+    /// <param name="targetFolder">The ExplorerBrowserItem representing the folder whose child items are to be extracted.</param>
+    /// <param name="iconExtOnIconExtracted">An event handler that is called each time an icon is extracted for a child item.</param>
+    /// <param name="iconExtOnComplete">An event handler that is called when the extraction process is complete.</param>
+ public void ExtractChildItems(ExplorerBrowserItem targetFolder,
+        EventHandler<ShellIconExtractedEventArgs>? iconExtOnIconExtracted,
+        EventHandler? iconExtOnComplete)
+    {
+        Debug.Print($"ExtractChildItems <{targetFolder.DisplayName}> <{iconExtOnIconExtracted}> <{iconExtOnComplete}>");
+        Debug.Assert(targetFolder is not null);
+        if (targetFolder is null)
+        {
+            throw new ArgumentNullException(nameof(targetFolder));
+        }
+
+        Debug.Assert(targetFolder.IsFolder);
+        Debug.Assert(targetFolder.ShellItem.PIDL != null);
+        var shItemId = targetFolder.ShellItem.PIDL;
+        var shFolder = new ShellFolder(shItemId);
+        var shellIconExtractor = new ShellIconExtractor(shFolder);
+        shellIconExtractor.IconExtracted += (sender, args) =>
+        {
+            var shItem = new ShellItem(args.ItemID);
+            var ebItem = new ExplorerBrowserItem(shItem);
+
+            if (ebItem.IsFolder)
+            {
+                ebItem.BitmapSource = _defaultFolderImageBitmapSource;
+                targetFolder.Children?.Insert(0, ebItem);
+                //folderCount++;
+            }
+            else
+            {
+                ebItem.BitmapSource = _defaultDocumentAssocImageBitmapSource;
+                targetFolder.Children?.Add(ebItem);
+                //fileCount++;
+            }
+
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                CurrentFolderItems.Add(ebItem);
+            });
+        };
+        shellIconExtractor.IconExtracted += iconExtOnIconExtracted;
+        shellIconExtractor.Complete += iconExtOnComplete;
+        shellIconExtractor.Start();
+    }
+
+    private void IconExtOnComplete(object? sender, EventArgs e)
+    {
+        var cnt = CurrentFolderItems.Count;
+        Debug.Print($".IconExtOnComplete(): {cnt} items");
+
+        //ShellTreeView.SetItemsSource(CurrentFolderItem, CurrentFolderItems);  // TODO: using root item here, should be target folder?!?
+        //if (GridViewVisibility == Microsoft.UI.Xaml.Visibility.Visible)
+        //{
+        //    Debug.Print($".GridViewVisibility = {Microsoft.UI.Xaml.Visibility.Visible}");
+        //    ShellGridView.SetItems(CurrentFolderItems);
+        //}
+    }
+*/
+
 // TODO: IDisposable
 // TODO: IComparable
 [DebuggerDisplay($"{{{nameof(ToString)}(),nq}}")]
@@ -86,11 +151,6 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
         // if IsHidden... do overlay
         // is IsLink... do overlay
         Shell32.SHSTOCKICONID shStockIconId;
-        if (IsLink)
-        {
-            _ = GetStockIconOverlayBitmapAsync(Shell32.SHSTOCKICONID.SIID_LINK);
-        }
-
         shStockIconId = IsFolder
             ? Shell32.SHSTOCKICONID.SIID_FOLDER
             : Shell32.SHSTOCKICONID.SIID_DOCASSOC;

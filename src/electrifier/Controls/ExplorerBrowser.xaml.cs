@@ -76,13 +76,16 @@ public sealed partial class ExplorerBrowser : UserControl
 
                 target.ChildItems.Clear();
                 PrimaryShellListView.Items.Clear();
-                foreach (var child in shFolder)
+                DispatcherQueue.TryEnqueue(() =>
                 {
-                    var ebItem = new ShellBrowserItem(child);
+                    foreach (var child in shFolder)
+                    {
+                        var ebItem = new ShellBrowserItem(child);
 
-                    target.ChildItems.Add(ebItem);
-                    PrimaryShellListView.Items.Add(ebItem);
-                }
+                        target.ChildItems.Add(ebItem);
+                        PrimaryShellListView.Items.Add(ebItem);
+                    }
+                });
             }
             else
             {
