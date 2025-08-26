@@ -29,6 +29,7 @@ public class BrowserItemFactory
     }
 }
 
+// TODO: See https://github.com/CommunityToolkit/Windows/blob/main/components/Collections/src/AdvancedCollectionView/AdvancedCollectionView.cs#L272
 /* This comes from: https://github.com/electrifier/electrifier-v1.25/compare/reconfigure...tajbender:electrifier.v1.25:IconExtractor-Branch
     /// <summary>
     /// ExtractChildItems uses ShellIconExtractor to asynchronously extract icons for all child items of the given targetFolder.
@@ -148,14 +149,16 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
         //SoftwareBitmap = ConfiguredTaskAwaitable GetStockIconBitmapSource()
 
 
-        // if IsHidden... do overlay
-        // is IsLink... do overlay
         Shell32.SHSTOCKICONID shStockIconId;
         shStockIconId = IsFolder
             ? Shell32.SHSTOCKICONID.SIID_FOLDER
             : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
         _ = GetStockIconBitmapAsync(shStockIconId);
 
+        if(ShellItem.IsLink)
+        {
+            _ = GetStockIconOverlayBitmapAsync(Shell32.SHSTOCKICONID.SIID_LINK);
+        }
     }
 
     private async Task<SoftwareBitmapSource> GetStockIconOverlayBitmapAsync(Shell32.SHSTOCKICONID stockIconId)

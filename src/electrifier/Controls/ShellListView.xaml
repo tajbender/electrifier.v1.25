@@ -22,11 +22,12 @@
                                Grid.Column="0"
                                Source="{x:Bind SoftwareBitmap, Mode=OneWay}"
                                VerticalAlignment="Stretch" />
-                        <!--<Image x:Name="ShellIconOverlay"
+                        <Image x:Name="ShellIconOverlay"
                                Grid.Column="0"
+                               Opacity="0.8"
                                Source="{x:Bind OverlaySoftwareBitmap, Mode=OneWay}"
                                VerticalAlignment="Stretch" />
-                        <Border Grid.Column="0"
+                        <!-- <Border Grid.Column="0"
                                 x:Name="ShellIconHiddenOverlayBorder"
                                 Background="#80000000"
                                 CornerRadius="7"
