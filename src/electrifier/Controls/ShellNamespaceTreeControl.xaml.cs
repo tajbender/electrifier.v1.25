@@ -69,7 +69,13 @@ public static ShellBrowserItem HomeShellFolder() => new(new ShellItem("shell:::{
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Music));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Videos));
 
-        Items[2].IsSelected = true;
+
+        // todo: add separator
+        Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_ComputerFolder));
+        Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_NetworkFolder));
+        Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_ThisPCDesktop)); // todo: WARN: Check why this leads to `SyncCenter`?
+
+        Items[1].IsSelected = true;
     }
 
     private void OnSelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs e)
