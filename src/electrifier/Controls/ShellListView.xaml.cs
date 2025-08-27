@@ -29,7 +29,7 @@ public sealed partial class ShellListView : UserControl
 {
     internal ItemsView NativeItemsView => ItemsView;
 
-    public ObservableCollection<ShellBrowserItem> Items
+    private ObservableCollection<ShellBrowserItem> Items
     {
         get;
     }
@@ -46,12 +46,11 @@ public sealed partial class ShellListView : UserControl
 
         Items = [];
         AdvancedCollectionView = new AdvancedCollectionView(Items, true);
-        AdvancedCollectionView.SortDescriptions.Add(new SortDescription(SortDirection.Ascending));
         Debug.Assert(NativeItemsView != null, nameof(NativeItemsView) + " != null");
         NativeItemsView.ItemsSource = AdvancedCollectionView;
     }
 
-    public void AddItem(ShellBrowserItem shellBrowserItem) => Items.Add(shellBrowserItem);
+    public void AddItem(ShellBrowserItem shellBrowserItem) => AdvancedCollectionView.Add(shellBrowserItem);
 
     public void AddItems(IEnumerable<ShellBrowserItem> shellBrowserItems)
     {
@@ -59,7 +58,7 @@ public sealed partial class ShellListView : UserControl
         {
             foreach (var item in shellBrowserItems)
             {
-                Items.Add(item);
+                AdvancedCollectionView.Add(item);
             }
         }
     }
@@ -68,7 +67,31 @@ public sealed partial class ShellListView : UserControl
     {
         using (AdvancedCollectionView.DeferRefresh())
         {
-            Items.Clear();
+            AdvancedCollectionView.Clear();
+        }
+    }
+
+    /// <summary>
+    /// Default sort of <see cref="BrowserItem"/>s.
+    /// <b>WARN: This is not</b> the exact Comparison Windows File Explorer uses.
+    /// </summary>
+    public class DefaultBrowserItemComparer : IComparer
+    {
+        public int Compare(object? x, object? y)
+        {
+            //if (x is not ShellBrowserItem left || y is not ShellBrowserItem right)
+            {
+                return new Comparer(CultureInfo.InvariantCulture).Compare(x, y);
+            }
+
+            //return left.ShellItem.CompareTo(right.ShellItem);
+
+            //return left.IsFolder switch
+            //{
+            //    true when right.IsFolder == false => -1,
+            //    false when right.IsFolder == true => 1,
+            //    _ => left.ShellItem.CompareTo(right.ShellItem)
+            //};
         }
     }
 

@@ -32,9 +32,20 @@ namespace electrifier.Controls;
 
 public sealed partial class ExplorerBrowser : UserControl
 {
-    public ObservableCollection<ShellBrowserItem> CurrentItems;
     public event EventHandler<Vanara.Windows.Shell.NavigatedEventArgs> Navigated;
     public event EventHandler<Vanara.Windows.Shell.NavigationFailedEventArgs> NavigationFailed;
+    /*
+     *      var e = new CurrentChangingEventArgs();
+            OnCurrentChanging(e);
+            if (e.Cancel)
+            {
+                return false;
+            }
+
+            CurrentPosition = i;
+            OnCurrentChanged(null!);
+            return true;
+     */
 
     private Task<HRESULT>? _currentNavigationTask;
     private bool _isLoading;
@@ -75,7 +86,7 @@ public sealed partial class ExplorerBrowser : UserControl
                 using var shFolder = new ShellFolder(target.ShellItem);
 
                 target.ChildItems.Clear();
-                PrimaryShellListView.Items.Clear();
+                PrimaryShellListView.ClearItems();
                 DispatcherQueue.TryEnqueue(() =>
                 {
                     foreach (var child in shFolder)
@@ -83,18 +94,15 @@ public sealed partial class ExplorerBrowser : UserControl
                         var ebItem = new ShellBrowserItem(child);
 
                         target.ChildItems.Add(ebItem);
-                        PrimaryShellListView.Items.Add(ebItem);
+                        PrimaryShellListView.AddItem(ebItem);
                     }
                 });
             }
             else
             {
                 Debug.WriteLine(".Navigate() => Cache hit!");
-                PrimaryShellListView.Items.Clear();
-                foreach (var child in target.ChildItems)
-                {
-                    PrimaryShellListView.Items.Add(child);
-                }
+                PrimaryShellListView.ClearItems();
+                PrimaryShellListView.AddItems(target.ChildItems);
             }
 
             // TODO: Load folder-open icon and overlays
