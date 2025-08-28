@@ -79,30 +79,30 @@ public sealed partial class ExplorerBrowser : UserControl
                 //CurrentNavigationTask
             }
 
-            // IsLoading = true;
+            PrimaryShellListView.SetItemSource(target.ChildItems);
 
             if (target.ChildItems.Count <= 0)
             {
                 using var shFolder = new ShellFolder(target.ShellItem);
 
                 target.ChildItems.Clear();
-                PrimaryShellListView.ClearItems();
-                DispatcherQueue.TryEnqueue(() =>
-                {
+                //PrimaryShellListView.ClearItems();
+                //DispatcherQueue.TryEnqueue(() =>
+                //{
                     foreach (var child in shFolder)
                     {
                         var ebItem = new ShellBrowserItem(child);
 
                         target.ChildItems.Add(ebItem);
-                        PrimaryShellListView.AddItem(ebItem);
+                        //PrimaryShellListView.AddItem(ebItem);
                     }
-                });
+                //});
             }
             else
             {
                 Debug.WriteLine(".Navigate() => Cache hit!");
-                PrimaryShellListView.ClearItems();
-                PrimaryShellListView.AddItems(target.ChildItems);
+                //PrimaryShellListView.ClearItems();
+                //PrimaryShellListView.AddItems(target.ChildItems);
             }
 
             // TODO: Load folder-open icon and overlays

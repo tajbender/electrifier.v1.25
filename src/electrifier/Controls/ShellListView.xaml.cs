@@ -50,6 +50,12 @@ public sealed partial class ShellListView : UserControl
         NativeItemsView.ItemsSource = AdvancedCollectionView;
     }
 
+    public void SetItemSource(object itemSource)
+    {
+        //AdvancedCollectionView.Source = itemSource;
+        NativeItemsView.ItemsSource = itemSource;
+    }
+
     public void AddItem(ShellBrowserItem shellBrowserItem) => AdvancedCollectionView.Add(shellBrowserItem);
 
     public void AddItems(IEnumerable<ShellBrowserItem> shellBrowserItems)
