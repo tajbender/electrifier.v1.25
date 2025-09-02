@@ -1,29 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using electrifier.Controls;
 using electrifier.Controls.Helpers;
-using electrifier.Controls.Services;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using Vanara.PInvoke;
 using Vanara.Windows.Shell;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using static Vanara.PInvoke.ComCtl32;
-using static Vanara.PInvoke.Kernel32;
-using static Vanara.PInvoke.Shell32;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -32,9 +13,33 @@ namespace electrifier.Controls;
 
 public sealed partial class ExplorerBrowser : UserControl
 {
-    public event EventHandler<Vanara.Windows.Shell.NavigatedEventArgs> Navigated;
-    public event EventHandler<Vanara.Windows.Shell.NavigationFailedEventArgs> NavigationFailed;
+    public event EventHandler<NavigatedEventArgs> Navigated;
+    public event EventHandler<NavigatingEventArgs> Navigating;
+    public event EventHandler<NavigationFailedEventArgs> NavigationFailed;
+
+    public readonly ShellNavigationHistory History = new();
+    //private Vanara.Windows.Shell.NavigationLogDirection _navigationLogDirection;
+    //private Vanara.Windows.Shell.ShellBrowserViewMode _viewMode = ShellBrowserViewMode.Details;
+    /// <summary>Fires when the Items collection changes.</summary>
+    public event EventHandler? ItemsChanged;
+
+
+    /// <summary>Fires when the SelectedItems collection changes.</summary>
+    public event EventHandler? SelectionChanged;
+
+
     /*
+     public enum NavigationLogDirection
+{
+	/// <summary>Navigates forward through the navigation log</summary>
+	Forward,
+
+	/// <summary>Navigates backward through the travel log</summary>
+	Backward
+}
+
+     
+     
      *      var e = new CurrentChangingEventArgs();
             OnCurrentChanging(e);
             if (e.Cancel)
@@ -131,6 +136,14 @@ public sealed partial class ExplorerBrowser : UserControl
     private async void PrimaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
     {
         Debug.Print($".PrimaryShellTreeView_Navigated() to {e.NewLocation.Name}");
+
+        //var tnode = e.NewLocation;
+        var treeNode = PrimaryShellTreeView.SelectedItem;
+        var cnt = treeNode?.Content;
+        //treeNode.IsSelected = true;
+
+
+
 
         _ = Navigate(new ShellBrowserItem(e.NewLocation));  // WARN: This is a fire-and-forget call, no await! // WARN: Use existing ShellBrowserItem from TreeView
     }
