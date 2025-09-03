@@ -70,6 +70,7 @@ public sealed partial class ExplorerBrowser : UserControl
     internal async Task<HRESULT> Navigate(ShellBrowserItem target)
     {
         var shTargetItem = target.ShellItem;
+        var isRunning = true;
 
         Debug.WriteLineIf(!shTargetItem.IsFolder, $".WARN: Navigate({target.DisplayName}) => is not a folder!");
         // TODO: If no folder, or drive empty, etc... show empty listview with error message
@@ -86,31 +87,50 @@ public sealed partial class ExplorerBrowser : UserControl
 
             PrimaryShellListView.SetItemSource(target.ChildItems);
 
-            if (target.ChildItems.Count <= 0)
+            if(target.ChildItems.Count > 0)
             {
-                using var shFolder = new ShellFolder(target.ShellItem);
+                Debug.Print($".Navigate({target.DisplayName}) => already has {target.ChildItems.Count} items, skipping reload.");
+                return HRESULT.S_OK;
+            }
 
-                target.ChildItems.Clear();
-                //PrimaryShellListView.ClearItems();
+            // WARN: See https://share.google/zWhwyyuhim50ur8Ph     // https://medium.com/@a.lyskawa/the-hitchhiker-guide-to-asynchronous-events-in-c-e9840109fb53
+
+
+            ShellFolder shFolder = new(shTargetItem);
+            var icnExtractor = new ShellIconExtractor(shFolder, bmpSize: 64);  //new[] { shTargetItem }, 32, true);
+            icnExtractor.IconExtracted += (sender, args) =>
+            {
+                var shItem = new ShellItem(args.ItemID);
+                var ebItem = new ShellBrowserItem(shItem);
+                target.ChildItems?.Add(ebItem);
                 //DispatcherQueue.TryEnqueue(() =>
                 //{
-                    foreach (var child in shFolder)
-                    {
-                        var ebItem = new ShellBrowserItem(child);
-
-                        target.ChildItems.Add(ebItem);
-                        //PrimaryShellListView.AddItem(ebItem);
-                    }
+                //    PrimaryShellListView.AddItem(ebItem);
                 //});
-            }
-            else
+            };
+            icnExtractor.Complete += (sender, args) =>
             {
-                Debug.WriteLine(".Navigate() => Cache hit!");
-                //PrimaryShellListView.ClearItems();
-                //PrimaryShellListView.AddItems(target.ChildItems);
-            }
+                isRunning = false;
+                var cnt = target.ChildItems?.Count ?? 0;
+                Debug.Print($".Navigate({target.DisplayName}) => .IconExtOnComplete(): {cnt} items");
+                //PrimaryShellListView.SetItemSource(target.ChildItems);
+                //if (GridViewVisibility == Microsoft.UI.Xaml.Visibility.Visible)
+                //{
+                //    Debug.Print($".GridViewVisibility = {Microsoft.UI.Xaml.Visibility.Visible}");
+                //    ShellGridView.SetItems(CurrentFolderItems);
+                //}
+            };
 
-            // TODO: Load folder-open icon and overlays
+
+            icnExtractor.Start();
+
+            while (isRunning)
+            {
+                using (PrimaryShellListView.AdvancedCollectionView.DeferRefresh())
+                {
+                    await Task.Delay(250);
+                }
+            }
         }
         catch (COMException comEx)
         {
@@ -144,8 +164,8 @@ public sealed partial class ExplorerBrowser : UserControl
 
 
 
-
-        _ = Navigate(new ShellBrowserItem(e.NewLocation));  // WARN: This is a fire-and-forget call, no await! // WARN: Use existing ShellBrowserItem from TreeView
+        
+        _ = await Navigate(new ShellBrowserItem(e.NewLocation));  // WARN: This is a fire-and-forget call, no await! // WARN: Use existing ShellBrowserItem from TreeView
     }
 
     private async void SecondaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
