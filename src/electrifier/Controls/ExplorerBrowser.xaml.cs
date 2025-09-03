@@ -128,9 +128,10 @@ public sealed partial class ExplorerBrowser : UserControl
             {
                 using (PrimaryShellListView.AdvancedCollectionView.DeferRefresh())
                 {
-                    await Task.Delay(250);
+                    await Task.Delay(50);
                 }
             }
+            PrimaryShellListView.SetItemSource(target.ChildItems);
         }
         catch (COMException comEx)
         {
