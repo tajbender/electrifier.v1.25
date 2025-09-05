@@ -95,30 +95,20 @@ public sealed partial class ExplorerBrowser : UserControl
 
             // WARN: See https://share.google/zWhwyyuhim50ur8Ph     // https://medium.com/@a.lyskawa/the-hitchhiker-guide-to-asynchronous-events-in-c-e9840109fb53
 
-
+            var rootFolderPIDL = shTargetItem.PIDL;
             ShellFolder shFolder = new(shTargetItem);
             var icnExtractor = new ShellIconExtractor(shFolder, bmpSize: 64);  //new[] { shTargetItem }, 32, true);
             icnExtractor.IconExtracted += (sender, args) =>
             {
-                var shItem = new ShellItem(args.ItemID);
+                var shItem = new ShellItem(Shell32.PIDL.Combine(rootFolderPIDL, args.ItemID));
                 var ebItem = new ShellBrowserItem(shItem);
                 target.ChildItems?.Add(ebItem);
-                //DispatcherQueue.TryEnqueue(() =>
-                //{
-                //    PrimaryShellListView.AddItem(ebItem);
-                //});
             };
             icnExtractor.Complete += (sender, args) =>
             {
                 isRunning = false;
                 var cnt = target.ChildItems?.Count ?? 0;
                 Debug.Print($".Navigate({target.DisplayName}) => .IconExtOnComplete(): {cnt} items");
-                //PrimaryShellListView.SetItemSource(target.ChildItems);
-                //if (GridViewVisibility == Microsoft.UI.Xaml.Visibility.Visible)
-                //{
-                //    Debug.Print($".GridViewVisibility = {Microsoft.UI.Xaml.Visibility.Visible}");
-                //    ShellGridView.SetItems(CurrentFolderItems);
-                //}
             };
 
 
