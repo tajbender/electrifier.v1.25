@@ -59,14 +59,17 @@ internal class Shel32NamespaceService
 
         var hIcon = icninfo.hIcon;
         var icnHandle = hIcon.ToIcon();
-        var bmpSource = GetWinUi3BitmapSourceFromIcon(icnHandle);        // TODO: bmpSource.SetBitmapAsync(softwareBitmap); // TODO: SetBitmapAsync(softwareBitmap);
-        await bmpSource;
-        var softBitmap = bmpSource.Result;
-
-        if (softBitmap != null)
+        if (icnHandle != null)
         {
-            _ = StockIconDictionary.TryAdd(shStockIconId, softBitmap); // WARN: Is this thread safe?
-            return softBitmap;
+            var bmpSource = GetWinUi3BitmapSourceFromIcon(icnHandle);        // TODO: bmpSource.SetBitmapAsync(softwareBitmap); // TODO: SetBitmapAsync(softwareBitmap);
+            await bmpSource;
+            var softBitmap = bmpSource.Result;
+
+            if (softBitmap != null)
+            {
+                _ = StockIconDictionary.TryAdd(shStockIconId, softBitmap); // WARN: Is this thread safe?
+                return softBitmap;
+            }
         }
 
         throw new ArgumentOutOfRangeException($"Can't get StockIcon for SHSTOCKICONID: {shStockIconId.ToString()}");
