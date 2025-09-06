@@ -94,25 +94,36 @@ internal class Shel32NamespaceService
     {
         ArgumentNullException.ThrowIfNull(gdiBitmap);
 
+        // TODO: WARN: Here get exceptions thrown, see commented out try/catch
+        //try
+        //{
         // get pixels as an array of bytes
         // TODO: See in vanara IconExtractor in terms of getting byte data array
         var data = gdiBitmap.LockBits(new Rectangle(0, 0, gdiBitmap.Width, gdiBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, gdiBitmap.PixelFormat);
-        var bytes = new byte[data.Stride * data.Height];
-        Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
-        gdiBitmap.UnlockBits(data);
+            var bytes = new byte[data.Stride * data.Height];
+            Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
+            gdiBitmap.UnlockBits(data);
 
-        // get WinRT SoftwareBitmap
-        var softwareBitmap = new Windows.Graphics.Imaging.SoftwareBitmap(
-            Windows.Graphics.Imaging.BitmapPixelFormat.Bgra8,
-            gdiBitmap.Width,
-            gdiBitmap.Height,
-            Windows.Graphics.Imaging.BitmapAlphaMode.Premultiplied);
-        softwareBitmap.CopyFromBuffer(bytes.AsBuffer());
+            // get WinRT SoftwareBitmap
+            var softwareBitmap = new Windows.Graphics.Imaging.SoftwareBitmap(
+                Windows.Graphics.Imaging.BitmapPixelFormat.Bgra8,
+                gdiBitmap.Width,
+                gdiBitmap.Height,
+                Windows.Graphics.Imaging.BitmapAlphaMode.Premultiplied);
+            softwareBitmap.CopyFromBuffer(bytes.AsBuffer());
 
-        // build WinUI3 SoftwareBitmapSource
-        var source = new SoftwareBitmapSource();
-        await source.SetBitmapAsync(softwareBitmap);
-        return source;
+            // build WinUI3 SoftwareBitmapSource
+            var source = new SoftwareBitmapSource();
+            await source.SetBitmapAsync(softwareBitmap);
+            return source;
+        //}
+        //catch (Exception ex)
+        //{
+        //    // 13:18:52:152    Exception thrown: 'System.Runtime.InteropServices.COMException' in System.Private.CoreLib.dll
+        //    // 13:18:52:152.ERR: GetWinUi3BitmapSourceFromGdiBitmap () => The application called an interface that was marshalled for a different thread. (0x8001010E (RPC_E_WRONG_THREAD))
+        //    Debug.WriteLine($".ERR: GetWinUi3BitmapSourceFromGdiBitmap() => {ex.Message}");
+        //    return null;
+        //}
     }
 
     private string GetDebuggerDisplay() => $"{nameof(Shel32NamespaceService)}>";

@@ -101,6 +101,7 @@ public sealed partial class ExplorerBrowser : UserControl
             icnExtractor.IconExtracted += (sender, args) =>
             {
                 var shItem = new ShellItem(Shell32.PIDL.Combine(rootFolderPIDL, args.ItemID));
+                // WARN: This fails: var bitmapIcon = new System.Drawing.Bitmap(icnExtractor.ImageList[args.ImageListIndex]);
                 var ebItem = new ShellBrowserItem(shItem);
                 target.ChildItems?.Add(ebItem);
             };
@@ -194,5 +195,62 @@ public sealed partial class ExplorerBrowser : UserControl
             Debug.Fail($"[Error] Navigate(<{e.NewLocation.Name}>) failed, reason unknown: {ex.Message}");
             throw;
         }
+    }
+}
+
+
+/// <summary>Event argument for FilterItem event</summary>
+public class FilterShellItemEventArgs : EventArgs
+{
+    /// <summary>Initializes a new instance of the <see cref="NavigatedEventArgs"/> class.</summary>
+    /// <param name="item">The shell item.</param>
+    public FilterShellItemEventArgs(ShellItem item) => Item = item;
+
+    /// <summary>Gets or sets a value indicating whether a <see cref="ShellItem"/> is included by the filter.</summary>
+    /// <value><see langword="true"/> if included; otherwise, <see langword="false"/>.</value>
+    public bool Include { get; set; } = true;
+
+    /// <summary>The new location of the explorer browser</summary>
+    public ShellItem Item
+    {
+        get; private set;
+    }
+}
+
+/// <summary>Event argument for The Navigated event</summary>
+public class NavigatedEventArgs : EventArgs
+{
+    /// <summary>Initializes a new instance of the <see cref="NavigatedEventArgs"/> class.</summary>
+    /// <param name="folder">The folder.</param>
+    public NavigatedEventArgs(ShellFolder folder) => NewLocation = folder;
+
+    /// <summary>The new location of the explorer browser</summary>
+    public ShellItem NewLocation
+    {
+        get; private set;
+    }
+}
+
+/// <summary>Event argument for The Navigating event</summary>
+public class NavigatingEventArgs : CancelEventArgs
+{
+    /// <summary>Initializes a new instance of the <see cref="NavigatingEventArgs"/> class.</summary>
+    /// <param name="pendingLocation">The pending location.</param>
+    public NavigatingEventArgs(ShellItem pendingLocation) => PendingLocation = pendingLocation;
+
+    /// <summary>The location being navigated to.</summary>
+    public ShellItem PendingLocation
+    {
+        get; private set;
+    }
+}
+
+/// <summary>Event argument for the NavigatinoFailed event</summary>
+public class NavigationFailedEventArgs : EventArgs
+{
+    /// <summary>The location the browser would have navigated to.</summary>
+    public ShellItem? FailedLocation
+    {
+        get; set;
     }
 }
