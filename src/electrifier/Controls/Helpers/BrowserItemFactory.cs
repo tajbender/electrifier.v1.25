@@ -103,6 +103,7 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
     public string DisplayName => ShellItem.GetDisplayName(ShellItemDisplayString.NormalDisplay) ?? ShellItem.ToString();
     public Shell32.PIDL PIDL => ShellItem.PIDL;
     public ShellItem ShellItem;
+    public System.Drawing.Bitmap? ExtractedIconBitmap;
     public SoftwareBitmapSource? SoftwareBitmap;
     public SoftwareBitmapSource? OverlaySoftwareBitmap;
     public ShellItemAttribute Attributes => ShellItem.Attributes;
@@ -160,6 +161,8 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
             _ = GetStockIconOverlayBitmapAsync(Shell32.SHSTOCKICONID.SIID_LINK);
         }
     }
+
+    // INFO: Bitmap.FromHicon(hIcon.Handle) // TODO: Dispose Bitmap
 
     private async Task<SoftwareBitmapSource> GetStockIconOverlayBitmapAsync(Shell32.SHSTOCKICONID stockIconId)
     {

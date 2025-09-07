@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using electrifier.Controls.Helpers;
+using electrifier.Controls.Services;
 using Microsoft.UI.Xaml.Controls;
 using Vanara.PInvoke;
 using Vanara.Windows.Shell;
@@ -87,7 +89,7 @@ public sealed partial class ExplorerBrowser : UserControl
 
             PrimaryShellListView.SetItemSource(target.ChildItems);
 
-            if(target.ChildItems.Count > 0)
+            if (target.ChildItems.Count > 0)
             {
                 Debug.Print($".Navigate({target.DisplayName}) => already has {target.ChildItems.Count} items, skipping reload.");
                 return HRESULT.S_OK;
@@ -103,6 +105,8 @@ public sealed partial class ExplorerBrowser : UserControl
                 var shItem = new ShellItem(Shell32.PIDL.Combine(rootFolderPIDL, args.ItemID));
                 // WARN: This fails: var bitmapIcon = new System.Drawing.Bitmap(icnExtractor.ImageList[args.ImageListIndex]);
                 var ebItem = new ShellBrowserItem(shItem);
+                ebItem.ExtractedIconBitmap = new System.Drawing.Bitmap(icnExtractor.ImageList[args.ImageListIndex]);  // TODO PixelFormat.Format32bppPArgb);
+                ebItem.ExtractedIconBitmap?.MakeTransparent();
                 target.ChildItems?.Add(ebItem);
             };
             icnExtractor.Complete += (sender, args) =>
@@ -113,8 +117,8 @@ public sealed partial class ExplorerBrowser : UserControl
             };
 
 
+            // Start the icon extraction (this DOESN'T run async)
             icnExtractor.Start();
-
             while (isRunning)
             {
                 using (PrimaryShellListView.AdvancedCollectionView.DeferRefresh())
@@ -122,6 +126,25 @@ public sealed partial class ExplorerBrowser : UserControl
                     await Task.Delay(50);
                 }
             }
+
+            // Finally set the native icons for the items if available
+            var useNativeIcons = true;
+            if (useNativeIcons)
+            {
+
+                foreach (var browserItem in target.ChildItems)
+                {
+                    if (browserItem.ExtractedIconBitmap != null)
+                    {
+                        browserItem.SoftwareBitmap = await Shel32NamespaceService.GetWinUi3BitmapSourceFromGdiBitmap(browserItem.ExtractedIconBitmap);
+                    }
+                    else
+                    {
+                        Debug.Print($".Navigate({target.DisplayName}) => has NO icon for item: {browserItem.DisplayName}");
+                    }
+                }
+            }
+
             PrimaryShellListView.SetItemSource(target.ChildItems);
         }
         catch (COMException comEx)
