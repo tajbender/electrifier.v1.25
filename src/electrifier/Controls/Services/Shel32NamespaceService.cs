@@ -36,10 +36,10 @@ internal class Shel32NamespaceService
         // Enumerate child items
         var shFolder = new ShellFolder(shellItem);
 
-        foreach (var item in shFolder.EnumerateChildren(FolderItemFilter.Storage))
+        foreach (var shItem in shFolder.EnumerateChildren(FolderItemFilter.Storage))
         {
             // Create a new ShellBrowserItem for each child item
-            var browserItem = BrowserItemFactory.FromPIDL(item.PIDL);
+            var browserItem = BrowserItemFactory.FromItem(shItem);
             result.Add(browserItem);
         }
         return result;

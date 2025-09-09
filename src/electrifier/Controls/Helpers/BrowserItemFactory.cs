@@ -19,12 +19,14 @@ namespace electrifier.Controls.Helpers;
 
 public class BrowserItemFactory
 {
-    public static ShellBrowserItem FromPIDL(Shell32.PIDL pidl, List<ShellBrowserItem>? childItems = null) => new(new ShellItem(pidl), childItems);
+    public static ShellBrowserItem FromItem(ShellItem shItem, List<ShellBrowserItem>? childItems = null) => new(shItem, childItems);
+    //public static ShellBrowserItem FromPIDL(Shell32.PIDL pidl, List<ShellBrowserItem>? childItems = null) => new(new ShellItem(pidl), childItems);
     public static ShellBrowserItem FromKnownFolderId(Shell32.KNOWNFOLDERID knownFolderId) => new(new ShellFolder(knownFolderId));
-    public static ShellBrowserItem FromShellFolder(ShellFolder shellFolder) => FromPIDL(shellFolder.PIDL);
+    public static ShellBrowserItem FromShellFolder(ShellFolder shellFolder) => new(shellFolder);
+    public static ShellBrowserItem FromParsingName(string parsingName) => new(new ShellItem(parsingName));
     public static ShellBrowserItem HomeShellFolder()
     {
-        using var homeShellFolder = new ShellItem("shell:::{679f85cb-0220-4080-b29b-5540cc05aab6}");
+        using var homeShellFolder = new  ShellFolder("shell:::{679f85cb-0220-4080-b29b-5540cc05aab6}");
         return new ShellBrowserItem(homeShellFolder);
     }
 }
@@ -101,6 +103,7 @@ public class BrowserItemFactory
 public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyPropertyChanged
 {
     public string DisplayName => ShellItem.GetDisplayName(ShellItemDisplayString.NormalDisplay) ?? ShellItem.ToString();
+    public ShellFolder? Parent => ShellItem.Parent;
     public Shell32.PIDL PIDL => ShellItem.PIDL;
     public ShellItem ShellItem;
     public System.Drawing.Bitmap? ExtractedIconBitmap;

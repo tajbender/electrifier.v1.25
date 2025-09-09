@@ -24,10 +24,13 @@
                     DefaultLabelPosition="Collapsed"
                     HorizontalAlignment="Left">
             <AppBarButton Icon="Back"
+                          IsEnabled="{x:Bind CanSeekBackward}"
                           Label="Back" />
             <AppBarButton Icon="Forward"
+                          IsEnabled="{x:Bind CanSeekForward}"
                           Label="Forward" />
             <AppBarButton Icon="Up"
+                          IsEnabled="{x:Bind CanGotoParent}"
                           Label="Parent Folder" />
             <AppBarSeparator />
             <AppBarButton Icon="OpenFile"

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using electrifier.Controls.Helpers;
@@ -15,20 +16,23 @@ namespace electrifier.Controls;
 
 public sealed partial class ExplorerBrowser : UserControl
 {
+    public readonly ShellNavigationHistory History = new();
+    public bool CanSeekBackward => History.CanSeekBackward;
+    public bool CanSeekForward => History.CanSeekForward;
+    public bool CanGotoParent => /*CurrentFolder?.Parent != null*/true;
+    public ShellItem? CurrentFolder => History.Current;
+
     public event EventHandler<NavigatedEventArgs> Navigated;
     public event EventHandler<NavigatingEventArgs> Navigating;
     public event EventHandler<NavigationFailedEventArgs> NavigationFailed;
 
-    public readonly ShellNavigationHistory History = new();
     //private Vanara.Windows.Shell.NavigationLogDirection _navigationLogDirection;
     //private Vanara.Windows.Shell.ShellBrowserViewMode _viewMode = ShellBrowserViewMode.Details;
     /// <summary>Fires when the Items collection changes.</summary>
     public event EventHandler? ItemsChanged;
 
-
     /// <summary>Fires when the SelectedItems collection changes.</summary>
     public event EventHandler? SelectionChanged;
-
 
     /*
      public enum NavigationLogDirection
@@ -76,6 +80,7 @@ public sealed partial class ExplorerBrowser : UserControl
 
         Debug.WriteLineIf(!shTargetItem.IsFolder, $".WARN: Navigate({target.DisplayName}) => is not a folder!");
         // TODO: If no folder, or drive empty, etc... show empty listview with error message
+        History.Add(shTargetItem);
 
         // TODO: init ShellNamespaceService
         try
