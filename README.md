@@ -8,6 +8,8 @@
 - Reconfigure
 ---
 ## About.
+### Did miss the finish line of Microsoft Hacktogether 2003
+- https://github.com/microsoft/hack-together/issues/38
 ### Successor of legacy native _unfinished_ electrifier (used _Windows Forms_)
 - https://github.com/electrifier/Classic-electrifier
 ----
