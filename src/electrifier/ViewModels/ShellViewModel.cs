@@ -1,8 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-
 using electrifier.Contracts.Services;
 using electrifier.Views;
-
 using Microsoft.UI.Xaml.Navigation;
 
 namespace electrifier.ViewModels;
@@ -27,25 +25,34 @@ public partial class ShellViewModel : ObservableRecipient
 
     public ShellViewModel(INavigationService navigationService, INavigationViewService navigationViewService)
     {
+        //LazyInitializer.EnsureInitialized(ref _instance, () => this);
         NavigationService = navigationService;
         NavigationService.Navigated += OnNavigated;
         NavigationViewService = navigationViewService;
     }
 
-    private void OnNavigated(object sender, NavigationEventArgs e)
+    private void OnNavigated(object sender, NavigationEventArgs args)
     {
-        IsBackEnabled = NavigationService.CanGoBack;
-
-        if (e.SourcePageType == typeof(SettingsPage))
+        try
         {
-            Selected = NavigationViewService.SettingsItem;
-            return;
+            if (args.SourcePageType == typeof(SettingsPage))
+            {
+                //Selected = NavigationViewService.SettingsItem;
+                IsBackEnabled = true;
+                return;
+            }
         }
-
-        var selectedItem = NavigationViewService.GetSelectedItem(e.SourcePageType);
-        if (selectedItem != null)
+        catch (Exception ex)
         {
-            Selected = selectedItem;
+            Console.WriteLine($"Error in OnNavigated: {ex.Message}");
+
+            IsBackEnabled = NavigationService.CanGoBack;
+
+            var selectedItem = NavigationViewService.GetSelectedItem(args.SourcePageType);
+            if (selectedItem != null)
+            {
+                Selected = selectedItem;
+            }
         }
     }
 }
