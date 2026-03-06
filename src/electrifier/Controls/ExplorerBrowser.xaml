@@ -22,10 +22,13 @@
                     DefaultLabelPosition="Collapsed"
                     HorizontalAlignment="Left">
             <AppBarButton Icon="Back"
+                          IsEnabled="False"
                           Label="Back" />
             <AppBarButton Icon="Forward"
+                          IsEnabled="False"
                           Label="Forward" />
             <AppBarButton Icon="Up"
+                          IsEnabled="False"
                           Label="Parent Folder" />
             <AppBarSeparator />
             <AppBarButton Icon="OpenFile"
@@ -34,29 +37,36 @@
                     <Flyout>
                         <StackPanel>
                             <AppBarButton Icon="Folder"
-                                          Label="Folder"
-                                          IsEnabled="False" />
+                                          IsEnabled="False" 
+                                          Label="Folder"/>
                             <AppBarButton Icon="Link"
-                                          Label="Shortcut"
-                                          IsEnabled="False" />
+                                          IsEnabled="False" 
+                                          Label="Shortcut"/>
+                            <AppBarSeparator />
                         </StackPanel>
                     </Flyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
             <AppBarSeparator />
             <AppBarButton Icon="Cut"
+                          IsEnabled="False"
                           Label="Cut" />
             <AppBarButton Icon="Copy"
+                          IsEnabled="False"
                           Label="Copy" />
             <AppBarButton Icon="Paste"
+                          IsEnabled="False"
                           Label="Paste" />
             <AppBarButton Icon="Rename"
+                          IsEnabled="False"
                           Label="Rename" />
             <AppBarButton Icon="Share"
+                          IsEnabled="False"
                           Label="Share" />
             <AppBarButton Icon="Delete"
+                          IsEnabled="False"
                           Label="Delete" />
-            <AppBarSeparator />
+            <AppBarSeparator Visibility="Collapsed"/>
             <AppBarElementContainer>
                 <SplitButton x:Name="SortSplitButton"
                              Content="Sort">
@@ -188,7 +198,7 @@
             <AppBarSeparator />
             <AppBarElementContainer>
                 <SplitButton x:Name="TagsSplitButton"
-                             Content="Tags">
+                             Content="Files Tags">
                     <SplitButton.Flyout>
                         <Flyout>
                             <StackPanel>
@@ -297,6 +307,7 @@
             </Grid>
         </SplitView>
         <SplitView x:Name="SecondarySplitView"
+                   Visibility="Collapsed"
                    Grid.Column="1"
                    Grid.Row="1"
                    PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"

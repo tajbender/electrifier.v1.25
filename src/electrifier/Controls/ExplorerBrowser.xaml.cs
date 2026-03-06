@@ -25,9 +25,6 @@ using static Vanara.PInvoke.ComCtl32;
 using static Vanara.PInvoke.Kernel32;
 using static Vanara.PInvoke.Shell32;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace electrifier.Controls;
 
 public sealed partial class ExplorerBrowser : UserControl
