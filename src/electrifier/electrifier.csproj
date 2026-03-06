@@ -19,6 +19,12 @@
     <PackageIcon>Assets/WindowIcon.ico</PackageIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Controls\Models\**" />
+    <EmbeddedResource Remove="Controls\Models\**" />
+    <None Remove="Controls\Models\**" />
+    <Page Remove="Controls\Models\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Controls\ExplorerBrowser.xaml" />
     <None Remove="Controls\ShellListView.xaml" />
     <None Remove="Controls\ShellNamespaceTreeControl.xaml" />
@@ -60,10 +66,12 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\Models\" />
     <Folder Include="Controls\Resources\" />
   </ItemGroup>
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
   </PropertyGroup>
+  <ItemGroup>
+    <PRIResource Remove="Controls\Models\**" />
+  </ItemGroup>
 </Project>
