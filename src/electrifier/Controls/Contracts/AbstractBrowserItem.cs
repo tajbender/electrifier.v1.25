@@ -11,7 +11,8 @@ namespace electrifier.Controls.Contracts;
 /// Enclosing Type <typeparam name="T">ShellItem</typeparam> as reference to the underlying Shell Namespace Item reference.
 /// </summary>
 [DebuggerDisplay($"{{{nameof(ToString)}(),nq}}")]
-public abstract class AbstractBrowserItem<T> // TODO: IDisposable
+public abstract class AbstractBrowserItem<T> : IEquatable<AbstractBrowserItem<T>?>
+// TODO: IDisposable
 {
     public T BaseType;
     public readonly IEnumerable<AbstractBrowserItem<T>>? ChildItems;
@@ -26,5 +27,18 @@ public abstract class AbstractBrowserItem<T> // TODO: IDisposable
     //internal void async IconUpdate(int Index, SoftwareBitmapSource bmpSrc);
     //internal void async StockIconUpdate(STOCKICONID id, SoftwareBitmapSource bmpSrc);
     //internal void async ChildItemsIconUpdate();
+    public override bool Equals(object? obj) => Equals(obj as AbstractBrowserItem<T>);
+    public bool Equals(AbstractBrowserItem<T>? other) => other is not null && EqualityComparer<T>.Default.Equals(BaseType, other.BaseType) && IsFolder == other.IsFolder;
+
+    public static bool operator ==(AbstractBrowserItem<T>? left, AbstractBrowserItem<T>? right)
+    {
+        return EqualityComparer<AbstractBrowserItem<T>>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(AbstractBrowserItem<T>? left, AbstractBrowserItem<T>? right)
+    {
+        return !(left == right);
+    }
+
     public new string ToString() => $"AbstractBrowserItem(<{typeof(T)}>(isFolder {IsFolder}, childItems {ChildItems})";
 }

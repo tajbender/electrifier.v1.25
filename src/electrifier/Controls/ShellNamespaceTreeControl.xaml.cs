@@ -1,23 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using electrifier.Controls.Helpers;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using Vanara.PInvoke;
 using Vanara.Windows.Shell;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using static Vanara.PInvoke.Shell32;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -69,7 +56,7 @@ public static ShellBrowserItem HomeShellFolder() => new(new ShellItem("shell:::{
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Music));
         Items.Add(BrowserItemFactory.FromKnownFolderId(Shell32.KNOWNFOLDERID.FOLDERID_Videos));
 
-        Items[2].IsSelected = true;
+        Items[0].IsSelected = true;
     }
 
     private void OnSelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs e)
