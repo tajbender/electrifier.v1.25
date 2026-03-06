@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using electrifier.Controls.Helpers;
+using Microsoft.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
-using electrifier.Controls.Helpers;
-using Microsoft.UI.Xaml.Media.Imaging;
 using Vanara.PInvoke;
 using Vanara.Windows.Shell;
 
@@ -15,9 +14,7 @@ namespace electrifier.Controls.Services;
 // TODO:
 // WARN: Add Shell Log-Writer class, for logging Shell32 operations
 
-/// <summary>
-/// A service for interacting with the Shell32 namespace.
-/// </summary>
+/// <summary>Service to interact with the Shell32 namespace.</summary>
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 internal class Shel32NamespaceService
 {
@@ -26,9 +23,11 @@ internal class Shel32NamespaceService
     /// <summary>The default text that is displayed when an empty folder is shown</summary>
     [Category("Appearance"), DefaultValue("This folder is empty."), Description("The default text that is displayed when an empty folder is shown.")]
     public string EmptyFolderText { get; set; } = "This folder is empty.";
+
     /// <summary>The default text that is displayed when an empty group is shown</summary>
     [Category("Appearance"), DefaultValue("This group is empty."), Description("The default text that is displayed when an empty group is shown.")]
     public string EmptyGroupText { get; set; } = "This group is empty.";
+
 
     public ObservableCollection<ShellBrowserItem> Enumerate(ShellItem shellItem)
     {
@@ -113,4 +112,41 @@ internal class Shel32NamespaceService
     }
 
     private string GetDebuggerDisplay() => $"{nameof(Shel32NamespaceService)}>";
+
+//    // PSEUDOCODE (detailed):
+//    // 1. Check cache (StockIconDictionary) for requested SHSTOCKICONID; return cached SoftwareBitmapSource if present.
+//    // 2. Call SHGetStockIconInfo to obtain an HICON for the requested stock icon.
+//    // 3. Convert HICON to System.Drawing.Icon and call GetWinUi3BitmapSourceFromIcon to obtain a SoftwareBitmapSource (awaited).
+//    // 4. If the awaited result is non-null, add it to the cache and return it.
+//    // 5. If null, throw an ArgumentOutOfRangeException indicating the stock icon couldn't be obtained.
+//    //
+//    // NOTE: The original bug was using `.Result` on an already awaited SoftwareBitmapSource value.
+//    // The fix is to remove `.Result` and use the awaited value directly, with null checking.
+//
+//    public static async Task<SoftwareBitmapSource> GetStockIconBitmapSource(Shell32.SHSTOCKICONID shStockIconId)
+//    {
+//        if (StockIconDictionary.TryGetValue(shStockIconId, out var source))
+//        {
+//            return source;
+//        }
+//
+//        var siFlags = Shell32.SHGSI.SHGSI_LARGEICON | Shell32.SHGSI.SHGSI_ICON;
+//        var icninfo = Shell32.SHSTOCKICONINFO.Default;
+//        Shell32.SHGetStockIconInfo(shStockIconId, siFlags, ref icninfo)
+//            .ThrowIfFailed($"SHGetStockIconInfo({shStockIconId})");
+//
+//        var hIcon = icninfo.hIcon;
+//        var icnHandle = hIcon.ToIcon();
+//
+//        // Await the Task<SoftwareBitmapSource?> and use the result directly (no .Result)
+//        var bmpSource = await GetWinUi3BitmapSourceFromIcon(icnHandle);
+//
+//        if (bmpSource != null)
+//        {
+//            _ = StockIconDictionary.TryAdd(shStockIconId, bmpSource);
+//            return bmpSource;
+//        }
+//
+//        throw new ArgumentOutOfRangeException($"Can't get StockIcon for SHSTOCKICONID: {shStockIconId}");
+//    }
 }

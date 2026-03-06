@@ -23,13 +23,13 @@
                     HorizontalAlignment="Left">
             <AppBarButton Icon="Back"
                           IsEnabled="False"
-                          Label="Back" />
+                          Label="Navigate back" />
             <AppBarButton Icon="Forward"
                           IsEnabled="False"
-                          Label="Forward" />
+                          Label="Navigate forward" />
             <AppBarButton Icon="Up"
                           IsEnabled="False"
-                          Label="Parent Folder" />
+                          Label="Navigate to parent" />
             <AppBarSeparator />
             <AppBarButton Icon="OpenFile"
                           Label="New">

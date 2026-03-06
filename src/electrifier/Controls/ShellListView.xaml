@@ -41,7 +41,7 @@
                 </ItemContainer>
             </DataTemplate>
         </Grid.Resources>
-        <!-- INFO: Use `ScrollView` here, NOT `ScrollViewer` https://stackoverflow.com/questions/77189888/how-to-customize-the-scrollbar-in-winui-3 -->
+        <!-- INFO: Use `ScrollView` here, NOT `ScrollViewer`: https://stackoverflow.com/questions/77189888/how-to-customize-the-scrollbar-in-winui-3 -->
         <ScrollView VerticalScrollBarVisibility="Visible">
             <ItemsView x:Name="ItemsView"
                        DoubleTapped="ItemsView_OnDoubleTapped"
