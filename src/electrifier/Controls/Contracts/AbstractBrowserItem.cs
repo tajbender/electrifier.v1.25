@@ -32,13 +32,9 @@ public abstract class AbstractBrowserItem<T> : IEquatable<AbstractBrowserItem<T>
     public bool Equals(AbstractBrowserItem<T>? other) => other is not null && EqualityComparer<T>.Default.Equals(BaseType, other.BaseType) && IsFolder == other.IsFolder;
     public new string ToString() => $"AbstractBrowserItem(<{typeof(T)}>(isFolder {IsFolder}, childItems {ChildItems})";
 
-    public static bool operator ==(AbstractBrowserItem<T>? left, AbstractBrowserItem<T>? right)
-    {
-        return EqualityComparer<AbstractBrowserItem<T>>.Default.Equals(left, right);
-    }
+    public static bool operator ==(AbstractBrowserItem<T>? left, AbstractBrowserItem<T>? right) => EqualityComparer<AbstractBrowserItem<T>>.Default.Equals(left, right);
 
-    public static bool operator !=(AbstractBrowserItem<T>? left, AbstractBrowserItem<T>? right)
-    {
-        return !(left == right);
-    }
+    public static bool operator !=(AbstractBrowserItem<T>? left, AbstractBrowserItem<T>? right) => !(left == right);
+
+    public override int GetHashCode() => (BaseType.GetHashCode());
 }
