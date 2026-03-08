@@ -22,6 +22,9 @@ public abstract class AbstractBrowserItem<T> : IEquatable<AbstractBrowserItem<T>
     //internal void async IconUpdate(int Index, SoftwareBitmapSource bmpSrc);
     //internal void async StockIconUpdate(STOCKICONID id, SoftwareBitmapSource bmpSrc);
     //internal void async ChildItemsIconUpdate();
+
+    /// <summary>TODO: Consider implementing IEquatable and overriding GetHashCode for better performance in collections. 
+    /// Use PIDL for default Compare.</summary>
     public override bool Equals(object? obj) => Equals(obj as AbstractBrowserItem<T>);
     public bool Equals(AbstractBrowserItem<T>? other) => other is not null && other == this;
     public new string ToString() => $"AbstractBrowserItem(<{typeof(T)}>(isFolder {IsFolder}, childItems {ChildItems})";

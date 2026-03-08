@@ -249,7 +249,6 @@
                    PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
                    IsPaneOpen="True"
                    OpenPaneLength="192"
-                   CompactPaneLength="48"
                    DisplayMode="Inline">
             <SplitView.Pane>
                 <local:ShellNamespaceTreeControl x:Name="PrimaryShellTreeView" />
@@ -306,69 +305,11 @@
                 </CommandBar>
             </Grid>
         </SplitView>
-        <SplitView x:Name="SecondarySplitView"
-                   Visibility="Collapsed"
-                   Grid.Column="1"
-                   Grid.Row="1"
-                   PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
-                   IsPaneOpen="True"
-                   OpenPaneLength="192"
-                   CompactPaneLength="48"
-                   DisplayMode="Inline">
-            <SplitView.Pane>
-                <local:ShellNamespaceTreeControl x:Name="SecondaryShellTreeView" />
-            </SplitView.Pane>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <local:ShellListView x:Name="SecondaryShellListView"
-                                     Grid.Row="0" />
-                <CommandBar x:Name="SecondaryStatusCommandBar"
-                            Grid.Column="0"
-                            Grid.Row="1"
-                            HorizontalAlignment="Left"
-                            HorizontalContentAlignment="Left"
-                            VerticalAlignment="Stretch"
-                            VerticalContentAlignment="Center">
-                    <AppBarButton IsCompact="True">
-                        <TextBlock>
-                            <Run FontWeight="SemiBold"
-                                 Text="Items: " />
-                        </TextBlock>
-                    </AppBarButton>
-                    <AppBarSeparator />
-                    <AppBarButton IsCompact="True">
-                        <TextBlock>
-                            <Run FontWeight="SemiBold"
-                                 Text="Folders: " />
-                        </TextBlock>
-                    </AppBarButton>
-                    <AppBarSeparator />
-                    <AppBarButton IsCompact="True">
-                        <TextBlock>
-                            <Run FontWeight="SemiBold"
-                                 Text="Files: " />
-                        </TextBlock>
-                    </AppBarButton>
-                    <AppBarSeparator />
-                    <AppBarButton IsCompact="True">
-                        <TextBlock>
-                            <Run FontWeight="SemiBold"
-                                 Text="Size: " />
-                            <Run Text="KB" />
-                        </TextBlock>
-                    </AppBarButton>
-                    <AppBarSeparator />
-                    <AppBarButton IsCompact="True">
-                        <TextBlock>
-                            <Run FontWeight="SemiBold"
-                                 Text="Hidden: " />
-                        </TextBlock>
-                    </AppBarButton>
-                </CommandBar>
-            </Grid>
-        </SplitView>
+        <Border x:Name="SidebarBorder"
+                Grid.Column="1"
+                Grid.Row="1"
+                MinWidth="192"
+                Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
+        </Border>
     </Grid>
 </UserControl>
