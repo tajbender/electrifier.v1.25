@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Vanara.PInvoke;
 using Vanara.Windows.Shell;
 
@@ -58,17 +58,14 @@ internal class Shel32NamespaceService
 
         var hIcon = icninfo.hIcon;
         var icnHandle = hIcon.ToIcon();
+        var bmpSource = GetWinUi3BitmapSourceFromIcon(icnHandle);        // TODO: bmpSource.SetBitmapAsync(softwareBitmap); // TODO: SetBitmapAsync(softwareBitmap);
+        await bmpSource;
+        var softBitmap = bmpSource.Result;
 
-        if (icnHandle != null)
+        if (softBitmap != null)
         {
-            // Await the Task<SoftwareBitmapSource?> and use the result directly (no .Result)
-            var bmpSource = await GetWinUi3BitmapSourceFromIcon(icnHandle);
-
-            if (bmpSource != null)
-            {
-                _ = StockIconDictionary.TryAdd(shStockIconId, bmpSource); // WARN: Is this thread safe?
-                return bmpSource;
-            }
+            _ = StockIconDictionary.TryAdd(shStockIconId, softBitmap); // WARN: Is this thread safe?
+            return softBitmap;
         }
 
         throw new ArgumentOutOfRangeException($"Can't get StockIcon for SHSTOCKICONID: {shStockIconId.ToString()}");
