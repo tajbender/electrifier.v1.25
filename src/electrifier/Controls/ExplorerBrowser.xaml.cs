@@ -1,29 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using electrifier.Controls;
-using electrifier.Controls.Helpers;
-using electrifier.Controls.Services;
-using Microsoft.UI.Xaml;
+﻿using electrifier.Controls.Helpers;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Vanara.PInvoke;
 using Vanara.Windows.Shell;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using static Vanara.PInvoke.ComCtl32;
-using static Vanara.PInvoke.Kernel32;
-using static Vanara.PInvoke.Shell32;
 
 namespace electrifier.Controls;
 
@@ -44,8 +25,6 @@ public sealed partial class ExplorerBrowser : UserControl
 
         PrimaryShellTreeView.Navigated += PrimaryShellTreeView_Navigated;
         PrimaryShellListView.Navigated += PrimaryShellTreeView_Navigated;
-        SecondaryShellTreeView.Navigated += SecondaryShellTreeView_Navigated;
-        SecondaryShellListView.Navigated += SecondaryShellTreeView_Navigated;
     }
 
     internal async Task<HRESULT> Navigate(ShellBrowserItem target)
@@ -122,42 +101,5 @@ public sealed partial class ExplorerBrowser : UserControl
         Debug.Print($".PrimaryShellTreeView_Navigated() to {e.NewLocation.Name}");
 
         _ = Navigate(new ShellBrowserItem(e.NewLocation));  // WARN: This is a fire-and-forget call, no await! // WARN: Use existing ShellBrowserItem from TreeView
-    }
-
-    private async void SecondaryShellTreeView_Navigated(object sender, NavigatedEventArgs e)
-    {
-        Debug.Print($".SecondaryShellTreeView_Navigated() to {e.NewLocation.Name}");
-        SecondaryShellListView.ClearItems();
-
-        try
-        {
-            var rootItem = new ShellFolder(e.NewLocation.PIDL);
-
-            var childItems = rootItem?.EnumerateChildren(FolderItemFilter.Folders | FolderItemFilter.NonFolders | FolderItemFilter.IncludeHidden);
-            if (childItems == null)
-            {
-                Debug.Fail($"[Error] Navigate(<{e.NewLocation.Name}>) failed. No items found.");
-                return;
-            }
-
-            var newBrowserItems = new List<ShellBrowserItem>();
-            foreach (var item in childItems)
-            {
-                newBrowserItems.Add(new ShellBrowserItem(new(item.PIDL)));
-            }
-
-            SecondaryShellListView.AddItems(newBrowserItems);
-        }
-        catch (COMException comEx)
-        {
-            Debug.Fail(
-                $"[Error] Navigate(<{e.NewLocation.Name}>) failed. COMException: <HResult: {comEx.HResult}>: `{comEx.Message}`");
-            //NavigationFailed?.Invoke(this, new NavigationFailedEventArgs(comEx));
-        }
-        catch (Exception ex)
-        {
-            Debug.Fail($"[Error] Navigate(<{e.NewLocation.Name}>) failed, reason unknown: {ex.Message}");
-            throw;
-        }
     }
 }
