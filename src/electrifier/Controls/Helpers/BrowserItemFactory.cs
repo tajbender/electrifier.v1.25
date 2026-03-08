@@ -1,9 +1,9 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using electrifier.Controls.Contracts;
+﻿using electrifier.Controls.Contracts;
 using electrifier.Controls.Services;
 using Microsoft.UI.Xaml.Media.Imaging;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Vanara.PInvoke;
 using Vanara.Windows.Shell;
 
@@ -142,12 +142,18 @@ public partial class ShellBrowserItem : AbstractBrowserItem<ShellItem>, INotifyP
 
         // if IsHidden... do overlay
         // is IsLink... do overlay
-        Shell32.SHSTOCKICONID shStockIconId;
-        shStockIconId = IsFolder
-            ? Shell32.SHSTOCKICONID.SIID_FOLDER
-            : Shell32.SHSTOCKICONID.SIID_DOCASSOC;
-        _ = GetStockIconBitmapAsync(shStockIconId);
-
+        // Shell32.SHSTOCKICONID shStockIconId;
+        if (IsFolder)
+        {
+            // TODO: Drives?
+            _ = GetStockIconBitmapAsync(Shell32.SHSTOCKICONID.SIID_FOLDER);
+        }
+        else
+        {
+            // var assoc = shItem.Association;
+            // TODO: SIID_DOCNOASSOC SIID_APPLICATION 
+            _ = GetStockIconBitmapAsync(Shell32.SHSTOCKICONID.SIID_DOCASSOC);
+        }
     }
 
     private async Task<SoftwareBitmapSource> GetStockIconOverlayBitmapAsync(Shell32.SHSTOCKICONID stockIconId)
