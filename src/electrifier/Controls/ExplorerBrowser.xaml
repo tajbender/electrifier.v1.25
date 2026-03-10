@@ -21,15 +21,9 @@
                     Grid.Row="0"
                     DefaultLabelPosition="Collapsed"
                     HorizontalAlignment="Left">
-            <AppBarButton Icon="Back"
-                          IsEnabled="False"
-                          Label="Navigate back" />
-            <AppBarButton Icon="Forward"
-                          IsEnabled="False"
-                          Label="Navigate forward" />
-            <AppBarButton Icon="Up"
-                          IsEnabled="False"
-                          Label="Navigate to parent" />
+            <AppBarButton Icon="Back" Label="Navigate back" />
+            <AppBarButton Icon="Forward" Label="Navigate forward" />
+            <AppBarButton Icon="Up" Label="Parent folder" />
             <AppBarSeparator />
             <AppBarButton Icon="OpenFile"
                           Label="New">
@@ -66,6 +60,16 @@
             <AppBarButton Icon="Delete"
                           IsEnabled="False"
                           Label="Delete" />
+            <AppBarButton Icon="Undo" Label="Undo" Visibility="Collapsed" />
+            <AppBarSeparator />
+            <AppBarButton Icon="Pin" Label="Pin to Quick access" Visibility="Collapsed"/>
+            <AppBarSeparator />
+            <AppBarButton Icon="SelectAll" Label="Select all" />
+            <!-- TODO: The Icon="ViewAll" is the one, that Windows Explorer uses for `Select none` -->
+<!--            <AppBarButton Icon="ClearSelection" Label="Select none" Visibility="Collapsed" />
+            <AppBarButton Icon="Warning" Label="Invert selection" Visibility="Collapsed" />
+            <AppBarButton Icon="Warning" Label="Properties" Visibility="Collapsed"/>
+            <AppBarButton Icon="Setting" Label="Options" Visibility="Collapsed" /> -->
             <AppBarSeparator/>
             <AppBarElementContainer>
                 <SplitButton x:Name="SortSplitButton"
@@ -118,7 +122,7 @@
                                         IsEnabled="False" />
                                 <Button Content="Details pane"
                                         IsEnabled="False" />
-                                <Button Content="Preview pane"
+                                <Button Content="File Manager pane"
                                         IsEnabled="False" />
                                 <Button Content="~"
                                         IsEnabled="False" />
@@ -138,24 +142,42 @@
                                 <AppBarButton Icon="Orientation"
                                               Label="Orientation"
                                               IsEnabled="False" />
-                                <Button Content="Spy Mode - Chiffre filnames"
+                                <Button Content="Spy Mode - Chiffre Filenames"
+                                        IsEnabled="False" />
+                                <Button Content="File Extensions: Use default (Windows Explorer settings)"
+                                        IsEnabled="False" />
+                                <Button Content="Files Extensions: Show for uncommon files only Hide"
+                                        IsEnabled="False" />
+                                <Button Content="Files Extensions: Show for uncommon files only"
                                         IsEnabled="False" />
                             </StackPanel>
                         </Flyout>
                     </SplitButton.Flyout>
                 </SplitButton>
             </AppBarElementContainer>
-            <AppBarButton Icon="Filter"
-                          Label="Filter">
+
+            <AppBarButton Icon="View" Label="View">
                 <AppBarButton.Flyout>
                     <Flyout>
                         <StackPanel>
-                            <AppBarButton Icon="Home"
-                                          Label="Home" />
-                            <AppBarButton Icon="Edit"
-                                          Label="Work" />
-                            <AppBarButton Icon="Pictures"
-                                          Label="Photos" />
+                            <AppBarButton Icon="View" Label="Tiles" />
+                            <AppBarButton Icon="View" Label="Details" />
+                            <MenuFlyoutSeparator/>
+                            <AppBarButton Icon="View" Label="Compact Mode" />
+                            <MenuFlyoutSeparator/>
+                            <AppBarButton Icon="View" Label="Show hidden Files" />
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+
+
+            <AppBarButton Icon="Filter" Label="Filter">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <StackPanel>
+                            <AppBarButton Icon="Important" Label="Hide folders" />
+                            <AppBarButton Icon="Important" Label="Hide Files" />
                             <AppBarButton Icon="Important"
                                           Label="Important" />
                         </StackPanel>
@@ -196,20 +218,33 @@
                 </SplitButton>
             </AppBarElementContainer>
             <AppBarSeparator />
+
+            <AppBarButton Icon="View" Label="View">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <StackPanel>
+                            <AppBarButton Icon="View" Label="Tiles" />
+                            <AppBarButton Icon="View" Label="Details" />
+                            <MenuFlyoutSeparator/>
+                            <AppBarButton Icon="View" Label="Compact Mode" />
+                            <MenuFlyoutSeparator/>
+                            <AppBarButton Icon="View" Label="Show hidden Files" />
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+
+
+
             <AppBarElementContainer>
-                <SplitButton x:Name="TagsSplitButton"
-                             Content="Files Tags">
+                <SplitButton Content="File´s Tags">
                     <SplitButton.Flyout>
                         <Flyout>
                             <StackPanel>
-                                <AppBarButton Icon="Home"
-                                              Label="Home" />
-                                <AppBarButton Icon="Edit"
-                                              Label="Work" />
-                                <AppBarButton Icon="Pictures"
-                                              Label="Photos" />
-                                <AppBarButton Icon="Important"
-                                              Label="Important" />
+                                <AppBarButton Icon="Home" Label="Home" />
+                                <AppBarButton Icon="Edit" Label="Work" />
+                                <AppBarButton Icon="Pictures" Label="Photos" />
+                                <AppBarButton Icon="Important" Label="Important" />
                             </StackPanel>
                         </Flyout>
                     </SplitButton.Flyout>
@@ -309,6 +344,7 @@
                 Grid.Column="1"
                 Grid.Row="1"
                 MinWidth="192"
+                BorderThickness="7"
                 Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
         </Border>
     </Grid>
