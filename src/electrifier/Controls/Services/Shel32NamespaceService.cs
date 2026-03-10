@@ -30,10 +30,10 @@ internal class Shel32NamespaceService
     public string EmptyGroupText { get; set; } = "This group is empty.";
 
 
-    public ObservableCollection<ShellBrowserItem> Enumerate(ShellItem shellItem)
+    public ObservableCollection<ShellBrowserItem> EnumerateFolder(ShellItem shellItem)
     {
         var result = new ObservableCollection<ShellBrowserItem>();
-        // Enumerate child items
+        // EnumerateFolder child items
         var shFolder = new ShellFolder(shellItem);
 
         foreach (var item in shFolder.EnumerateChildren(FolderItemFilter.Storage))

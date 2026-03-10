@@ -9,7 +9,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="320"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -24,6 +24,7 @@
             <AppBarButton Icon="Back" Label="Navigate back" />
             <AppBarButton Icon="Forward" Label="Navigate forward" />
             <AppBarButton Icon="Up" Label="Parent folder" />
+            <AppBarButton Icon="Pin" Label="Pin to Quick access"  />
             <AppBarSeparator />
             <AppBarButton Icon="OpenFile" Label="New">
                 <AppBarButton.Flyout>
@@ -44,63 +45,38 @@
             <AppBarButton Icon="Delete" Label="Delete" />
             <AppBarButton Icon="Undo" Label="Undo"  />
             <AppBarSeparator />
-            <AppBarButton Icon="Pin" Label="Pin to Quick access"  />
             <AppBarSeparator />
             <AppBarButton Icon="SelectAll" Label="Select all" />
-            <!-- TODO: The Icon="ViewAll" is the one, that Windows Explorer uses for `Select none` -->
-            <!-- AppBarButton Icon="ClearSelection" Label="Select none" Visibility="Collapsed" />
-                <AppBarButton Icon="Warning" Label="Invert selection" Visibility="Collapsed" />
-                <AppBarButton Icon="Warning" Label="Properties" Visibility="Collapsed"/>
-                <AppBarButton Icon="Setting" Label="Options" Visibility="Collapsed" -->
+            <AppBarButton Icon="Pin" Label="Select All"  />
+            <AppBarButton Icon="Pin" Label="Invert Selection"  />
+            <AppBarButton Icon="Pin" Label="Select None"  />
             <AppBarSeparator />
             <AppBarElementContainer>
-                <SplitButton x:Name="ViewSplitButton"
-                             Content="View">
+                <SplitButton Content="View">
                     <SplitButton.Flyout>
                         <Flyout>
                             <StackPanel>
-                                <Button Content="Tiles"
-                                          />
-                                <Button Content="Content"
-                                          />
-                                <Button Content="~"
-                                          />
-                                <Button Content="Details pane"
-                                          />
-                                <Button Content="File Manager pane"
-                                          />
-                                <Button Content="~"
-                                          />
-                                <Button Content="Show"
-                                          />
-                                <Button Content="~"
-                                          />
-                                <Button Content="Two Pages"
-                                          />
-                                <!--  Glyph: E89A, TwoPage  -->
-                                <AppBarButton Icon="TwoPage"
-                                              Label="Double pane mode"
-                                                />
-                                <AppBarButton Icon="Refresh"
-                                              Label="Refresh"
-                                                />
-                                <AppBarButton Icon="Orientation"
-                                              Label="Orientation"
-                                                />
-                                <Button Content="Spy Mode - Chiffre Filenames"
-                                          />
-                                <Button Content="File Extensions: Use default (Windows Explorer settings)"
-                                          />
-                                <Button Content="Files Extensions: Show for uncommon files only Hide"
-                                          />
-                                <Button Content="Files Extensions: Show for uncommon files only"
-                                          />
+                                <Button Content="Tiles" />
+                                <Button Content="Content" />
+                                <AppBarSeparator />
+                                <Button Content="Details pane" />
+                                <Button Content="File Manager pane"/>
+                                <AppBarSeparator />
+                                <Button Content="Show"/>
+                                <AppBarSeparator />
+                                <Button Content="Two Pages"/>
+                                <AppBarButton Icon="TwoPage" Label="Double pane mode" />
+                                <AppBarButton Icon="Refresh" Label="Refresh" />
+                                <AppBarButton Icon="Orientation" Label="Orientation" />
+                                <Button Content="Hide Filenames (Spy Mode)" />
+                                <Button Content="File Extensions: Use default (Windows Explorer settings)"/>
+                                <Button Content="Files Extensions: Show for uncommon files only Hide"/>
+                                <Button Content="Files Extensions: Show for uncommon files only"/>
                             </StackPanel>
                         </Flyout>
                     </SplitButton.Flyout>
                 </SplitButton>
             </AppBarElementContainer>
-
             <AppBarButton Icon="View" Label="View">
                 <AppBarButton.Flyout>
                     <Flyout>
@@ -115,23 +91,19 @@
                     </Flyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
-
-
             <AppBarButton Icon="Filter" Label="Filter">
                 <AppBarButton.Flyout>
                     <Flyout>
                         <StackPanel>
+                            <AppBarButton Icon="Important" Label="Hide files" />
                             <AppBarButton Icon="Important" Label="Hide folders" />
-                            <AppBarButton Icon="Important" Label="Hide Files" />
-                            <AppBarButton Icon="Important"
-                                          Label="Important" />
+                            <AppBarButton Icon="Important" Label="Hide hidden" />
                         </StackPanel>
                     </Flyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
             <AppBarElementContainer>
-                <SplitButton x:Name="FilterSplitButton"
-                             Content="Filter">
+                <SplitButton Content="Filter">
                     <SplitButton.Flyout>
                         <Flyout>
                             <StackPanel>
@@ -154,16 +126,9 @@
                             </StackPanel>
                         </Flyout>
                     </SplitButton.Flyout>
-                    <SplitButton.Resources>
-                        <TeachingTip x:Name="FilterSplitButtonTeachingTip"
-                                     Title="TODO: Add filter options title text."
-                                     Subtitle="Use the dropdown button option to save your item and create another."
-                                     Target="{x:Bind FilterSplitButton}" />
-                    </SplitButton.Resources>
                 </SplitButton>
             </AppBarElementContainer>
             <AppBarSeparator />
-
             <AppBarButton Icon="View" Label="View">
                 <AppBarButton.Flyout>
                     <Flyout>
@@ -178,8 +143,6 @@
                     </Flyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
-
-
             <AppBarElementContainer>
                 <SplitButton Content="File´s Tags">
                     <SplitButton.Flyout>
@@ -222,8 +185,7 @@
                                 />
             </CommandBar.SecondaryCommands>
         </CommandBar>
-        <SplitView x:Name="PrimarySplitView"
-                   Grid.Column="0"
+        <SplitView Grid.Column="0"
                    Grid.Row="1"
                    PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
                    IsPaneOpen="True"
@@ -239,8 +201,7 @@
                 </Grid.RowDefinitions>
                 <local:ShellListView x:Name="PrimaryShellListView"
                                      Grid.Row="0" />
-                <CommandBar x:Name="PrimaryStatusCommandBar"
-                            Grid.Column="0"
+                <CommandBar Grid.Column="0"
                             Grid.Row="1"
                             HorizontalAlignment="Left"
                             HorizontalContentAlignment="Left"
@@ -284,11 +245,11 @@
                 </CommandBar>
             </Grid>
         </SplitView>
-        <Border x:Name="SidebarBorder"
-                Grid.Column="1"
+        <Border Grid.Column="1"
                 Grid.Row="1"
                 MinWidth="192"
                 BorderThickness="7"
-                Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}" />
+                Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
+        </Border>
     </Grid>
 </UserControl>
