@@ -9,9 +9,6 @@
     behaviors:NavigationViewHeaderBehavior.HeaderMode="Never"
     mc:Ignorable="d">
     <Grid x:Name="ContentArea">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <controls:ExplorerBrowser Grid.Row="0"/>
+        <controls:ExplorerBrowser />
     </Grid>
 </Page>

@@ -9,9 +9,6 @@
     d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
     mc:Ignorable="d">
     <Grid x:Name="MainPageContent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
         <!--<Button Grid.Row="0" AnimatedIcon.State="None">New Shell...</Button>-->
         <controls:ExplorerBrowser Grid.Row="0" />
         <!-- @todo: add filmstrip to the bottom for recent tabs and editors -->
