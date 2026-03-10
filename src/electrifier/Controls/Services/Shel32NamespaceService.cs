@@ -11,8 +11,9 @@ using Vanara.Windows.Shell;
 
 namespace electrifier.Controls.Services;
 
-// TODO:
-// WARN: Add Shell Log-Writer class, for logging Shell32 operations
+// TODO: WARN: Add Shell Log-Writer class, for logging Shell32 operations
+
+// TODO: WARN: Don't add (+) Expandable to `Home` and `Gallery` folders.
 
 /// <summary>Service to interact with the Shell32 namespace.</summary>
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
